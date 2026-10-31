@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getFleetVehicles } from '../../../Services/API/maintenanceAPI.js'
 import VehicleSelector from '../Components/maintenance3d/VehicleSelector.jsx'
 import VehicleInspection from '../Components/maintenance3d/VehicleInspection.jsx'
+import FleetServiceNeeds from '../Components/maintenance3d/FleetServiceNeeds.jsx'
 import './MaintenancePredictions.css'
 
 function vehicleFromUrl() {
@@ -68,7 +69,10 @@ export default function MaintenancePredictions({ navigate }) {
           <button type="button" className="is-primary" onClick={loadFleet}>Retry</button>
         </div>
       ) : vehicles.length ? (
-        <VehicleSelector vehicles={vehicles} onSelect={openVehicle} />
+        <>
+          <FleetServiceNeeds onSelect={openVehicle} />
+          <VehicleSelector vehicles={vehicles} onSelect={openVehicle} />
+        </>
       ) : (
         <div className="pm-page-state" role="status">
           <h2>No vehicles in the fleet</h2>
