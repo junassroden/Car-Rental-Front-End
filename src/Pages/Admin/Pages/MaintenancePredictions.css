@@ -254,6 +254,8 @@
 .pm-details { margin: 8px 0 0; font-size: 0.75rem; }
 .pm-details summary { cursor: pointer; color: var(--pm-text-faint); }
 .pm-details p { margin: 4px 0 0; }
+.pm-prediction-items { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.pm-prediction-items small { display: block; margin-top: 2px; color: var(--pm-text-faint); font-size: 0.72rem; }
 
 .pm-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--pm-line); }
 .pm-fact span { display: block; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pm-text-faint); }
@@ -359,3 +361,14 @@
 @media (prefers-reduced-motion: reduce) {
   .pm-page *, .pm-page *::before, .pm-page *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }
+
+/* Fleet-wide service-need predictions above the vehicle selector. */
+.pm-fleet-needs { margin: 0 auto 20px; max-width: 1200px; padding: 16px 20px; border: 1px solid var(--pm-line); border-radius: 12px; background: var(--pm-surface, transparent); color: var(--pm-text); }
+.pm-fleet-needs header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+.pm-fleet-needs h2 { margin: 0; font-size: 1.05rem; }
+.pm-fleet-needs header small { color: var(--pm-text-faint); font-size: 0.75rem; }
+.pm-fleet-needs > ul { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.pm-fleet-needs > ul > li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding-top: 8px; border-top: 1px solid var(--pm-line); }
+.pm-fleet-needs > ul > li > button { display: flex; flex-direction: column; align-items: flex-start; min-width: 160px; background: none; border: 0; padding: 0; color: inherit; cursor: pointer; text-align: left; }
+.pm-fleet-needs > ul > li > button span { color: var(--pm-text-faint); font-size: 0.75rem; }
+.pm-fleet-needs > ul > li > div { display: flex; flex-wrap: wrap; gap: 6px; }
