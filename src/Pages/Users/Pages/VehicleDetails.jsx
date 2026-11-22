@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { api, imageUrl } from '../../../Services/API/api.js'
+import CarSilhouette from '../Components/CarSilhouette.jsx'
 import './VehicleDetails.css'
 
 function money(value) {
@@ -159,9 +160,9 @@ export default function VehicleDetails({ carId, navigate }) {
                 onError={() => setFailedPaths((paths) => [...paths, currentPhoto.image_path])}
               />
             ) : (
-              <div className="vd-no-photo">
-                <CarIcon />
-                <span>{selectedVariant ? `No photos of ${selectedVariant.color} yet` : 'Photo unavailable'}</span>
+              <div className="vd-no-photo vehicle-placeholder">
+                {/suv|crossover|utility|hatch|van|mpv|pick-?up|truck|sedan|coupe|compact|economy|luxury|sport/i.test(String(car.category || '')) ? <CarSilhouette category={car.category} /> : <CarIcon />}
+                <small>{selectedVariant ? `No photos of ${selectedVariant.color} yet` : 'Photo coming soon'}</small>
               </div>
             )}
             {showArrows && (
@@ -200,6 +201,7 @@ export default function VehicleDetails({ carId, navigate }) {
         </section>
 
         <aside className="vd-info">
+          <span className="vd-kicker">{[car.category, car.year].filter(Boolean).join(' · ') || 'Vehicle'}</span>
           <h1>{carName}</h1>
           {car.year && <p className="vd-subtitle">{[car.year, car.category].filter(Boolean).join(' · ')}</p>}
 

@@ -1,16 +1,16 @@
 .vda,
 .vda-dialog {
-  --vda-ink: #202a28;
-  --vda-muted: #5f6964;
-  --vda-line: #e7e6df;
-  --vda-field-line: #d6d7cd;
-  --vda-forest: #263f39;
-  --vda-forest-dark: #192f2a;
-  --vda-canvas: #eef0ea;
-  --vda-soft: #f5f5ef;
-  --vda-red: #8a2f2a;
-  --vda-green: #275a3c;
-  --vda-amber: #7d5510;
+  --vda-ink: var(--n-800);
+  --vda-muted: var(--n-500);
+  --vda-line: var(--n-150);
+  --vda-field-line: var(--n-200);
+  --vda-forest: var(--g-700);
+  --vda-forest-dark: var(--g-800);
+  --vda-canvas: var(--n-100);
+  --vda-soft: var(--n-50);
+  --vda-red: var(--bad-700);
+  --vda-green: var(--ok-700);
+  --vda-amber: var(--warn-700);
   color: var(--vda-ink);
 }
 
@@ -24,7 +24,7 @@
 
 .vda button:focus-visible,
 .vda-dialog button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -40,7 +40,7 @@
   background: none;
   font-size: 14px;
   font-weight: 500;
-  transition: color .2s ease;
+  transition: color .2s var(--ease-out);
 }
 
 .vda-back:hover {
@@ -102,17 +102,17 @@
 
 .vda-status-available {
   color: var(--vda-green);
-  background: #e6f1e8;
+  background: var(--n-100);
 }
 
 .vda-status-rented {
-  color: #2d5566;
-  background: #e5eff2;
+  color: var(--g-600);
+  background: var(--n-100);
 }
 
 .vda-status-maintenance {
   color: var(--vda-amber);
-  background: #fbf1da;
+  background: var(--b-50);
 }
 
 .vda-header-actions {
@@ -135,7 +135,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .vda-btn:active:not(:disabled) {
@@ -147,7 +147,7 @@
 }
 
 .vda-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--vda-forest);
 }
 
@@ -158,12 +158,12 @@
 .vda-btn-outline {
   border-color: var(--vda-field-line);
   color: var(--vda-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .vda-btn-outline:hover:not(:disabled) {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .vda-btn-ghost-danger {
@@ -172,16 +172,16 @@
 }
 
 .vda-btn-ghost-danger:hover {
-  background: #fbeceb;
+  background: var(--n-50);
 }
 
 .vda-btn-danger {
-  color: #fff;
-  background: #9c2c27;
+  color: var(--n-0);
+  background: var(--bad-700);
 }
 
 .vda-btn-danger:hover:not(:disabled) {
-  background: #7f2420;
+  background: var(--bad-700);
 }
 
 .vda-link {
@@ -215,7 +215,7 @@
 .vda-card {
   border: 1px solid var(--vda-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .vda-panel {
@@ -247,16 +247,16 @@
 }
 
 .vda-none {
-  color: #7a827d;
+  color: var(--n-400);
 }
 
 .vda-banner {
   margin: 0 0 14px;
   padding: 12px 14px;
-  border: 1px solid #f0d8d6;
+  border: 1px solid var(--bad-100);
   border-radius: 8px;
   color: var(--vda-red);
-  background: #fdf3f2;
+  background: var(--n-50);
   font-size: 14px;
 }
 
@@ -279,7 +279,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  animation: vda-fade .25s ease;
+  animation: vda-fade .25s var(--ease-out);
 }
 
 @keyframes vda-fade {
@@ -348,7 +348,7 @@
 
 .vda-thumb.is-failed .vda-thumb-show {
   color: var(--vda-amber);
-  background: #fbf1da;
+  background: var(--b-50);
 }
 
 .vda-thumb-remove {
@@ -363,14 +363,14 @@
   border: 1px solid var(--vda-field-line);
   border-radius: 50%;
   color: var(--vda-ink);
-  background: #fff;
-  transition: color .2s ease, background-color .2s ease;
+  background: var(--n-0);
+  transition: color .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 
 .vda-thumb-remove:hover {
-  border-color: #9c2c27;
-  color: #fff;
-  background: #9c2c27;
+  border-color: var(--bad-700);
+  color: var(--n-0);
+  background: var(--bad-700);
 }
 
 .vda-add {
@@ -382,23 +382,23 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  border: 1px dashed #aeb4a8;
+  border: 1px dashed var(--n-300);
   border-radius: 8px;
   color: var(--vda-muted);
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color .2s ease, color .2s ease, background-color .2s ease;
+  transition: border-color .2s var(--ease-out), color .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 
 .vda-add:hover {
   border-color: var(--vda-forest);
   color: var(--vda-ink);
-  background: #fafaf6;
+  background: var(--n-25);
 }
 
 .vda-add:focus-within {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -424,7 +424,7 @@
   margin-top: 10px;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #fbeceb;
+  background: var(--n-50);
 }
 
 .vda-confirm p {
@@ -640,22 +640,22 @@
 
 .vda-bookings .is-pending {
   color: var(--vda-amber);
-  background: #fbf1da;
+  background: var(--b-50);
 }
 
 .vda-bookings .is-awaiting_approval {
-  color: #705b24;
-  background: #f7f0dc;
+  color: var(--b-700);
+  background: var(--b-50);
 }
 
 .vda-bookings .is-confirmed {
   color: var(--vda-green);
-  background: #e6f1e8;
+  background: var(--n-100);
 }
 
 .vda-bookings .is-out {
-  color: #2d5566;
-  background: #e5eff2;
+  color: var(--g-600);
+  background: var(--n-100);
 }
 
 .vda-more {
@@ -693,9 +693,9 @@
 .vda-shimmer {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: vda-shimmer 1.4s ease-in-out infinite;
+  animation: vda-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes vda-shimmer {
@@ -719,12 +719,12 @@ html:has(.vda-dialog[open]) {
   border: 0;
   border-radius: 14px;
   color: var(--vda-ink);
-  background: #fff;
-  box-shadow: 0 24px 60px rgb(20 36 31 / 28%);
+  background: var(--n-0);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--n-800) 14%, transparent);
 }
 
 .vda-dialog::backdrop {
-  background: rgb(20 30 27 / 55%);
+  background: color-mix(in srgb, var(--n-900) 55%, transparent);
 }
 
 .vda-dialog h2 {

@@ -1,34 +1,153 @@
+/* ==========================================================================
+   DriveRent design tokens — "Precision Automotive"
+   Graphite ink on cool paper, a deep racing green for brand and action,
+   and a brass signal accent used sparingly (like a gauge needle).
+   Every stylesheet in the app reads colour, type, radius, shadow and motion
+   from here. Page files keep their local aliases, but those point at these.
+   ========================================================================== */
+
 :root {
-  font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
-  color: #202a28;
-  background: #f7f6f1;
+  /* Type families */
+  --font-sans: 'Geist', 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Archivo', 'Geist', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  /* Neutral ramp: cool-warm graphite, not yellow cream */
+  --n-0: #ffffff;
+  --n-25: #fbfbfa;
+  --n-50: #f4f4f1;
+  --n-100: #ebebe7;
+  --n-150: #e2e2dd;
+  --n-200: #d3d4ce;
+  --n-300: #b6b8b1;
+  --n-400: #8f918a;
+  --n-500: #6c6e68;
+  --n-600: #50524d;
+  --n-700: #383a36;
+  --n-800: #242623;
+  --n-900: #161816;
+  --n-950: #0c0d0c;
+
+  /* Brand: racing green */
+  --g-50: #eef3f0;
+  --g-100: #dbe6e0;
+  --g-200: #b6cdc0;
+  --g-300: #8aae9b;
+  --g-400: #5c8a73;
+  --g-500: #3b6a55;
+  --g-600: #2a5442;
+  --g-700: #1e4234;
+  --g-800: #163328;
+  --g-900: #10241c;
+  --g-950: #091710;
+
+  /* Signal accent: brass */
+  --b-50: #f8f2e8;
+  --b-100: #f0e4cf;
+  --b-200: #e3cba3;
+  --b-300: #d2ad76;
+  --b-500: #ad7f45;
+  --b-700: #75532a;
+  --b-900: #3f2c15;
+
+  /* Semantic */
+  --ok-50: #e9f4ec;
+  --ok-100: #d2eadb;
+  --ok-300: #8cc6a1;
+  --ok-500: #2e8350;
+  --ok-700: #1d5e37;
+  --warn-50: #fbf4e4;
+  --warn-100: #f5e5bf;
+  --warn-300: #e5bf6a;
+  --warn-500: #b9801a;
+  --warn-700: #7a5310;
+  --bad-50: #fbeeec;
+  --bad-100: #f4d6d2;
+  --bad-300: #e09a91;
+  --bad-500: #bd4236;
+  --bad-700: #872e27;
+
+  /* Roles */
+  --canvas: var(--n-50);
+  --surface: var(--n-0);
+  --surface-raised: var(--n-25);
+  --surface-sunken: var(--n-100);
+  --ink: var(--n-900);
+  --ink-2: var(--n-700);
+  --muted: var(--n-500);
+  --faint: var(--n-400);
+  --line: var(--n-150);
+  --line-strong: var(--n-200);
+  --brand: var(--g-700);
+  --brand-hover: var(--g-800);
+  --brand-ink: var(--g-900);
+  --accent: var(--b-500);
+  --focus: color-mix(in srgb, var(--g-500) 38%, transparent);
+
+  /* Legacy aliases still read by older rules */
+  --navy: var(--g-900);
+  --navy-2: var(--g-800);
+  --blue: var(--g-600);
+  --blue-dark: var(--g-700);
+  --surface-page: var(--canvas);
+  --surface-card: var(--surface);
+  --ink-strong: var(--ink);
+  --ink-muted: var(--muted);
+  --line-soft: var(--line);
+  --brand-blue: var(--g-600);
+
+  /* Radius scale */
+  --r-xs: 6px;
+  --r-sm: 9px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 22px;
+  --r-2xl: 28px;
+  --r-pill: 999px;
+  --r-btn: 6px;
+
+  /* Elevation: wide, low-opacity, ink-tinted. No harsh drop shadows. */
+  --shadow-hair: 0 0 0 1px color-mix(in srgb, var(--n-900) 6%, transparent);
+  --shadow-1: 0 1px 2px color-mix(in srgb, var(--n-900) 5%, transparent), 0 2px 8px -2px color-mix(in srgb, var(--n-900) 6%, transparent);
+  --shadow-2: 0 2px 4px color-mix(in srgb, var(--n-900) 4%, transparent), 0 12px 32px -8px color-mix(in srgb, var(--n-900) 12%, transparent);
+  --shadow-3: 0 4px 10px color-mix(in srgb, var(--n-900) 5%, transparent), 0 32px 64px -16px color-mix(in srgb, var(--n-900) 22%, transparent);
+  --inner-light: inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-fast: 160ms;
+  --t-base: 260ms;
+  --t-slow: 520ms;
+
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--canvas);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  --navy: #1d2c28;
-  --navy-2: #263f39;
-  --blue: #35564a;
-  --blue-dark: #243a34;
-  --ink: #202a28;
-  --muted: #68716c;
-  --line: #e5e6df;
-  --surface: #ffffff;
-  --canvas: #f7f6f1;
+  font-feature-settings: 'ss01', 'cv11';
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--canvas);
   color: var(--ink);
+  letter-spacing: -0.006em;
 }
 
 button,
@@ -36,6 +155,7 @@ input,
 select,
 textarea {
   font: inherit;
+  letter-spacing: inherit;
 }
 
 button {
@@ -50,8 +170,10 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid rgb(53 86 74 / 28%);
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -60,10 +182,29 @@ img {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 ::selection {
   color: #fff;
-  background: #35564a;
+  background: var(--g-600);
+}
+
+/* Figures line up in tables, prices and gauges everywhere. */
+table,
+time,
+dd,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
 }

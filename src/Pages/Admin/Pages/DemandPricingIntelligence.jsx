@@ -8,7 +8,7 @@ import './DemandIntelligence.css'
  * enough months of bookings, and it says what it is based on. Colours are the dashboard's validated pair
  * (DashboardCharts.jsx): green #2b8a63 for recorded demand, amber #e0913a for days already booked ahead.
  */
-const COLORS = { past: '#2b8a63', ahead: '#e0913a', grid: '#efeee8', axis: '#8a928d', ink: '#202a28' }
+const COLORS = { past: '#2e8350', ahead: '#e0913a', grid: '#ebebe7', axis: '#8f918a', ink: '#161816' }
 const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 const monthLabel = (month) => new Intl.DateTimeFormat('en-PH', { month: 'short', year: '2-digit', timeZone: 'UTC' }).format(new Date(`${month}-01T00:00:00Z`))
@@ -23,7 +23,7 @@ function useBarChart(canvasRef, config, deps) {
     import('chart.js').then(({ Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip }) => {
       if (cancelled || !canvasRef.current) return
       Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip)
-      Chart.defaults.font.family = "'Outfit', 'Segoe UI', Arial, sans-serif"
+      Chart.defaults.font.family = "'Geist', 'Segoe UI', system-ui, sans-serif"
       Chart.defaults.color = COLORS.axis
       chart = new Chart(canvasRef.current, config())
     })

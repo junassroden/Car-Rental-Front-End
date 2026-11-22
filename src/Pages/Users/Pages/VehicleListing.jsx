@@ -22,21 +22,13 @@ const SearchIcon = ({ size }) => <OutlineIcon size={size}><circle cx="11" cy="11
 
 function VehicleSkeletons() {
   return (
-    <div className="vl-grid" role="status" aria-label="Finding available vehicles">
-      {SKELETON_CARDS.map((key) => (
-        <div className="vl-card vl-skeleton" key={key} aria-hidden="true">
-          <div className="vl-photo vl-shimmer" />
-          <div className="vl-card-body">
-            <span className="vl-shimmer vl-line-title" />
-            <span className="vl-shimmer vl-line-meta" />
-            <span className="vl-shimmer vl-line-specs" />
-            <span className="vl-shimmer vl-line-action" />
-          </div>
-        </div>
-      ))}
+    <div className="fleet-grid" role="status" aria-label="Finding available vehicles">
+      {SKELETON_CARDS.map((key) => <div className="fleet-skeleton" key={key} aria-hidden="true"><span /><i /><i /><i /></div>)}
     </div>
   )
 }
+
+const ArrowIcon = () => <OutlineIcon size={14}><path d="M5 12h14m-6-6 6 6-6 6" /></OutlineIcon>
 
 function VehicleCard({ car, navigate }) {
   const name = `${car.make} ${car.model}`
@@ -45,9 +37,9 @@ function VehicleCard({ car, navigate }) {
   const openDetails = () => navigate(`/users/vehicles/${car.id}`)
 
   return (
-    <article className="vl-card">
-      <button className="vl-photo" type="button" onClick={openDetails} aria-label={`View ${name} details`}>
-        <span className="vl-photo-empty" aria-hidden="true">
+    <article className="fleet-card">
+      <button className="fleet-card-media" type="button" onClick={openDetails} aria-label={`View ${name} details`}>
+        <span className="vehicle-placeholder" aria-hidden="true">
           <CarSilhouette category={car.category} />
           <small>Photo coming soon</small>
         </span>
@@ -57,23 +49,25 @@ function VehicleCard({ car, navigate }) {
           loading="lazy"
           onError={(event) => { event.currentTarget.hidden = true }}
         />}
+        <span className="status-pill status-available"><i />Available</span>
       </button>
-      <div className="vl-card-body">
-        <div className="vl-card-heading">
-          <div>
-            <h3>{name}</h3>
-            {meta && <p>{meta}</p>}
-          </div>
-          <span className="vl-price"><b>{money(car.daily_rental_price)}</b><small>per day</small></span>
+      <div className="fleet-card-body">
+        <div className="fleet-card-title">
+          {meta && <span className="fleet-card-kicker">{meta}</span>}
+          <h3>{name}</h3>
+          {car.color && <span className="fleet-card-colour">{car.color}</span>}
         </div>
-        <ul className="vl-specs" aria-label="Vehicle specifications">
+        <ul className="fleet-card-specs vl-specs" aria-label="Vehicle specifications">
           {car.transmission && <li><GearboxIcon />{car.transmission}</li>}
           {car.fuel_type && <li><FuelIcon />{car.fuel_type}</li>}
           {car.seating_capacity && <li><SeatsIcon />{car.seating_capacity} seats</li>}
         </ul>
-        <div className="vl-actions">
-          <button type="button" className="vl-details" onClick={openDetails} aria-label={`View ${name} details`}>View details</button>
-          <button type="button" className="vl-reserve" onClick={() => navigate(`/users/reservations/create?car_id=${car.id}`)} aria-label={`Reserve ${name}`}>Reserve</button>
+        <div className="fleet-card-foot">
+          <span className="fleet-card-price"><b>{money(car.daily_rental_price)}</b><small>per day</small></span>
+          <div className="fleet-card-actions">
+            <button type="button" className="fleet-card-details" onClick={openDetails} aria-label={`View ${name} details`}>Details</button>
+            <button type="button" className="fleet-card-book" onClick={() => navigate(`/users/reservations/create?car_id=${car.id}`)} aria-label={`Reserve ${name}`}>Reserve<span className="button-icon"><ArrowIcon /></span></button>
+          </div>
         </div>
       </div>
     </article>
@@ -239,7 +233,7 @@ export default function VehicleListing({ navigate }) {
               </select>
             </label>
           </div>
-          <div className="vl-grid">
+          <div className="fleet-grid">
             {filteredCars.map((car) => <VehicleCard key={car.id} car={car} navigate={navigate} />)}
           </div>
         </section>

@@ -9,7 +9,7 @@ import { markerTone, TONE_LABELS } from './status.js'
 const OVERVIEW_DIRECTION = new THREE.Vector3(1, 0.42, -1.15).normalize()
 const WORLD_UP = new THREE.Vector3(0, 1, 0)
 const COMPACT_WIDTH = 760
-const BACKDROP = '#eef0ea'
+const BACKDROP = '#ebebe7'
 
 /** Camera position and orbit target that frame the whole vehicle in the current viewport. */
 function rigRadius(rig) {
@@ -389,14 +389,14 @@ export default function InspectionStage({ rig, vehicle, components, selectedKey,
         <Studio quality={quality} />
         <VehicleModel rig={rig} paint={paintColor(vehicle.color)} xray={xray} interaction={interaction} />
         <StudioFloor radius={rigRadius(rig)} footprint={[rig.spec.length * 1.38, (rig.kind === 'motorcycle' ? 0.5 : rig.spec.width) * 1.7]} />
-        <ContactShadows position={[0, 0.003, 0]} opacity={0.55} scale={rig.kind === 'motorcycle' ? 4.5 : 10} blur={2.1} far={2.2} resolution={quality === 'high' ? 1024 : 512} frames={1} color="#202a28" />
+        <ContactShadows position={[0, 0.003, 0]} opacity={0.55} scale={rig.kind === 'motorcycle' ? 4.5 : 10} blur={2.1} far={2.2} resolution={quality === 'high' ? 1024 : 512} frames={1} color="#161816" />
         <OrbitControls
           makeDefault
           enablePan
           screenSpacePanning
           panSpeed={0.6}
           enableDamping
-          dampingFactor={0.09}
+          dampingFactor={0.07}
           minDistance={0.7}
           maxDistance={rigRadius(rig) * 6}
           minPolarAngle={0.2}

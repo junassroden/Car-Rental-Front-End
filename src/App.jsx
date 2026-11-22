@@ -316,12 +316,18 @@ function Icon({ name, size = 18 }) {
     fuel: <><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M3 21h14m-9-4h4m4-9h2l3 3v6a2 2 0 0 1-4 0v-4" /></>,
     gear: <><circle cx="12" cy="12" r="3" /><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.6.9l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.6-.9l-1.7.6-1.4-2.4 1.4-1.1a7 7 0 0 1 0-1.9l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.6-.9l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.6.9l1.7-.6 1.4 2.4-1.4 1.1a7 7 0 0 1 0 1.8Z" transform="translate(-1 -1)" /></>,
     shield: <><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" /><path d="m9 12 2 2 4-4" /></>,
+    gauge: <><path d="M3.5 16a8.5 8.5 0 1 1 17 0" /><path d="m12 16 4.2-5.2" /><circle cx="12" cy="16" r="1.3" /><path d="M6.5 16h1.2m8.6 0h1.2M12 9.2v1.2" /></>,
   }
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{shapes[name] || shapes.car}</svg>
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{shapes[name] || shapes.car}</svg>
 }
 
 function Logo({ onClick }) {
-  return <button className="logo" onClick={onClick} aria-label="DriveRent home"><span className="logo-symbol"><Icon name="car" size={19} /></span><span>Drive<span>Rent</span></span></button>
+  return <button className="logo" onClick={onClick} aria-label="DriveRent home">
+    <span className="logo-symbol" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M6 21a10 10 0 1 1 20 0" /><path d="m16 21 5.5-6.5" /><circle cx="16" cy="21" r="1.6" fill="currentColor" stroke="none" /></svg>
+    </span>
+    <span className="logo-word">Drive<span>Rent</span></span>
+  </button>
 }
 
 function Navbar({ user, adminLayout, customerLayout = false, path, navigate, logout, onMenuToggle }) {
@@ -332,15 +338,14 @@ function Navbar({ user, adminLayout, customerLayout = false, path, navigate, log
     ? [['/', 'Home'], ['/users/vehicles', 'Vehicles'], ['/users/recommendations', 'Recommendations'], ['/users/payments', 'Payments'], ['/users/dashboard', 'Dashboard']]
       : [['/', 'Home'], ['/vehicles', 'Vehicles']]
   return (
-    <header className={`topbar ${adminLayout ? 'topbar-admin' : ''}`}>
+    <header className={`topbar ${adminLayout ? 'topbar-admin' : ''}${!adminLayout && !customerLayout ? ' topbar-public' : ''}${menuOpen ? ' is-menu-open' : ''}`}>
       {!adminLayout && <Logo onClick={() => navigate('/')} />}
       {adminLayout || customerLayout
         ? <div className="admin-breadcrumb"><span>{adminLayout ? 'Workspace' : 'Your Drive'}</span><b>/</b><strong>{customerLayout ? (path.endsWith('/reservations/create') ? 'New reservation' : path.includes('/recommendations') ? 'Vehicle finder' : path.includes('/vehicles') ? 'Browse vehicles' : path.endsWith('/rentals') ? 'Active rentals' : path.endsWith('/history') ? 'Reservation history' : path.includes('payments') ? 'Payment history' : path.includes('profile') ? 'Profile' : 'Dashboard') : path.includes('/maintenance/predictions') ? 'Predictive maintenance' : path.includes('/maintenance/model-management') ? 'Model management' : path.includes('/maintenance/records') ? 'Vehicle maintenance records' : path === '/admin/maintenance' ? 'Fleet operations' : path.includes('/intelligence/demand') ? 'Demand intelligence' : path.includes('/intelligence/risk') ? 'Risk analysis' : path.includes('payments') ? 'Payment history' : path.endsWith('/reservations/history') ? 'Reservation history' : path.includes('reservations') ? 'Reservation management' : path.includes('vehicles') ? 'Vehicle management' : 'Dashboard'}</strong></div>
-        : <nav className={menuOpen ? 'public-nav open' : 'public-nav'}>{customerLinks.map(([href, label]) => <button key={href} className={path === href ? 'nav-link active' : 'nav-link'} onClick={() => { navigate(href); setMenuOpen(false) }}>{label}</button>)}</nav>}
+        : <nav className={menuOpen ? 'public-nav open' : 'public-nav'} aria-label="Main">{customerLinks.map(([href, label], index) => <button key={href} style={{ '--i': index }} className={path === href ? 'nav-link active' : 'nav-link'} aria-current={path === href ? 'page' : undefined} onClick={() => { navigate(href); setMenuOpen(false) }}>{label}</button>)}</nav>}
       <div className="topbar-right">
-        <span className="connection-dot" title="Backend API" />
-        {user ? <><button className="profile-button" onClick={() => navigate(user.role === 'admin' ? '/admin/dashboard' : '/users/dashboard')}><span className="avatar">{(user.full_name || user.username || 'U').slice(0, 1).toUpperCase()}</span><span className="profile-name">{user.full_name || user.username}<small>{user.role === 'admin' ? 'Administrator' : 'Customer'}</small></span></button><button className="icon-button logout-top" onClick={logout} title="Logout"><Icon name="logout" /></button></>
-          : <button className="button button-primary button-compact" onClick={() => navigate('/auth/login')}>Sign in</button>}
+        {user ? <><button className="profile-button" onClick={() => navigate(user.role === 'admin' ? '/admin/dashboard' : '/users/dashboard')}><span className="avatar">{(user.full_name || user.username || 'U').slice(0, 1).toUpperCase()}</span><span className="profile-name">{user.full_name || user.username}<small>{user.role === 'admin' ? 'Administrator' : 'Customer'}</small></span></button><button className="icon-button logout-top" onClick={logout} title="Log out" aria-label="Log out"><Icon name="logout" /></button></>
+          : <button className="nav-signin" onClick={() => navigate('/auth/login')}>Sign in</button>}
         <button className={adminLayout || customerLayout ? 'menu-toggle admin-menu-toggle' : 'menu-toggle'} onClick={adminLayout || customerLayout ? onMenuToggle : () => setMenuOpen((open) => !open)} aria-label={adminLayout ? 'Toggle admin navigation' : customerLayout ? 'Toggle customer navigation' : 'Toggle navigation'} aria-expanded={adminLayout || customerLayout ? undefined : menuOpen}><span /><span /><span /></button>
       </div>
     </header>
@@ -350,9 +355,9 @@ function Navbar({ user, adminLayout, customerLayout = false, path, navigate, log
 function AdminSidebar({ path, navigate, logout, open, onNavigate }) {
   const intelligenceItems = [
     ['/admin/maintenance', 'gear', 'Fleet Operations'],
-    ['/admin/maintenance/records', 'gear', 'Service History'],
+    ['/admin/maintenance/records', 'history', 'Service History'],
     ['/admin/intelligence/demand', 'chart', 'Demand Intelligence'],
-    ['/admin/maintenance/predictions', 'shield', 'Predictive Maintenance'],
+    ['/admin/maintenance/predictions', 'gauge', 'Predictive Maintenance'],
   ]
   const paymentItems = [
     ['/admin/payments', 'receipt', 'Payment History'],
@@ -426,10 +431,10 @@ function AdminSidebar({ path, navigate, logout, open, onNavigate }) {
           </button>
         )
       })}
-      {renderGroup('intelligence', 'AI Intelligence', 'brain', intelligenceItems)}
+      {renderGroup('intelligence', 'Fleet & Insights', 'gauge', intelligenceItems)}
       {renderGroup('payments', 'Payments', 'wallet', paymentItems)}
     </nav>
-    <div className="sidebar-lower"><span className="sidebar-caption">ACCOUNT</span><button className="sidebar-link" onClick={() => { logout(); onNavigate?.() }}><Icon name="logout" />Log out</button><div className="sidebar-note"><Icon name="shield" size={16} /><span>Admin workspace<small>Manage your fleet</small></span></div></div>
+    <div className="sidebar-lower"><span className="sidebar-caption">ACCOUNT</span><button className="sidebar-link" onClick={() => { logout(); onNavigate?.() }}><Icon name="logout" />Log out</button></div>
     <small className="sidebar-version">DRIVERENT · FLEET PORTAL</small>
     </div>
   </aside>
@@ -497,19 +502,35 @@ function CustomerSidebar({ user, path, navigate, logout, open, onNavigate }) {
 }
 
 function Footer({ navigate }) {
-  return <footer className="site-footer"><Logo onClick={() => navigate('/')} /><span>© {new Date().getFullYear()} DriveRent. Built for your next journey.</span></footer>
+  return <footer className="site-footer">
+    <div className="site-footer-brand">
+      <Logo onClick={() => navigate('/')} />
+      <p>Rental cars with clear daily rates and the details you need to choose well.</p>
+    </div>
+    <nav className="site-footer-nav" aria-label="Footer">
+      <button type="button" onClick={() => navigate('/vehicles')}>Vehicles</button>
+      <a href="/#how-it-works">How it works</a>
+      <a href="/#faqs">FAQs</a>
+      <button type="button" onClick={() => navigate('/auth/login')}>Sign in</button>
+    </nav>
+    <small className="site-footer-legal">© {new Date().getFullYear()} DriveRent. Built for your next journey.</small>
+  </footer>
 }
 
 function HomePage({ user, navigate, onOpenApiError, reloadKey }) {
   const [cars, setCars] = useState([])
+  const [availableTotal, setAvailableTotal] = useState(0)
   const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
   const pageRef = useRef(null)
   const fleetRef = useRef(null)
   useEffect(() => {
     let active = true
     api.get('/api/cars/available?per_page=6')
-      .then((response) => { if (active) setCars(response.data || []) })
+      .then((response) => {
+        if (!active) return
+        setCars(response.data || [])
+        setAvailableTotal(Number(response.meta?.total) || (response.data || []).length)
+      })
       .catch((error) => { if (active) onOpenApiError(error.message) })
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
@@ -518,8 +539,17 @@ function HomePage({ user, navigate, onOpenApiError, reloadKey }) {
   const dashboardRoute = user?.role === 'admin' ? '/admin/dashboard' : '/users/dashboard'
   const fleetCars = cars.slice(0, 6)
   const fleetMakes = [...new Set(cars.map((car) => car.make).filter(Boolean))]
+  const fleetCategories = [...new Set(cars.map((car) => car.category).filter(Boolean))]
+  const featuredFrom = cars.length ? Math.min(...cars.map((car) => Number(car.daily_rental_price) || Infinity)) : 0
   const aboutCopy = 'Useful details and a clear next step make every journey easier to plan.'
   const aboutWords = aboutCopy.split(' ')
+
+  // Web fonts change line heights once they arrive; re-measure so scroll reveals fire at the right place.
+  useEffect(() => {
+    let active = true
+    document.fonts?.ready.then(() => { if (active) ScrollTrigger.refresh() })
+    return () => { active = false }
+  }, [])
 
   useGSAP(() => {
     const motion = gsap.matchMedia()
@@ -568,39 +598,31 @@ function HomePage({ user, navigate, onOpenApiError, reloadKey }) {
 
   const scrollFleet = (direction) => {
     const container = fleetRef.current
-    const card = container?.querySelector('.home-fleet-card')
+    const card = container?.querySelector('.fleet-card')
     if (!container || !card) return
     const gap = Number.parseFloat(window.getComputedStyle(container).columnGap) || 0
     container.scrollBy({ left: direction * (card.getBoundingClientRect().width + gap), behavior: 'smooth' })
   }
 
-  return <div className="public-page" ref={pageRef}>
+  return <div className="public-page home-page" ref={pageRef}>
     <section className="home-hero home-hero--cinematic home-hero--split">
       <div className="home-hero-media" aria-hidden="true">
         <img data-hero-media src={LANDING_IMAGES.hero} alt="" fetchPriority="high" />
       </div>
       <div className="home-hero-copy">
-        <span className="home-hero-badge" data-hero-reveal>
-          <span className="home-hero-badge-dot" aria-hidden="true" />
-          {loading ? 'Checking the fleet' : cars.length ? 'Vehicles available to reserve now' : 'New vehicles arriving soon'}
-        </span>
-        <h1 data-hero-reveal>Your next <span className="home-heading-image" style={{ backgroundImage: `linear-gradient(100deg, rgb(141 106 83 / 55%), rgb(24 35 33 / 45%)), url("${LANDING_IMAGES.ride}")` }}>ride</span><br />starts here.</h1>
+        <h1 data-hero-reveal>Your next ride<br />starts here.</h1>
         <p data-hero-reveal>Find a car that fits your plans. Compare real vehicles, clear daily rates, and details that make choosing easier.</p>
         <div className="home-hero-actions" data-hero-reveal>
-          <form className="home-hero-search" role="search" onSubmit={(event) => { event.preventDefault(); navigate(`${vehiclesPath}?search=${encodeURIComponent(search.trim())}`) }}>
-            <Icon name="search" size={19} />
-            <input aria-label="Search available vehicles" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search make or model, e.g. Toyota" />
-            <button type="submit" className="button">Explore fleet <Icon name="arrow" size={16} /></button>
-          </form>
-          <a className="home-hero-secondary" href="#how-it-works">How it works <Icon name="arrow" size={16} /></a>
+          <button type="button" className="home-hero-link home-hero-link-primary" onClick={() => navigate(vehiclesPath)}>Browse the fleet</button>
+          <a className="home-hero-link" href="#how-it-works">How it works</a>
         </div>
-        {fleetMakes.length > 0 && <p className="home-hero-makes" data-hero-reveal><span>On the road with</span>{fleetMakes.slice(0, 5).map((make) => <b key={make}>{make}</b>)}</p>}
       </div>
-      <ul className="home-hero-trust" aria-label="Why rent with DriveRent" data-hero-reveal>
-        <li><Icon name="wallet" size={18} /><span><b>Rates up front</b>Daily price on every listing</span></li>
-        <li><Icon name="image" size={18} /><span><b>Real vehicles</b>Photos and full specifications</span></li>
-        <li><Icon name="calendar" size={18} /><span><b>Your dates</b>Request online, confirmed by us</span></li>
-      </ul>
+      <dl className="home-hero-readout" aria-label="Fleet at a glance" data-hero-reveal>
+        <div><dt>Available now</dt><dd>{loading ? '—' : availableTotal}</dd></div>
+        <div><dt>Body types</dt><dd>{loading || !fleetCategories.length ? '—' : fleetCategories.slice(0, 3).join(' · ')}</dd></div>
+        <div><dt>Featured from</dt><dd>{loading || !Number.isFinite(featuredFrom) || !featuredFrom ? '—' : <>{money(featuredFrom)}<small>/ day</small></>}</dd></div>
+        {fleetMakes.length > 0 && <div><dt>On the road with</dt><dd>{fleetMakes.slice(0, 3).join(' · ')}</dd></div>}
+      </dl>
       <a className="home-hero-scroll" href="#available-fleet" aria-label="Scroll to available vehicles"><span /></a>
     </section>
     <nav className="home-anchor-nav" aria-label="Explore DriveRent">
@@ -611,43 +633,22 @@ function HomePage({ user, navigate, onOpenApiError, reloadKey }) {
     </nav>
     <section className="home-section home-fleet-section" id="available-fleet">
       <div className="home-fleet-heading" data-reveal>
-        <SectionHeading eyebrow="A GOOD PLACE TO START" title="Find the right ride for the day" description="Explore the vehicles available now, with pricing and useful details upfront." action="View all vehicles" onAction={() => navigate(vehiclesPath)} />
+        <SectionHeading eyebrow="Available now" title="Find the right ride for the day" description="Explore the vehicles available now, with pricing and useful details upfront." action="View all vehicles" onAction={() => navigate(vehiclesPath)} />
         {fleetCars.length > 3 && <div className="home-fleet-controls" aria-label="Featured vehicle carousel controls">
           <button type="button" onClick={() => scrollFleet(-1)} aria-label="Show previous vehicles"><Icon name="back" size={18} /></button>
           <button type="button" onClick={() => scrollFleet(1)} aria-label="Show next vehicles"><Icon name="arrow" size={18} /></button>
         </div>}
       </div>
-      {loading ? <Loading label="Loading available vehicles" /> : cars.length ? (
+      {loading ? <div className="fleet-grid" aria-hidden="true">{Array.from({ length: 3 }, (_, index) => <div className="fleet-skeleton" key={index}><span /><i /><i /><i /></div>)}</div> : cars.length ? (
         <div className="home-fleet-carousel" ref={fleetRef} role="region" aria-label="Available vehicles" data-reveal>
-          {fleetCars.map((car) => {
-            const photo = getVehiclePhoto(car)
-            return <article className="home-fleet-card" key={car.id}>
-              <button type="button" className="home-fleet-photo" onClick={() => navigate(`${vehiclesPath}/${car.id}`)} aria-label={`View ${car.make} ${car.model}`}>
-                <span className="home-fleet-placeholder" aria-hidden="true">
-                  <span className="home-fleet-watermark">{car.make}</span>
-                  <CarSilhouette category={car.category} />
-                </span>
-                {photo && <img src={photo} alt={`${car.make} ${car.model}`} loading="lazy" onError={handleVehicleImageError} />}
-                <span className="home-fleet-chip"><span aria-hidden="true" />Available</span>
-              </button>
-              <div className="home-fleet-card-copy">
-                <div className="home-fleet-card-title"><div><h3>{car.make} {car.model}</h3><span>{[car.year, car.category].filter(Boolean).join(' · ') || 'Available now'}</span></div><strong>{money(car.daily_rental_price)}<small>/ day</small></strong></div>
-                <div className="home-fleet-card-specs">
-                  <span><Icon name="gear" size={15} />{car.transmission || 'Not listed'}</span>
-                  <span><Icon name="seat" size={15} />{car.seating_capacity || '—'} seats</span>
-                  {car.fuel_type && <span><Icon name="fuel" size={15} />{car.fuel_type}</span>}
-                </div>
-                <button type="button" className="home-fleet-book" onClick={() => navigate(user ? `/users/reservations/create?car_id=${car.id}` : `${vehiclesPath}/${car.id}`)}>{user ? 'Choose this car' : 'View vehicle'} <Icon name="arrow" size={16} /></button>
-              </div>
-            </article>
-          })}
+          {fleetCars.map((car) => <FleetCard key={car.id} car={car} onView={() => navigate(`${vehiclesPath}/${car.id}`)} onBook={() => navigate(user ? `/users/reservations/create?car_id=${car.id}` : `${vehiclesPath}/${car.id}`)} bookLabel={user ? 'Choose this car' : 'View vehicle'} showDetails={Boolean(user)} />)}
         </div>
       ) : <EmptyState title="No vehicles available right now" description="Check back soon to see new vehicles in our fleet." />}
     </section>
     <section className="home-about" id="about-us">
       <div className="home-about-copy" data-reveal>
-        <span className="eyebrow"><span className="eyebrow-line" />ABOUT DRIVERENT</span>
-        <h2>More clarity for<br />the road ahead.</h2>
+        <span className="eyebrow">About DriveRent</span>
+        <h2>More clarity for the road ahead.</h2>
         <p>DriveRent makes it easier to find a rental car that suits your plans. Browse vehicles marked available, compare their details and daily rates, then send a reservation request with your dates.</p>
         <ul className="home-about-list">
           <li><Icon name="check" size={16} />Daily rates shown before you choose</li>
@@ -656,73 +657,65 @@ function HomePage({ user, navigate, onOpenApiError, reloadKey }) {
         </ul>
         <button className="text-action" onClick={() => navigate(vehiclesPath)}>Get to know the fleet <Icon name="arrow" size={16} /></button>
       </div>
-      <div className="home-about-note">
+      <figure className="home-about-note">
         <img data-scroll-image src={LANDING_IMAGES.about} alt="A driver's hands on the steering wheel at dusk" loading="lazy" />
-        <div className="home-about-note-copy">
-          <span className="home-about-icon"><Icon name="key" size={22} /></span>
+        <figcaption className="home-about-note-copy">
+          <span className="home-about-caption">A clearer way to get there</span>
           <p aria-label={aboutCopy}><span aria-hidden="true">{aboutWords.map((word, index) => <span data-reveal-word key={`${word}-${index}`}>{word}{index < aboutWords.length - 1 ? ' ' : ''}</span>)}</span></p>
-          <span className="home-about-caption">A CLEARER WAY TO GET THERE</span>
-        </div>
-      </div>
+        </figcaption>
+      </figure>
     </section>
     <section className="home-why" id="why-choose-us">
-      <div data-reveal><SectionHeading eyebrow="THE DRIVERENT DIFFERENCE" title="A rental experience built around you" description="The essentials are easy to find, so you can choose with confidence." /></div>
+      <div data-reveal><SectionHeading eyebrow="The DriveRent difference" title="A rental experience built around you" description="The essentials are easy to find, so you can choose with confidence." /></div>
       <div className="home-why-bento" data-reveal>
         <figure className="home-why-photo">
           <img src={LANDING_IMAGES.why} alt="A hatchback parked by the sea" loading="lazy" />
           <figcaption><b>Plan the trip, not the paperwork.</b><span>Everything you need to decide is on the listing.</span></figcaption>
         </figure>
-        <article className="home-why-item">
-          <span className="home-why-icon"><Icon name="wallet" size={21} /></span>
-          <div><h3>Know what it costs</h3><p>See each vehicle’s daily rate up front and review an estimate when you choose your rental dates.</p></div>
-        </article>
-        <article className="home-why-item">
-          <span className="home-why-icon"><Icon name="car" size={21} /></span>
-          <div><h3>Compare the details</h3><p>Check vehicle photos, seating, fuel type, transmission and other listed specifications before you decide.</p></div>
-        </article>
-        <article className="home-why-item">
-          <span className="home-why-icon"><Icon name="calendar" size={21} /></span>
-          <div><h3>Browse current availability</h3><p>Start with vehicles currently listed as available and submit your preferred dates for confirmation.</p></div>
-        </article>
+        <ol className="home-why-list">
+          <li className="home-why-item"><span className="home-why-index">01</span><div><h3>Know what it costs</h3><p>See each vehicle’s daily rate up front and review an estimate when you choose your rental dates.</p></div></li>
+          <li className="home-why-item"><span className="home-why-index">02</span><div><h3>Compare the details</h3><p>Check vehicle photos, seating, fuel type, transmission and other listed specifications before you decide.</p></div></li>
+          <li className="home-why-item"><span className="home-why-index">03</span><div><h3>Browse current availability</h3><p>Start with vehicles currently listed as available and submit your preferred dates for confirmation.</p></div></li>
+        </ol>
       </div>
     </section>
     <section className="home-how" id="how-it-works">
-      <div className="how-heading" data-reveal><span className="eyebrow"><span className="eyebrow-line" />MADE FOR THE MILES AHEAD</span><h2>A more considered<br />way to rent.</h2><p>{aboutCopy}</p><button className="button button-dark" onClick={() => navigate(vehiclesPath)}>Explore the fleet <Icon name="arrow" size={16} /></button></div>
+      <div className="how-heading" data-reveal><span className="eyebrow">Made for the miles ahead</span><h2>A more considered way to rent.</h2><p>{aboutCopy}</p><button className="button button-white" onClick={() => navigate(vehiclesPath)}>Explore the fleet <span className="button-icon"><Icon name="arrow" size={15} /></span></button></div>
       <ol className="home-steps" data-reveal>
-        <li><span className="home-step-icon"><Icon name="search" size={20} /></span><small>Step 01</small><h3>Find your fit</h3><p>Search the available fleet and choose a vehicle for your plans.</p></li>
-        <li><span className="home-step-icon"><Icon name="calendar" size={20} /></span><small>Step 02</small><h3>Pick your dates</h3><p>Compare prices and specifications, then send a request with your pickup and return dates.</p></li>
-        <li><span className="home-step-icon"><Icon name="key" size={20} /></span><small>Step 03</small><h3>Get ready to go</h3><p>Once your reservation is confirmed, review the details and enjoy the drive.</p></li>
+        <li><small>01</small><h3>Find your fit</h3><p>Search the available fleet and choose a vehicle for your plans.</p></li>
+        <li><small>02</small><h3>Pick your dates</h3><p>Compare prices and specifications, then send a request with your pickup and return dates.</p></li>
+        <li><small>03</small><h3>Get ready to go</h3><p>Once your reservation is confirmed, review the details and enjoy the drive.</p></li>
       </ol>
     </section>
     <section className="home-faq" id="faqs">
       <div className="home-faq-heading" data-reveal>
-        <span className="eyebrow"><span className="eyebrow-line" />GOOD TO KNOW</span>
-        <h2>Frequently asked<br />questions.</h2>
+        <span className="eyebrow">Good to know</span>
+        <h2>Frequently asked questions.</h2>
         <p>Here are a few helpful details before you get started.</p>
       </div>
       <div className="home-faq-list" data-reveal>
         <details open>
-          <summary>How do I reserve a vehicle?<span aria-hidden="true">+</span></summary>
+          <summary>How do I reserve a vehicle?<span aria-hidden="true" /></summary>
           <p>Choose an available vehicle, select your pickup and return dates, then submit a reservation request. You’ll need to sign in to complete the request.</p>
         </details>
         <details>
-          <summary>How is the rental amount calculated?<span aria-hidden="true">+</span></summary>
+          <summary>How is the rental amount calculated?<span aria-hidden="true" /></summary>
           <p>The estimate uses the vehicle’s listed daily rate and the number of rental days. If a security deposit applies, it is shown separately in the booking summary.</p>
         </details>
         <details>
-          <summary>Does choosing a vehicle confirm my booking?<span aria-hidden="true">+</span></summary>
+          <summary>Does choosing a vehicle confirm my booking?<span aria-hidden="true" /></summary>
           <p>No. Selecting a vehicle starts a reservation request. Availability is checked when you submit your dates, and the system confirms whether it can be reserved.</p>
         </details>
         <details>
-          <summary>What details can I compare before booking?<span aria-hidden="true">+</span></summary>
+          <summary>What details can I compare before booking?<span aria-hidden="true" /></summary>
           <p>Vehicle listings can include photos, daily price, year, category, transmission, seating capacity, fuel type and other specifications.</p>
         </details>
       </div>
     </section>
     <section className="home-cta">
       <img className="home-cta-image" src={LANDING_IMAGES.cta} alt="" aria-hidden="true" loading="lazy" />
-      <div data-reveal><span className="eyebrow">YOUR NEXT JOURNEY STARTS HERE</span><h2>Find a car for the<br />road ahead.</h2></div>
-      <button className="button button-white" onClick={() => navigate(user ? dashboardRoute : vehiclesPath)}>{user ? 'Go to your dashboard' : 'Browse available cars'} <Icon name="arrow" size={17} /></button>
+      <div data-reveal><span className="eyebrow">Your next journey starts here</span><h2>Find a car for the road ahead.</h2></div>
+      <button className="button button-white" onClick={() => navigate(user ? dashboardRoute : vehiclesPath)}>{user ? 'Go to your dashboard' : 'Browse available cars'} <span className="button-icon"><Icon name="arrow" size={15} /></span></button>
     </section>
   </div>
 }
@@ -908,48 +901,47 @@ function VehicleListing({ navigate, reloadKey, admin, user, vehicleBasePath = ad
 }
 
 function VehicleGrid({ cars, navigate, admin = false, user, vehicleBasePath = admin ? '/admin/vehicles' : '/vehicles' }) {
-  return <div className="vehicle-grid">{cars.map((car) => <VehicleCard key={car.id} car={car} admin={admin} onClick={() => navigate(`${vehicleBasePath}/${car.id}${window.location.search}`)} onBook={() => navigate(user?.role === 'customer' ? `/users/reservations/create?car_id=${car.id}` : `/auth/login?next=${encodeURIComponent(`/users/reservations/create?car_id=${car.id}`)}`)} />)}</div>
+  return <div className="fleet-grid">{cars.map((car) => <VehicleCard key={car.id} car={car} admin={admin} onClick={() => navigate(`${vehicleBasePath}/${car.id}${window.location.search}`)} onBook={() => navigate(user?.role === 'customer' ? `/users/reservations/create?car_id=${car.id}` : `/auth/login?next=${encodeURIComponent(`/users/reservations/create?car_id=${car.id}`)}`)} />)}</div>
 }
 
 function VehicleCard({ car, admin, onClick, onBook }) {
-  const primary = getVehiclePhoto(car)
-  return <article className="vehicle-card">
-    <button className="vehicle-photo" onClick={onClick} aria-label={`View ${car.make} ${car.model}`}>
-      <span className="vehicle-photo-placeholder" aria-hidden="true"><Icon name="car" size={54} /></span>
-      {primary && <img src={primary} alt={`${car.make} ${car.model}`} loading="lazy" onError={handleVehicleImageError} />}
-      <StatusPill status={car.status} /><span className="photo-category">{car.category}</span>
-    </button>
-    <div className="vehicle-card-content">
-      <div className="vehicle-card-heading"><div><h3>{car.make} {car.model}</h3><p>{car.year} <span>·</span> {car.transmission || 'Automatic'}</p></div><span className="card-category">{car.category}</span></div>
-      <div className="vehicle-specs"><span><Icon name="seat" size={15} />{car.seating_capacity || 5} seats</span><span><Icon name="fuel" size={15} />{car.fuel_type || 'Gasoline'}</span></div>
-      <div className="vehicle-card-footer"><div className="daily-price"><b>{money(car.daily_rental_price)}</b><span>/ day</span></div><div className="vehicle-card-actions"><button className="card-detail-link" onClick={onClick}>{admin ? 'Manage' : 'Details'}<Icon name="arrow" size={15} /></button>{!admin && car.status === 'available' && <button className="card-book-link" onClick={onBook}>Book now</button>}</div></div>
-    </div>
-  </article>
+  return <FleetCard car={car} onView={onClick} onBook={onBook} detailsLabel={admin ? 'Manage' : 'Details'} canBook={!admin} />
 }
 
-function FleetCard({ car, onView, onBook }) {
+function VehiclePlaceholder({ car }) {
+  return <span className="vehicle-placeholder" aria-hidden="true">
+    {bodyHasSilhouette(car?.category) ? <CarSilhouette category={car.category} /> : <Icon name="car" size={44} />}
+    <small>Photo coming soon</small>
+  </span>
+}
+
+function bodyHasSilhouette(category) {
+  return /suv|crossover|utility|hatch|van|mpv|pick-?up|truck|sedan|coupe|compact|economy|luxury|sport/i.test(String(category || ''))
+}
+
+function FleetCard({ car, onView, onBook, bookLabel = 'Book now', showDetails = true, detailsLabel = 'Details', canBook = true }) {
   const photo = getVehiclePhoto(car)
   const available = (car.status || 'available') === 'available'
-  return <article className="home-fleet-card fleet-card">
-    <button type="button" className="home-fleet-photo" onClick={onView} aria-label={`View ${car.make} ${car.model}`}>
-      <span className="home-fleet-placeholder" aria-hidden="true">
-        <span className="home-fleet-watermark">{car.make}</span>
-        <CarSilhouette category={car.category} />
-      </span>
+  const specs = [car.transmission, car.seating_capacity ? `${car.seating_capacity} seats` : '', car.fuel_type].filter(Boolean)
+  return <article className="fleet-card">
+    <button type="button" className="fleet-card-media" onClick={onView} aria-label={`View ${car.make} ${car.model}`}>
+      <VehiclePlaceholder car={car} />
       {photo && <img src={photo} alt={`${car.make} ${car.model}`} loading="lazy" onError={handleVehicleImageError} />}
       <StatusPill status={car.status} />
-      {car.category && <span className="fleet-card-category">{car.category}</span>}
     </button>
-    <div className="home-fleet-card-copy">
-      <div className="home-fleet-card-title"><div><h3>{car.make} {car.model}</h3><span>{[car.year, car.color].filter(Boolean).join(' · ') || 'Available now'}</span></div><strong>{money(car.daily_rental_price)}<small>/ day</small></strong></div>
-      <div className="home-fleet-card-specs">
-        <span><Icon name="gear" size={15} />{car.transmission || 'Not listed'}</span>
-        <span><Icon name="seat" size={15} />{car.seating_capacity || '—'} seats</span>
-        {car.fuel_type && <span><Icon name="fuel" size={15} />{car.fuel_type}</span>}
+    <div className="fleet-card-body">
+      <div className="fleet-card-title">
+        <span className="fleet-card-kicker">{[car.category, car.year].filter(Boolean).join(' · ') || 'Vehicle'}</span>
+        <h3>{car.make} {car.model}</h3>
+        {car.color && <span className="fleet-card-colour">{car.color}</span>}
       </div>
-      <div className="fleet-card-actions">
-        <button type="button" className="fleet-card-details" onClick={onView}>Details</button>
-        {available && <button type="button" className="fleet-card-book" onClick={onBook}>Book now <Icon name="arrow" size={15} /></button>}
+      {specs.length > 0 && <ul className="fleet-card-specs" aria-label="Specifications">{specs.map((spec) => <li key={spec}>{spec}</li>)}</ul>}
+      <div className="fleet-card-foot">
+        <div className="fleet-card-price"><b>{money(car.daily_rental_price)}</b><small>per day</small></div>
+        <div className="fleet-card-actions">
+          {showDetails && <button type="button" className="fleet-card-details" onClick={onView}>{detailsLabel}</button>}
+          {canBook && available && <button type="button" className="fleet-card-book" onClick={onBook}>{bookLabel}<span className="button-icon"><Icon name="arrow" size={14} /></span></button>}
+        </div>
       </div>
     </div>
   </article>
@@ -1041,11 +1033,11 @@ function VehicleDetails({ carId, admin, user, navigate, onChanged, setToast, set
   const selectedPhoto = selectedImage ? imageUrl(selectedImage) : fallbackPhoto
   return <div className={`${admin ? 'admin-content' : 'public-page'} content-width detail-page`}>
     <button className="back-link" onClick={() => navigate(`${vehicleBasePath}${window.location.search}`)}><Icon name="back" size={16} />Back to vehicles</button>
-    <div className="detail-heading"><div><div className="detail-breadcrumb">{car.category}<span>·</span>{car.year}<span>·</span>{car.transmission}</div><h1>{car.make} {car.model}</h1></div><div className="detail-heading-actions">{admin && <><button className="button button-outline" onClick={() => navigate(`/admin/vehicles/${car.id}/edit${window.location.search}`)}><Icon name="edit" size={16} />Edit vehicle</button><button className="button button-danger-outline" onClick={() => setConfirmDelete(true)}><Icon name="trash" size={16} />Delete</button></>}<StatusPill status={car.status} /></div></div>
+    <div className="detail-heading"><div><div className="detail-breadcrumb">{[car.category, car.year, car.transmission].filter(Boolean).join(' · ')}</div><h1>{car.make} {car.model}</h1></div><div className="detail-heading-actions">{admin && <><button className="button button-outline" onClick={() => navigate(`/admin/vehicles/${car.id}/edit${window.location.search}`)}><Icon name="edit" size={16} />Edit vehicle</button><button className="button button-danger-outline" onClick={() => setConfirmDelete(true)}><Icon name="trash" size={16} />Delete</button></>}<StatusPill status={car.status} /></div></div>
     <div className="detail-top-grid">
       <div className="gallery">
-        <div className="gallery-main"><span className="vehicle-photo-placeholder" aria-hidden="true"><Icon name="car" size={72} />Photo unavailable</span>{selectedPhoto && <img src={selectedPhoto} alt={`${car.make} ${car.model}`} onError={handleVehicleImageError} />}{!admin && <span className="gallery-badge"><Icon name="check" size={14} />Vehicle information</span>}</div>
-        <div className="gallery-thumbs">{images.map((image) => <div className={`gallery-thumb ${selectedImage === image.image_path ? 'selected' : ''}`} key={image.id}><button onClick={() => setSelectedImage(image.image_path)} aria-label={`Show image ${image.id}`}><img src={imageUrl(image.image_path)} alt={`${car.make} ${car.model} view`} /></button>{admin && <button className="thumb-remove" onClick={() => removeImage(image)} aria-label="Remove image"><Icon name="close" size={14} /></button>}</div>)}{!images.length && <span className="gallery-note">Add vehicle photos for more views</span>}{admin && <label className="gallery-add"><Icon name="plus" size={19} /><span>Add image</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={upload} /></label>}</div>
+        <div className="gallery-main"><VehiclePlaceholder car={car} />{selectedPhoto && <img key={selectedPhoto} src={selectedPhoto} alt={`${car.make} ${car.model}`} onError={handleVehicleImageError} />}</div>
+        <div className="gallery-thumbs">{images.map((image) => <div className={`gallery-thumb ${selectedImage === image.image_path ? 'selected' : ''}`} key={image.id}><button onClick={() => setSelectedImage(image.image_path)} aria-label={`Show image ${image.id}`}><img src={imageUrl(image.image_path)} alt={`${car.make} ${car.model} view`} onError={admin ? handleVehicleImageError : (event) => { event.currentTarget.closest('.gallery-thumb').hidden = true }} /></button>{admin && <button className="thumb-remove" onClick={() => removeImage(image)} aria-label="Remove image"><Icon name="close" size={14} /></button>}</div>)}{!images.length && <span className="gallery-note">Add vehicle photos for more views</span>}{admin && <label className="gallery-add"><Icon name="plus" size={19} /><span>Add image</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={upload} /></label>}</div>
       </div>
       <aside className="detail-summary">
         <div className="detail-price"><b>{money(car.daily_rental_price)}</b><span>/ day</span></div>

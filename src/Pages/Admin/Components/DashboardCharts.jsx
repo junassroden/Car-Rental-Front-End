@@ -7,13 +7,13 @@ import { useEffect, useMemo, useRef, useState } from 'react'
  * (ΔE 24.1) checks. Amber is below 3:1 against white, so each chart has a legend and a table view.
  */
 const COLORS = {
-  paid: '#2b8a63',
+  paid: '#2e8350',
   unpaid: '#e0913a',
-  booked: '#2b8a63',
+  booked: '#2e8350',
   surface: '#ffffff',
-  grid: '#efeee8',
-  axis: '#8a928d',
-  ink: '#202a28',
+  grid: '#ebebe7',
+  axis: '#8f918a',
+  ink: '#161816',
 }
 const DAY_MS = 86400000
 const WEEKS = 8
@@ -67,9 +67,9 @@ function dailyBooked(reservations, today) {
 const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 const tooltipStyle = {
-  backgroundColor: '#1d2c28',
+  backgroundColor: '#161816',
   titleColor: '#ffffff',
-  bodyColor: '#e7ece8',
+  bodyColor: '#ebebe7',
   footerColor: '#ffffff',
   padding: 12,
   cornerRadius: 10,
@@ -88,7 +88,7 @@ function useChart(canvasRef, buildConfig, deps) {
     import('chart.js').then(({ Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip }) => {
       if (cancelled || !canvasRef.current) return
       Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip)
-      Chart.defaults.font.family = "'Outfit', 'Segoe UI', Arial, sans-serif"
+      Chart.defaults.font.family = "'Geist', 'Segoe UI', system-ui, sans-serif"
       Chart.defaults.color = COLORS.axis
       chart = new Chart(canvasRef.current, buildConfig())
     })

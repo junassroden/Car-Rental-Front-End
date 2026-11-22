@@ -1,17 +1,17 @@
 .vcm {
-  --vcm-ink: #202a28;
-  --vcm-muted: #5f6964;
-  --vcm-line: #e5e6df;
-  --vcm-green: #35564a;
+  --vcm-ink: var(--n-800);
+  --vcm-muted: var(--n-500);
+  --vcm-line: var(--n-150);
+  --vcm-green: var(--g-600);
 }
 
 .vcm-error {
   margin-bottom: 14px;
   padding: 10px 12px;
-  border: 1px solid #f0d6d6;
+  border: 1px solid var(--bad-100);
   border-radius: 8px;
-  color: #9a3d44;
-  background: #fff5f5;
+  color: var(--bad-700);
+  background: var(--n-25);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -65,17 +65,17 @@
   width: 100%;
   min-height: 38px;
   padding: 0 10px;
-  border: 1px solid #d8ded7;
+  border: 1px solid var(--n-150);
   border-radius: 8px;
   color: var(--vcm-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 14px;
 }
 
 .vcm-field input:focus,
 .vcm-photos select:focus {
-  border-color: #829987;
-  box-shadow: 0 0 0 3px rgb(53 86 74 / 12%);
+  border-color: var(--g-300);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-600) 12%, transparent);
   outline: 0;
 }
 
@@ -92,24 +92,24 @@
   font-weight: 600;
   white-space: nowrap;
   cursor: pointer;
-  transition: background .2s ease, border-color .2s ease, color .2s ease;
+  transition: background .2s var(--ease-out), border-color .2s var(--ease-out), color .2s var(--ease-out);
 }
 
 .vcm-upload {
   position: relative;
   overflow: hidden;
-  border: 1px solid #d8ded7;
+  border: 1px solid var(--n-150);
   color: var(--vcm-green);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .vcm-upload:hover {
-  border-color: #97a99b;
-  background: #f5f7f3;
+  border-color: var(--g-300);
+  background: var(--n-50);
 }
 
 .vcm-upload:focus-within {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -127,22 +127,22 @@
 
 .vcm-remove {
   border: 0;
-  color: #9a3d44;
+  color: var(--bad-700);
   background: none;
 }
 
 .vcm-remove:hover:not(:disabled) {
-  background: #fdf0f0;
+  background: var(--n-50);
 }
 
 .vcm-add-button {
   border: 0;
-  color: #fff;
-  background: #263f39;
+  color: var(--n-0);
+  background: var(--g-700);
 }
 
 .vcm-add-button:hover:not(:disabled) {
-  background: #192f2a;
+  background: var(--g-800);
 }
 
 .vcm button:disabled {
@@ -151,7 +151,7 @@
 }
 
 .vcm button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -187,7 +187,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   border-radius: 8px;
-  background: #eef0ea;
+  background: var(--n-100);
   object-fit: cover;
 }
 

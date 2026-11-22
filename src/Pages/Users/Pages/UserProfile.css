@@ -1,14 +1,14 @@
 .pf {
-  --pf-ink: #202a28;
-  --pf-muted: #5f6964;
-  --pf-line: #e7e6df;
-  --pf-field-line: #d6d7cd;
-  --pf-forest: #263f39;
-  --pf-forest-dark: #192f2a;
-  --pf-canvas: #eef0ea;
-  --pf-red: #9c2c27;
-  --pf-green: #275a3c;
-  --pf-amber: #7d5510;
+  --pf-ink: var(--n-800);
+  --pf-muted: var(--n-500);
+  --pf-line: var(--n-150);
+  --pf-field-line: var(--n-200);
+  --pf-forest: var(--g-700);
+  --pf-forest-dark: var(--g-800);
+  --pf-canvas: var(--n-100);
+  --pf-red: var(--bad-700);
+  --pf-green: var(--ok-700);
+  --pf-amber: var(--warn-700);
   container-type: inline-size;
   padding-top: 32px;
   padding-bottom: 96px;
@@ -22,7 +22,7 @@
 
 .pf button:focus-visible,
 .pf input[type='checkbox']:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -74,7 +74,7 @@
 .pf-card {
   border: 1px solid var(--pf-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 /* Summary */
@@ -100,7 +100,7 @@
   flex: 0 0 auto;
   place-items: center;
   border-radius: 12px;
-  color: #fff;
+  color: var(--n-0);
   background: var(--pf-forest);
   font-size: 19px;
   font-weight: 600;
@@ -157,11 +157,11 @@
   background: none;
   font-size: 14px;
   text-align: left;
-  transition: background-color .2s ease;
+  transition: background-color .2s var(--ease-out);
 }
 
 .pf-checklist button:hover {
-  background: #f5f5ef;
+  background: var(--n-50);
 }
 
 .pf-tick {
@@ -170,13 +170,13 @@
   height: 20px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1.5px solid #b9bfb4;
+  border: 1.5px solid var(--n-300);
   border-radius: 50%;
 }
 
 .pf-tick.is-done {
   border-color: var(--pf-forest);
-  color: #fff;
+  color: var(--n-0);
   background: var(--pf-forest);
 }
 
@@ -216,7 +216,7 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .pf-btn:active:not(:disabled) {
@@ -228,7 +228,7 @@
 }
 
 .pf-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--pf-forest);
 }
 
@@ -239,12 +239,12 @@
 .pf-btn-outline {
   border-color: var(--pf-field-line);
   color: var(--pf-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .pf-btn-outline:hover {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .pf-btn-link {
@@ -316,30 +316,30 @@
   border: 1px solid var(--pf-field-line);
   border-radius: 8px;
   color: var(--pf-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 15px;
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition: border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
 }
 
 .pf-field input::placeholder {
-  color: #7a827d;
+  color: var(--n-400);
 }
 
 .pf-field input:hover:not([readonly]) {
-  border-color: #aeb4a8;
+  border-color: var(--n-300);
 }
 
 .pf-field input:focus,
 .pf-field input:focus-visible {
   border-color: var(--pf-forest);
-  box-shadow: 0 0 0 3px rgb(38 63 57 / 12%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-700) 12%, transparent);
   outline: 0;
 }
 
 .pf-field input[readonly] {
   border-color: var(--pf-line);
   color: var(--pf-muted);
-  background: #f5f5ef;
+  background: var(--n-50);
 }
 
 .pf-field input[aria-invalid='true'] {
@@ -432,7 +432,7 @@
 }
 
 .pf-upload:focus-within {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -456,7 +456,7 @@
   padding: 12px;
   border: 1px solid transparent;
   border-radius: 8px;
-  background: #f5f5ef;
+  background: var(--n-50);
   font-size: 14px;
   line-height: 1.5;
   cursor: pointer;
@@ -483,9 +483,9 @@
 .pf-shimmer {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: pf-shimmer 1.4s ease-in-out infinite;
+  animation: pf-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes pf-shimmer {

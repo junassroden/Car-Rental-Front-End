@@ -4,14 +4,14 @@
 }
 
 .car-silhouette-body {
-  fill: #cfd5ca;
+  fill: var(--n-200);
 }
 
 .car-silhouette-glass,
 .car-silhouette-hub {
-  fill: #eef0ea;
+  fill: var(--n-100);
 }
 
 .car-silhouette-tyre {
-  fill: #7e8a81;
+  fill: var(--n-400);
 }

@@ -1,10 +1,10 @@
 .rsv {
-  --rsv-ink: #202a28;
-  --rsv-muted: #5f6964;
-  --rsv-line: #e7e6df;
-  --rsv-forest: #263f39;
-  --rsv-green: #35564a;
-  --rsv-tint: #edf2eb;
+  --rsv-ink: var(--n-800);
+  --rsv-muted: var(--n-500);
+  --rsv-line: var(--n-150);
+  --rsv-forest: var(--g-700);
+  --rsv-green: var(--g-600);
+  --rsv-tint: var(--n-50);
   container-type: inline-size;
   padding-top: 28px;
   padding-bottom: 96px;
@@ -13,7 +13,7 @@
 
 .rsv button:focus-visible,
 .rsv input:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -30,7 +30,7 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: color .2s ease;
+  transition: color .2s var(--ease-out);
 }
 
 .rsv-back:hover {
@@ -70,7 +70,7 @@
   min-width: 0;
   border: 1px solid var(--rsv-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rsv-section {
@@ -98,11 +98,11 @@
   background: var(--rsv-tint);
   font-size: 13px;
   font-weight: 600;
-  transition: background .2s ease, color .2s ease;
+  transition: background .2s var(--ease-out), color .2s var(--ease-out);
 }
 
 .rsv-step.is-done {
-  color: #fff;
+  color: var(--n-0);
   background: var(--rsv-green);
 }
 
@@ -167,24 +167,24 @@
   justify-content: space-between;
   gap: 12px;
   padding: 0 12px;
-  border: 1px solid #d8ded7;
+  border: 1px solid var(--n-150);
   border-radius: 8px;
   color: var(--rsv-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 15px;
   font-variant-numeric: tabular-nums;
   text-align: left;
   cursor: pointer;
-  transition: border-color .2s ease, box-shadow .2s ease;
+  transition: border-color .2s var(--ease-out), box-shadow .2s var(--ease-out);
 }
 
 .rsv-date-trigger:hover:not(:disabled) {
-  border-color: #a9b6ab;
+  border-color: var(--n-300);
 }
 
 .rsv-date-trigger:focus-visible {
-  border-color: #829987;
-  box-shadow: 0 0 0 3px rgb(53 86 74 / 12%);
+  border-color: var(--g-300);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-600) 12%, transparent);
   outline: 0;
 }
 
@@ -193,8 +193,8 @@
 }
 
 .rsv-date-trigger:disabled {
-  color: #7d857f;
-  background: #f8f8f4;
+  color: var(--n-400);
+  background: var(--n-25);
   cursor: not-allowed;
 }
 
@@ -204,7 +204,7 @@
   padding: 16px;
   border: 1px solid var(--rsv-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rsv-calendar-header,
@@ -230,15 +230,15 @@
   border: 1px solid var(--rsv-line);
   border-radius: 7px;
   color: var(--rsv-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 21px;
   line-height: 1;
   cursor: pointer;
 }
 
 .rsv-calendar-header button:disabled {
-  color: #a9ada8;
-  background: #f8f8f4;
+  color: var(--n-300);
+  background: var(--n-25);
   cursor: not-allowed;
 }
 
@@ -281,18 +281,18 @@
 
 .rsv-calendar-days button.is-unavailable,
 .rsv-calendar-days button:disabled {
-  color: #979d97;
-  background: #f1f1ed;
+  color: var(--n-400);
+  background: var(--n-50);
   cursor: not-allowed;
 }
 
 .rsv-calendar-days button.is-selected {
-  color: #fff;
+  color: var(--n-0);
   background: var(--rsv-forest);
 }
 
 .rsv-calendar-days button.is-selected:disabled {
-  color: #fff;
+  color: var(--n-0);
   background: var(--rsv-forest);
 }
 
@@ -317,14 +317,14 @@
 .rsv-calendar-key i {
   width: 9px;
   height: 9px;
-  border: 1px solid #d8ded7;
+  border: 1px solid var(--n-150);
   border-radius: 3px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rsv-calendar-key i.is-unavailable {
-  border-color: #e7e6df;
-  background: #f1f1ed;
+  border-color: var(--n-150);
+  background: var(--n-50);
 }
 
 .rsv-calendar-message,
@@ -335,7 +335,7 @@
 }
 
 .rsv-calendar-error {
-  color: #a33a32;
+  color: var(--bad-500);
 }
 
 .rsv-calendar-close {
@@ -366,30 +366,30 @@
 .rsv-length {
   min-height: 34px;
   padding: 0 12px;
-  border: 1px solid #d8ded7;
+  border: 1px solid var(--n-150);
   border-radius: 8px;
   color: var(--rsv-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: background .2s ease, border-color .2s ease, color .2s ease;
+  transition: background .2s var(--ease-out), border-color .2s var(--ease-out), color .2s var(--ease-out);
 }
 
 .rsv-length:hover:not(:disabled) {
-  border-color: #97a99b;
-  background: #f5f7f3;
+  border-color: var(--g-300);
+  background: var(--n-50);
 }
 
 .rsv-length[aria-pressed="true"] {
   border-color: var(--rsv-forest);
-  color: #fff;
+  color: var(--n-0);
   background: var(--rsv-forest);
 }
 
 .rsv-length:disabled {
-  color: #7d857f;
-  background: #f8f8f4;
+  color: var(--n-400);
+  background: var(--n-25);
   cursor: not-allowed;
 }
 
@@ -402,7 +402,7 @@
   padding: 10px 12px;
   border-radius: 8px;
   color: var(--rsv-muted);
-  background: #f4f4ef;
+  background: var(--n-50);
   font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
@@ -417,22 +417,22 @@
 }
 
 .rsv-status.is-checking i {
-  animation: rsv-pulse 1.2s ease-in-out infinite;
+  animation: rsv-pulse 1.2s var(--ease-in-out) infinite;
 }
 
 .rsv-status.is-good {
-  color: #1c6b4e;
-  background: #e9f5ee;
+  color: var(--ok-700);
+  background: var(--n-50);
 }
 
 .rsv-status.is-bad {
-  color: #9a3d44;
-  background: #fdf0f0;
+  color: var(--bad-700);
+  background: var(--n-50);
 }
 
 .rsv-status.is-warn {
-  color: #7f5810;
-  background: #fff6e2;
+  color: var(--warn-700);
+  background: var(--b-50);
 }
 
 /* Choice rows */
@@ -455,7 +455,7 @@
 .rsv-check-special {
   margin-top: 18px;
   padding-top: 18px;
-  border-top: 1px solid #f0f0ea;
+  border-top: 1px solid var(--n-50);
 }
 
 .rsv-check b {
@@ -477,8 +477,8 @@
   margin: 0 0 16px;
   padding: 14px 16px;
   border-radius: 8px;
-  color: #454f4a;
-  background: #f8f8f4;
+  color: var(--n-600);
+  background: var(--n-25);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -505,8 +505,8 @@
   place-items: center;
   overflow: hidden;
   border-radius: 8px;
-  color: #8b978e;
-  background: #eef0ea;
+  color: var(--n-400);
+  background: var(--n-100);
 }
 
 .rsv-photo img {
@@ -638,10 +638,10 @@
 
 .rsv-error {
   padding: 10px 12px;
-  border: 1px solid #f0d6d6;
+  border: 1px solid var(--bad-100);
   border-radius: 8px;
-  color: #9a3d44;
-  background: #fff5f5;
+  color: var(--bad-700);
+  background: var(--n-25);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -661,16 +661,16 @@
   padding: 0 18px;
   border: 0;
   border-radius: 8px;
-  color: #fff;
+  color: var(--n-0);
   background: var(--rsv-forest);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background .2s ease, transform .2s ease;
+  transition: background .2s var(--ease-out), transform .2s var(--ease-out);
 }
 
 .rsv-submit:hover:not(:disabled) {
-  background: #192f2a;
+  background: var(--g-800);
 }
 
 .rsv-submit:active:not(:disabled) {
@@ -678,8 +678,8 @@
 }
 
 .rsv-submit:disabled {
-  color: #6c746f;
-  background: #e9eae4;
+  color: var(--n-500);
+  background: var(--n-100);
   cursor: not-allowed;
 }
 
@@ -700,7 +700,7 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  transition: color .2s ease;
+  transition: color .2s var(--ease-out);
 }
 
 .rsv-cancel:hover {
@@ -711,7 +711,7 @@
   padding: 18px 24px 22px;
   border-top: 1px solid var(--rsv-line);
   border-radius: 0 0 12px 12px;
-  background: #f8f8f4;
+  background: var(--n-25);
 }
 
 .rsv-next h3 {
@@ -739,8 +739,8 @@
   height: 14px;
   margin-bottom: 14px;
   border-radius: 4px;
-  background: #ecece6;
-  animation: rsv-pulse 1.4s ease-in-out infinite;
+  background: var(--n-100);
+  animation: rsv-pulse 1.4s var(--ease-in-out) infinite;
 }
 
 .rsv-skeleton-tall {

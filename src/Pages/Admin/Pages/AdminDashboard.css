@@ -1,17 +1,17 @@
 .ad {
-  --ad-ink: #202a28;
-  --ad-muted: #5f6964;
-  --ad-line: #e7e6df;
-  --ad-field-line: #d6d7cd;
-  --ad-forest: #263f39;
-  --ad-forest-dark: #192f2a;
-  --ad-canvas: #eef0ea;
-  --ad-red: #8a2f2a;
-  --ad-red-soft: #fbeceb;
-  --ad-amber: #7d5510;
-  --ad-amber-soft: #fbf1da;
-  --ad-green: #275a3c;
-  --ad-green-soft: #e6f1e8;
+  --ad-ink: var(--n-800);
+  --ad-muted: var(--n-500);
+  --ad-line: var(--n-150);
+  --ad-field-line: var(--n-200);
+  --ad-forest: var(--g-700);
+  --ad-forest-dark: var(--g-800);
+  --ad-canvas: var(--n-100);
+  --ad-red: var(--bad-700);
+  --ad-red-soft: var(--n-50);
+  --ad-amber: var(--warn-700);
+  --ad-amber-soft: var(--b-50);
+  --ad-green: var(--ok-700);
+  --ad-green-soft: var(--n-100);
   container-type: inline-size;
   width: min(100%, 1280px);
   margin: 0 auto;
@@ -21,7 +21,7 @@
 }
 
 .ad button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -53,7 +53,7 @@
 .ad-card {
   border: 1px solid var(--ad-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 /* Buttons */
@@ -65,7 +65,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .ad-btn:active {
@@ -73,7 +73,7 @@
 }
 
 .ad-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--ad-forest);
 }
 
@@ -84,12 +84,12 @@
 .ad-btn-outline {
   border-color: var(--ad-field-line);
   color: var(--ad-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .ad-btn-outline:hover {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 /* Stat tiles */
@@ -194,14 +194,14 @@
   border: 1px solid var(--ad-line);
   border-radius: 8px;
   color: var(--ad-ink);
-  background: #fff;
+  background: var(--n-0);
   text-align: left;
-  transition: border-color .2s ease, background-color .2s ease;
+  transition: border-color .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 
 .ad-alert:hover {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .ad-alert-icon {
@@ -325,7 +325,7 @@
 }
 
 .ad-type-pickup {
-  color: #fff;
+  color: var(--n-0);
   background: var(--ad-forest);
 }
 
@@ -413,9 +413,9 @@
 .ad-shimmer {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: ad-shimmer 1.4s ease-in-out infinite;
+  animation: ad-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes ad-shimmer {
@@ -567,7 +567,7 @@
 
 .ad-chart-table summary {
   width: fit-content;
-  color: #35564a;
+  color: var(--g-600);
   font-weight: 600;
   cursor: pointer;
 }

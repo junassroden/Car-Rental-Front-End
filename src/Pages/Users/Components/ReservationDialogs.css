@@ -1,14 +1,14 @@
 /* Reservation activity and dialog styles. */
 .rv,
 .rv-dialog {
-  --rv-ink: #202a28;
-  --rv-muted: #5f6964;
-  --rv-line: #e7e6df;
-  --rv-field-line: #d6d7cd;
-  --rv-forest: #263f39;
-  --rv-forest-dark: #192f2a;
-  --rv-canvas: #eef0ea;
-  --rv-red: #9c2c27;
+  --rv-ink: var(--n-800);
+  --rv-muted: var(--n-500);
+  --rv-line: var(--n-150);
+  --rv-field-line: var(--n-200);
+  --rv-forest: var(--g-700);
+  --rv-forest-dark: var(--g-800);
+  --rv-canvas: var(--n-100);
+  --rv-red: var(--bad-700);
   color: var(--rv-ink);
 }
 
@@ -20,7 +20,7 @@
 
 .rv button:focus-visible,
 .rv-dialog button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -67,7 +67,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .rv-btn:active:not(:disabled) {
@@ -79,7 +79,7 @@
 }
 
 .rv-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--rv-forest);
 }
 
@@ -90,21 +90,21 @@
 .rv-btn-outline {
   border-color: var(--rv-field-line);
   color: var(--rv-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rv-btn-outline:hover:not(:disabled) {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .rv-btn-danger {
-  color: #fff;
+  color: var(--n-0);
   background: var(--rv-red);
 }
 
 .rv-btn-danger:hover:not(:disabled) {
-  background: #7f2420;
+  background: var(--bad-700);
 }
 
 .rv-btn-link {
@@ -146,15 +146,15 @@
 }
 
 .rv-banner-good {
-  border-color: #d5e5d9;
-  color: #275a3c;
-  background: #f0f6f1;
+  border-color: var(--n-150);
+  color: var(--ok-700);
+  background: var(--n-50);
 }
 
 .rv-banner-bad {
-  border-color: #f0d8d6;
-  color: #8a2f2a;
-  background: #fdf3f2;
+  border-color: var(--bad-100);
+  color: var(--bad-700);
+  background: var(--n-50);
 }
 
 /* Reservation cards */
@@ -170,7 +170,7 @@
   overflow: hidden;
   border: 1px solid var(--rv-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rv-photo {
@@ -256,26 +256,26 @@
 }
 
 .rv-status-pending {
-  color: #7d5510;
-  background: #fbf1da;
+  color: var(--warn-700);
+  background: var(--b-50);
 }
 
 .rv-status-awaiting_approval {
-  color: #705b24;
-  background: #f7f0dc;
+  color: var(--b-700);
+  background: var(--b-50);
 }
 
 .rv-status-confirmed,
 .rv-status-completed {
-  color: #275a3c;
-  background: #e6f1e8;
+  color: var(--ok-700);
+  background: var(--n-100);
 }
 
 .rv-status-rejected,
 .rv-status-expired,
 .rv-status-cancelled {
-  color: #8a2f2a;
-  background: #fbeceb;
+  color: var(--bad-700);
+  background: var(--n-50);
 }
 
 .rv-total {
@@ -324,19 +324,19 @@
   padding: 10px 12px;
   border-radius: 8px;
   color: var(--rv-ink);
-  background: #f5f5ef;
+  background: var(--n-50);
   font-size: 14px;
   line-height: 1.45;
 }
 
 .rv-next-attention {
-  color: #5f420c;
-  background: #fbf1da;
+  color: var(--b-700);
+  background: var(--b-50);
 }
 
 .rv-next-good {
-  color: #275a3c;
-  background: #e6f1e8;
+  color: var(--ok-700);
+  background: var(--n-100);
 }
 
 .rv-actions {
@@ -351,9 +351,9 @@
 /* Loading */
 .rv-shimmer {
   display: block;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: rv-shimmer 1.4s ease-in-out infinite;
+  animation: rv-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes rv-shimmer {
@@ -384,7 +384,7 @@
   padding: 32px 20px;
   border: 1px solid var(--rv-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
   text-align: center;
 }
 
@@ -417,12 +417,12 @@ html:has(.rv-dialog[open]) {
   overflow: hidden;
   border: 0;
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 24px 60px rgb(20 36 31 / 28%);
+  background: var(--n-0);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--n-800) 14%, transparent);
 }
 
 .rv-dialog::backdrop {
-  background: rgb(20 30 27 / 55%);
+  background: color-mix(in srgb, var(--n-900) 55%, transparent);
 }
 
 .rv-dialog[open] {
@@ -477,7 +477,7 @@ html:has(.rv-dialog[open]) {
   margin: 0;
   padding: 14px;
   border-radius: 10px;
-  background: #f5f5ef;
+  background: var(--n-50);
 }
 
 .rv-pay-summary dt {
@@ -515,13 +515,13 @@ html:has(.rv-dialog[open]) {
   border: 1px solid var(--rv-field-line);
   border-radius: 8px;
   color: var(--rv-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 15px;
 }
 
 .rv-field input:focus {
   border-color: var(--rv-forest);
-  box-shadow: 0 0 0 3px rgb(38 63 57 / 12%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-700) 12%, transparent);
   outline: 0;
 }
 
@@ -570,7 +570,7 @@ html:has(.rv-dialog[open]) {
   gap: 16px;
   padding: 14px 20px;
   border-top: 1px solid var(--rv-line);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .rv-agreement-actions p {
@@ -605,7 +605,7 @@ html:has(.rv-dialog[open]) {
   padding: clamp(20px, 5vw, 40px);
   border: 1px solid var(--rv-line);
   border-radius: 6px;
-  background: #fff;
+  background: var(--n-0);
   font-size: 14px;
   line-height: 1.55;
 }
@@ -711,7 +711,7 @@ html:has(.rv-dialog[open]) {
   margin: 0 auto;
   padding: 24px;
   border-radius: 6px;
-  background: #fff;
+  background: var(--n-0);
   font: inherit;
   font-size: 14px;
   line-height: 1.6;
@@ -812,14 +812,14 @@ html:has(.rv-dialog[open]) {
   .rv-agreement-scroll {
     overflow: visible;
     padding: 0;
-    background: #fff;
+    background: var(--n-0);
   }
 
   .rv-doc {
     max-width: none;
     padding: 0;
     border: 0;
-    color: #000;
+    color: var(--n-950);
   }
 }
 
@@ -846,14 +846,14 @@ html:has(.rv-dialog[open]) {
   border: 1px solid var(--rv-line);
   border-left: 4px solid var(--rv-muted);
   border-radius: 8px;
-  background: #fff;
+  background: var(--n-0);
 }
-.rv-result-paid { border-left-color: #2c7a4b; }
-.rv-result-pending { border-left-color: #b7791f; }
+.rv-result-paid { border-left-color: var(--ok-500); }
+.rv-result-pending { border-left-color: var(--warn-500); }
 .rv-result-failed { border-left-color: var(--rv-red); }
 .rv-result h2 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.35; color: var(--rv-ink); }
-.rv-result-paid h2 { color: #275a3c; }
-.rv-result-failed h2 { color: #8a2f2a; }
+.rv-result-paid h2 { color: var(--ok-700); }
+.rv-result-failed h2 { color: var(--bad-700); }
 .rv-result > p { margin: 6px 0 0; max-width: 68ch; font-size: 15px; line-height: 1.5; color: var(--rv-muted); }
 .rv-result-facts {
   display: grid;
@@ -866,4 +866,4 @@ html:has(.rv-dialog[open]) {
 .rv-result-facts dt { font-size: 13px; color: var(--rv-muted); }
 .rv-result-facts dd { margin: 2px 0 0; font-size: 15px; font-weight: 500; color: var(--rv-ink); overflow-wrap: anywhere; }
 .rv-result .rv-actions { margin-top: 16px; }
-.rv-ref { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; overflow-wrap: anywhere; }
+.rv-ref { font-family: var(--font-mono); font-size: 13px; overflow-wrap: anywhere; }

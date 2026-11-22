@@ -1,13 +1,13 @@
 .fo {
-  --fo-ink: #202a28;
-  --fo-muted: #5f6964;
-  --fo-line: #e7e6df;
-  --fo-field-line: #d6d7cd;
-  --fo-forest: #263f39;
-  --fo-forest-dark: #192f2a;
-  --fo-canvas: #eef0ea;
-  --fo-red: #8a2f2a;
-  --fo-green: #275a3c;
+  --fo-ink: var(--n-800);
+  --fo-muted: var(--n-500);
+  --fo-line: var(--n-150);
+  --fo-field-line: var(--n-200);
+  --fo-forest: var(--g-700);
+  --fo-forest-dark: var(--g-800);
+  --fo-canvas: var(--n-100);
+  --fo-red: var(--bad-700);
+  --fo-green: var(--ok-700);
   container-type: inline-size;
   width: min(100%, 1280px);
   margin: 0 auto;
@@ -17,7 +17,7 @@
 }
 
 .fo button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -63,7 +63,7 @@
 .fo-card {
   border: 1px solid var(--fo-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 /* Buttons */
@@ -75,7 +75,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .fo-btn:active:not(:disabled) {
@@ -87,7 +87,7 @@
 }
 
 .fo-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--fo-forest);
 }
 
@@ -98,12 +98,12 @@
 .fo-btn-outline {
   border-color: var(--fo-field-line);
   color: var(--fo-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .fo-btn-outline:hover:not(:disabled) {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .fo-link {
@@ -158,8 +158,8 @@
 }
 
 .fo-tile.is-urgent {
-  border-color: #e7c5c2;
-  background: #fdf5f4;
+  border-color: var(--bad-100);
+  background: var(--n-50);
 }
 
 .fo-tile.is-urgent dt,
@@ -178,15 +178,15 @@
 }
 
 .fo-banner-good {
-  border-color: #d5e5d9;
+  border-color: var(--n-150);
   color: var(--fo-green);
-  background: #f0f6f1;
+  background: var(--n-50);
 }
 
 .fo-banner-bad {
-  border-color: #f0d8d6;
+  border-color: var(--bad-100);
   color: var(--fo-red);
-  background: #fdf3f2;
+  background: var(--n-50);
 }
 
 /* Panels */
@@ -283,13 +283,13 @@
 }
 
 .fo-date-today {
-  color: #fff;
+  color: var(--n-0);
   background: var(--fo-forest);
 }
 
 .fo-date-late {
   color: var(--fo-red);
-  background: #fbeceb;
+  background: var(--n-50);
 }
 
 .fo-when {
@@ -320,7 +320,7 @@
 }
 
 .fo-type-pickup {
-  color: #fff;
+  color: var(--n-0);
   background: var(--fo-forest);
 }
 
@@ -375,17 +375,17 @@
 
 .fo-note.fo-note-bad {
   color: var(--fo-red);
-  background: #fbeceb;
+  background: var(--n-50);
 }
 
 .fo-note.fo-note-good {
   color: var(--fo-green);
-  background: #e6f1e8;
+  background: var(--n-100);
 }
 
 .fo-note.fo-note-wait {
-  color: #7d5510;
-  background: #fbf1da;
+  color: var(--warn-700);
+  background: var(--b-50);
 }
 
 .fo-use .fo-note-bad {
@@ -438,19 +438,19 @@
   border: 1px solid var(--fo-field-line);
   border-radius: 999px;
   color: var(--fo-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 13px;
   font-weight: 500;
-  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+  transition: color .2s var(--ease-out), border-color .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 
 .fo-chips button:hover {
-  border-color: #aeb4a8;
+  border-color: var(--n-300);
 }
 
 .fo-chips button.selected {
   border-color: var(--fo-forest);
-  color: #fff;
+  color: var(--n-0);
   background: var(--fo-forest);
 }
 
@@ -461,7 +461,7 @@
 }
 
 .fo-chips button.selected span {
-  color: rgb(255 255 255 / 75%);
+  color: color-mix(in srgb, var(--n-0) 75%, transparent);
 }
 
 /* Fleet table */
@@ -576,7 +576,7 @@
 }
 
 .fo-none {
-  color: #7a827d;
+  color: var(--n-400);
 }
 
 .fo-rate {
@@ -608,17 +608,17 @@
 
 .fo-status-available {
   color: var(--fo-green);
-  background: #e6f1e8;
+  background: var(--n-100);
 }
 
 .fo-status-rented {
-  color: #2d5566;
-  background: #e5eff2;
+  color: var(--g-600);
+  background: var(--n-100);
 }
 
 .fo-status-maintenance {
-  color: #7d5510;
-  background: #fbf1da;
+  color: var(--warn-700);
+  background: var(--b-50);
 }
 
 /* Error */
@@ -651,9 +651,9 @@
 .fo-shimmer {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: fo-shimmer 1.4s ease-in-out infinite;
+  animation: fo-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes fo-shimmer {

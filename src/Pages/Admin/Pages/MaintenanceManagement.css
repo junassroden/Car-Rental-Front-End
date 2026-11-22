@@ -1,14 +1,14 @@
 .mm {
-  --mm-ink: #202a28;
-  --mm-muted: #5f6964;
-  --mm-line: #e7e6df;
-  --mm-field-line: #d6d7cd;
-  --mm-forest: #263f39;
-  --mm-forest-dark: #192f2a;
-  --mm-canvas: #eef0ea;
-  --mm-red: #8a2f2a;
-  --mm-green: #275a3c;
-  --mm-amber: #7d5510;
+  --mm-ink: var(--n-800);
+  --mm-muted: var(--n-500);
+  --mm-line: var(--n-150);
+  --mm-field-line: var(--n-200);
+  --mm-forest: var(--g-700);
+  --mm-forest-dark: var(--g-800);
+  --mm-canvas: var(--n-100);
+  --mm-red: var(--bad-700);
+  --mm-green: var(--ok-700);
+  --mm-amber: var(--warn-700);
   container-type: inline-size;
   width: min(100%, 1280px);
   margin: 0 auto;
@@ -19,7 +19,7 @@
 
 .mm button:focus-visible,
 .mm select:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -74,7 +74,7 @@
 .mm-card {
   border: 1px solid var(--mm-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 /* Buttons */
@@ -86,7 +86,7 @@
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
-  transition: background-color .2s ease, border-color .2s ease, transform .1s ease;
+  transition: background-color .2s var(--ease-out), border-color .2s var(--ease-out), transform .1s var(--ease-out);
 }
 
 .mm-btn:active:not(:disabled) {
@@ -98,7 +98,7 @@
 }
 
 .mm-btn-primary {
-  color: #fff;
+  color: var(--n-0);
   background: var(--mm-forest);
 }
 
@@ -109,12 +109,12 @@
 .mm-btn-outline {
   border-color: var(--mm-field-line);
   color: var(--mm-ink);
-  background: #fff;
+  background: var(--n-0);
 }
 
 .mm-btn-outline:hover:not(:disabled) {
-  border-color: #aeb4a8;
-  background: #fafaf6;
+  border-color: var(--n-300);
+  background: var(--n-25);
 }
 
 .mm-link {
@@ -170,8 +170,8 @@
 }
 
 .mm-tile.is-urgent {
-  border-color: #e7c5c2;
-  background: #fdf5f4;
+  border-color: var(--bad-100);
+  background: var(--n-50);
 }
 
 .mm-tile.is-urgent dt,
@@ -190,15 +190,15 @@
 }
 
 .mm-banner-good {
-  border-color: #d5e5d9;
+  border-color: var(--n-150);
   color: var(--mm-green);
-  background: #f0f6f1;
+  background: var(--n-50);
 }
 
 .mm-banner-bad {
-  border-color: #f0d8d6;
+  border-color: var(--bad-100);
   color: var(--mm-red);
-  background: #fdf3f2;
+  background: var(--n-50);
 }
 
 /* Panels */
@@ -265,19 +265,19 @@
   border: 1px solid var(--mm-field-line);
   border-radius: 999px;
   color: var(--mm-ink);
-  background: #fff;
+  background: var(--n-0);
   font-size: 13px;
   font-weight: 500;
-  transition: color .2s ease, border-color .2s ease, background-color .2s ease;
+  transition: color .2s var(--ease-out), border-color .2s var(--ease-out), background-color .2s var(--ease-out);
 }
 
 .mm-chips button:hover {
-  border-color: #aeb4a8;
+  border-color: var(--n-300);
 }
 
 .mm-chips button.selected {
   border-color: var(--mm-forest);
-  color: #fff;
+  color: var(--n-0);
   background: var(--mm-forest);
 }
 
@@ -288,7 +288,7 @@
 }
 
 .mm-chips button.selected span {
-  color: rgb(255 255 255 / 75%);
+  color: color-mix(in srgb, var(--n-0) 75%, transparent);
 }
 
 /* Log filters */
@@ -304,7 +304,7 @@
   border: 1px solid var(--mm-field-line);
   border-radius: 8px;
   color: var(--mm-ink);
-  background-color: #fff;
+  background-color: var(--n-0);
   font-size: 14px;
 }
 
@@ -316,12 +316,12 @@
 
 .mm-search input:focus {
   border-color: var(--mm-forest);
-  box-shadow: 0 0 0 3px rgb(38 63 57 / 12%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-700) 12%, transparent);
   outline: 0;
 }
 
 .mm-search input::placeholder {
-  color: #7a827d;
+  color: var(--n-400);
 }
 
 .mm-log-vehicle select,
@@ -421,7 +421,7 @@
 }
 
 .mm-none {
-  color: #7a827d;
+  color: var(--n-400);
 }
 
 .mm-status {
@@ -447,20 +447,20 @@
 .mm-status-overdue,
 .mm-rec-overdue {
   color: var(--mm-red);
-  background: #fbeceb;
+  background: var(--n-50);
 }
 
 .mm-status-soon,
 .mm-rec-scheduled,
 .mm-rec-in-progress {
   color: var(--mm-amber);
-  background: #fbf1da;
+  background: var(--b-50);
 }
 
 .mm-status-good,
 .mm-rec-completed {
   color: var(--mm-green);
-  background: #e6f1e8;
+  background: var(--n-100);
 }
 
 .mm-actions {
@@ -502,9 +502,9 @@
 .mm-shimmer {
   display: block;
   border-radius: 6px;
-  background: linear-gradient(100deg, #eceee7 30%, #f6f6f1 50%, #eceee7 70%);
+  background: linear-gradient(100deg, var(--n-100) 30%, var(--n-50) 50%, var(--n-100) 70%);
   background-size: 220% 100%;
-  animation: mm-shimmer 1.4s ease-in-out infinite;
+  animation: mm-shimmer 1.4s var(--ease-in-out) infinite;
 }
 
 @keyframes mm-shimmer {
@@ -530,12 +530,12 @@ html:has(.mm-dialog[open]) {
   border: 0;
   border-radius: 14px;
   color: var(--mm-ink);
-  background: #fff;
-  box-shadow: 0 24px 60px rgb(20 36 31 / 28%);
+  background: var(--n-0);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--n-800) 14%, transparent);
 }
 
 .mm-dialog::backdrop {
-  background: rgb(20 30 27 / 55%);
+  background: color-mix(in srgb, var(--n-900) 55%, transparent);
 }
 
 .mm-dialog[open] {
@@ -555,7 +555,7 @@ html:has(.mm-dialog[open]) {
 }
 
 .mm-dialog button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
@@ -662,7 +662,7 @@ html:has(.mm-dialog[open]) {
   border: 1px solid var(--mm-field-line);
   border-radius: 8px;
   color: var(--mm-ink);
-  background-color: #fff;
+  background-color: var(--n-0);
   font-size: 15px;
 }
 
@@ -678,7 +678,7 @@ html:has(.mm-dialog[open]) {
 
 .mm-field select:disabled {
   color: var(--mm-muted);
-  background-color: #f5f5ef;
+  background-color: var(--n-50);
   cursor: not-allowed;
 }
 
@@ -686,7 +686,7 @@ html:has(.mm-dialog[open]) {
 .mm-field select:focus,
 .mm-field textarea:focus {
   border-color: var(--mm-forest);
-  box-shadow: 0 0 0 3px rgb(38 63 57 / 12%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-700) 12%, transparent);
   outline: 0;
 }
 

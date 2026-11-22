@@ -3,17 +3,17 @@
 .di-window { min-width: 170px; }
 
 .di-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 0 0 16px; }
-.di-tile { background: #ffffff; border: 1px solid #e6e4dc; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
-.di-tile span { font-size: 12.5px; color: #5d6662; text-transform: uppercase; letter-spacing: 0.04em; }
-.di-tile b { font-size: 24px; color: #202a28; }
-.di-tile small { font-size: 12.5px; color: #6c7570; }
+.di-tile { background: var(--n-0); border: 1px solid var(--n-150); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+.di-tile span { font-size: 12.5px; color: var(--n-500); text-transform: uppercase; letter-spacing: 0.04em; }
+.di-tile b { font-size: 24px; color: var(--n-800); }
+.di-tile small { font-size: 12.5px; color: var(--n-500); }
 
 .di-panel { margin-bottom: 16px; }
 .di-panel h2 { margin: 4px 0; }
-.di-panel p { color: #5d6662; margin: 0 0 10px; }
+.di-panel p { color: var(--n-500); margin: 0 0 10px; }
 .di-panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 
-.di-legend { display: flex; gap: 16px; list-style: none; padding: 0; margin: 4px 0 8px; font-size: 13px; color: #3b4542; }
+.di-legend { display: flex; gap: 16px; list-style: none; padding: 0; margin: 4px 0 8px; font-size: 13px; color: var(--n-700); }
 .di-legend li { display: flex; align-items: center; gap: 6px; }
 .di-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
 

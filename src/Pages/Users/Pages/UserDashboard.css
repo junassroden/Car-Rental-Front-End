@@ -1,13 +1,13 @@
 .dash {
-  --dash-ink: #202a28;
-  --dash-muted: #68716c;
-  --dash-faint: #a3aaa4;
-  --dash-line: #e7e6df;
-  --dash-forest: #243a34;
-  --dash-forest-deep: #1d2c28;
-  --dash-clay: #e4c3a6;
-  --dash-cream: #f3efe6;
-  --dash-amber: #9a6b13;
+  --dash-ink: var(--n-800);
+  --dash-muted: var(--n-500);
+  --dash-faint: var(--n-300);
+  --dash-line: var(--n-150);
+  --dash-forest: var(--g-700);
+  --dash-forest-deep: var(--n-800);
+  --dash-clay: var(--b-200);
+  --dash-cream: var(--n-50);
+  --dash-amber: var(--warn-500);
   container-type: inline-size;
   display: grid;
   gap: 16px;
@@ -23,9 +23,8 @@
   gap: 32px;
   padding: 36px;
   border-radius: 14px;
-  color: #fff;
-  background:
-    radial-gradient(ellipse at 88% 8%, rgb(166 180 153 / 20%), transparent 42%),
+  color: var(--n-0);
+  background: radial-gradient(ellipse at 88% 8%, color-mix(in srgb, var(--g-300) 20%, transparent), transparent 42%),
     linear-gradient(118deg, var(--dash-forest), var(--dash-forest-deep) 72%);
 }
 
@@ -37,14 +36,14 @@
 }
 
 .dash-hero-copy time {
-  color: #c4d0c5;
+  color: var(--n-200);
   font-size: 13px;
   font-weight: 500;
 }
 
 .dash-hero-copy h1 {
   margin: 12px 0 10px;
-  color: #fff;
+  color: var(--n-0);
   font-size: clamp(2rem, 4.4cqw, 2.9rem);
   font-weight: 500;
   letter-spacing: -.045em;
@@ -60,7 +59,7 @@
 .dash-hero-copy p {
   max-width: 42ch;
   margin: 0 0 24px;
-  color: rgb(255 255 255 / 80%);
+  color: color-mix(in srgb, var(--n-0) 80%, transparent);
   font-size: 15px;
   line-height: 1.55;
   text-wrap: pretty;
@@ -80,11 +79,11 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background .2s ease, transform .2s ease;
+  transition: background .2s var(--ease-out), transform .2s var(--ease-out);
 }
 
 .dash-hero-action:hover {
-  background: #fff;
+  background: var(--n-0);
 }
 
 .dash-hero-action:hover svg,
@@ -99,7 +98,7 @@
 
 .dash svg {
   flex: none;
-  transition: transform .2s ease;
+  transition: transform .2s var(--ease-out);
 }
 
 /* Next trip ticket */
@@ -109,9 +108,9 @@
   flex-direction: column;
   gap: 14px;
   padding: 20px 22px;
-  border: 1px solid rgb(255 255 255 / 14%);
+  border: 1px solid color-mix(in srgb, var(--n-0) 14%, transparent);
   border-radius: 10px;
-  background: rgb(255 255 255 / 6%);
+  background: color-mix(in srgb, var(--n-0) 6%, transparent);
 }
 
 .dash-ticket-empty {
@@ -128,7 +127,7 @@
 }
 
 .dash-ticket-label {
-  color: #c4d0c5;
+  color: var(--n-200);
   font-size: 13px;
   font-weight: 500;
 }
@@ -136,7 +135,7 @@
 .dash-ticket h2 {
   margin: 0;
   overflow-wrap: anywhere;
-  color: #fff;
+  color: var(--n-0);
   font-size: 22px;
   font-weight: 500;
   letter-spacing: -.025em;
@@ -160,12 +159,12 @@
 }
 
 .dash-ticket-route small {
-  color: #c4d0c5;
+  color: var(--n-200);
   font-size: 12px;
 }
 
 .dash-ticket-route b {
-  color: #fff;
+  color: var(--n-0);
   font-size: 14px;
   font-weight: 500;
   font-variant-numeric: tabular-nums;
@@ -174,24 +173,24 @@
 
 .dash-ticket-route > i {
   height: 1px;
-  background: rgb(255 255 255 / 28%);
+  background: color-mix(in srgb, var(--n-0) 28%, transparent);
 }
 
 .dash-ticket-empty .dash-ticket-route b {
-  color: rgb(255 255 255 / 45%);
+  color: color-mix(in srgb, var(--n-0) 45%, transparent);
 }
 
 .dash-ticket-empty p {
   margin: auto 0 0;
-  color: rgb(255 255 255 / 80%);
+  color: color-mix(in srgb, var(--n-0) 80%, transparent);
   font-size: 14px;
 }
 
 .dash-ticket footer {
   margin-top: auto;
   padding-top: 12px;
-  border-top: 1px solid rgb(255 255 255 / 12%);
-  color: #c4d0c5;
+  border-top: 1px solid color-mix(in srgb, var(--n-0) 12%, transparent);
+  color: var(--n-200);
   font-size: 13px;
 }
 
@@ -215,8 +214,8 @@
 }
 
 .dash .status-pill.status-awaiting_approval {
-  color: #705b24;
-  background: #f7f0dc;
+  color: var(--b-700);
+  background: var(--b-50);
 }
 
 /* Stat strip: one surface split by hairlines */
@@ -226,7 +225,7 @@
   overflow: hidden;
   border: 1px solid var(--dash-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .dash-stat {
@@ -256,7 +255,7 @@
 }
 
 .dash-stat b.is-zero {
-  color: #7d857f;
+  color: var(--n-400);
 }
 
 .dash-stat b.is-attention {
@@ -285,7 +284,7 @@
   min-width: 0;
   border: 1px solid var(--dash-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--n-0);
 }
 
 .dash-panel h2 {
@@ -319,7 +318,7 @@
   justify-content: space-between;
   gap: 14px;
   padding: 12px 22px;
-  border-top: 1px solid #f0f0ea;
+  border-top: 1px solid var(--n-50);
 }
 
 .dash-row:first-child {
@@ -359,7 +358,7 @@
   border: 1px solid var(--dash-line);
   border-radius: 999px;
   color: var(--dash-forest);
-  background: #fff;
+  background: var(--n-0);
   font-size: 12px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -383,7 +382,7 @@
   align-items: flex-start;
   gap: 8px;
   padding: 20px 22px;
-  background: #f1f2ec;
+  background: var(--n-50);
 }
 
 .dash-finder p {
@@ -399,8 +398,8 @@
   gap: 18px;
   margin-top: 20px;
   padding-top: 18px;
-  border-top: 1px solid rgb(36 58 52 / 14%);
-  background: #f1f2ec;
+  border-top: 1px solid color-mix(in srgb, var(--g-700) 14%, transparent);
+  background: var(--n-50);
 }
 
 .dash-location-copy {
@@ -441,7 +440,7 @@
   min-height: 170px;
   overflow: hidden;
   border-radius: 8px;
-  background: #e2e8e2;
+  background: var(--n-150);
 }
 
 .dash-location-map iframe {
@@ -459,7 +458,7 @@
   gap: 6px;
   padding: 0;
   border: 0;
-  color: #35564a;
+  color: var(--g-600);
   background: none;
   font-size: 13px;
   font-weight: 600;
@@ -478,10 +477,10 @@
   justify-content: space-between;
   gap: 16px;
   padding: 12px 18px;
-  border: 1px solid #f0d6d6;
+  border: 1px solid var(--bad-100);
   border-radius: 10px;
-  color: #a5454c;
-  background: #fff5f5;
+  color: var(--bad-500);
+  background: var(--n-25);
   font-size: 14px;
 }
 
@@ -504,12 +503,12 @@
   display: block;
   height: 12px;
   border-radius: 4px;
-  background: #ecece6;
-  animation: dash-pulse 1.4s ease-in-out infinite;
+  background: var(--n-100);
+  animation: dash-pulse 1.4s var(--ease-in-out) infinite;
 }
 
 .dash-skeleton-dark {
-  background: rgb(255 255 255 / 14%);
+  background: color-mix(in srgb, var(--n-0) 14%, transparent);
 }
 
 .dash-skeleton-lg {
@@ -528,7 +527,7 @@
 
 /* Focus */
 .dash button:focus-visible {
-  outline: 2px solid #829987;
+  outline: 2px solid var(--g-300);
   outline-offset: 2px;
 }
 
