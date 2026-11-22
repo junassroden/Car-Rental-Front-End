@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 const GOOGLE_SCRIPT_ID = 'google-identity-services'
 
-export default function GoogleSignInButton({ onCredential, onError }) {
+// `fluid` sizes the Google button to its container (Google allows 200–400px); `shape` passes through to Google.
+export default function GoogleSignInButton({ onCredential, onError, fluid = false, shape = 'rectangular' }) {
   const buttonRef = useRef(null)
   const callbacks = useRef({ onCredential, onError })
   const [scriptReady, setScriptReady] = useState(Boolean(window.google?.accounts?.id))
@@ -26,13 +27,14 @@ export default function GoogleSignInButton({ onCredential, onError }) {
           else callbacks.current.onError('Google did not return an identity credential.')
         },
       })
+      const available = buttonRef.current.parentElement?.clientWidth || 320
       window.google.accounts.id.renderButton(buttonRef.current, {
         type: 'standard',
         theme: 'outline',
         size: 'large',
         text: 'continue_with',
-        shape: 'rectangular',
-        width: 320,
+        shape,
+        width: fluid ? Math.max(200, Math.min(400, Math.floor(available))) : 320,
       })
       setScriptReady(true)
     }
@@ -57,7 +59,7 @@ export default function GoogleSignInButton({ onCredential, onError }) {
       active = false
       script?.removeEventListener('load', renderButton)
     }
-  }, [clientId])
+  }, [clientId, fluid, shape])
 
   if (!clientId) {
     return <p className="google-auth-help">Google sign-in is unavailable until VITE_GOOGLE_CLIENT_ID is configured.</p>

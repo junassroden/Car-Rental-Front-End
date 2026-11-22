@@ -614,3 +614,9 @@
     text-align: left;
   }
 }
+
+/* Minimal pass: section counts sit beside the heading as quiet metadata. */
+.ad-panel-head { align-items: center; }
+.ad-panel-head h2 small { margin-left: 6px; font-size: 12px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #8a928d; }
+.ad-alert-text { align-self: center; }
+.ad-more { font-size: 12.5px; }

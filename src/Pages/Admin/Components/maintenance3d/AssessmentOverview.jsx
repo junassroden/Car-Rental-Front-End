@@ -18,6 +18,8 @@ const ICONS = {
   clipboard: 'M9 4h6v3H9zM9 5.5H6V20h12V5.5h-3M9 12h6M9 16h6',
   car: 'M5 16V11l2-5h10l2 5v5M5 16h14M5 16v2M19 16v2M5 11h14M8 13.5v.01M16 13.5v.01',
   settings: 'M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4h4V5zM6 15v4h4v-4z',
+  plus: 'M12 5v14M5 12h14',
+  chevron: 'M9 6l6 6-6 6',
 }
 
 export function PmIcon({ name, size = 16 }) {
@@ -96,7 +98,6 @@ export default function AssessmentOverview({ fleet, onOpen, onManageModels }) {
         <div>
           <span className="am-eyebrow">Fleet maintenance</span>
           <h1>Predictive Maintenance</h1>
-          <p>Select a vehicle and complete its condition assessment. Results and the 3D inspection become available once the assessment is submitted.</p>
         </div>
       </header>
 

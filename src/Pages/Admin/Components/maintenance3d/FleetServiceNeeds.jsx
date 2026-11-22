@@ -20,13 +20,13 @@ export default function FleetServiceNeeds({ onSelect }) {
   }, [])
 
   const { loading, error, data } = state
-  if (loading) return <section className="pm-fleet-needs" role="status"><span className="pm-spinner" />Loading model predictions…</section>
-  if (error) return <section className="pm-fleet-needs" role="alert"><h2>Model predictions</h2><p className="pm-muted">{error}</p></section>
+  if (loading) return <section className="pm-fleet-needs" role="status"><span className="pm-spinner" />Loading…</section>
+  if (error) return <section className="pm-fleet-needs" role="alert"><h2>Service needs</h2><p className="pm-muted">{error}</p></section>
   if (!data || data.status !== 'available') {
     return (
       <section className="pm-fleet-needs">
-        <h2>Model predictions</h2>
-        <p className="pm-muted">Unavailable: {data?.reason || 'no response from the AI service.'}</p>
+        <h2>Service needs</h2>
+        <p className="pm-muted" title={data?.reason || undefined}>Unavailable</p>
       </section>
     )
   }
@@ -35,13 +35,11 @@ export default function FleetServiceNeeds({ onSelect }) {
   return (
     <section className="pm-fleet-needs" aria-labelledby="pm-fleet-needs-title">
       <header>
-        <h2 id="pm-fleet-needs-title">Likely service needs</h2>
+        <h2 id="pm-fleet-needs-title">Service needs</h2>
         <small>
-          Model {data.model_version} · {data.summary?.analyzed_vehicles ?? 0} of {data.summary?.submitted_vehicles ?? 0} vehicles scored
-          {data.not_scored?.length ? ` · ${data.not_scored.length} outside the model's training data` : ''}
+          {data.model_version} · {data.summary?.analyzed_vehicles ?? 0}/{data.summary?.submitted_vehicles ?? 0} scored
         </small>
       </header>
-      <p className="pm-muted">{data.meaning}</p>
       {flagged.length ? (
         <ul>
           {flagged.map((vehicle) => (
@@ -58,10 +56,10 @@ export default function FleetServiceNeeds({ onSelect }) {
             </li>
           ))}
         </ul>
-      ) : <p className="pm-muted">No scored vehicle has a service item above its recommendation threshold.</p>}
+      ) : <p className="pm-muted">Nothing flagged.</p>}
       {data.not_scored?.length > 0 && (
         <details className="pm-details">
-          <summary>Why some vehicles were not scored</summary>
+          <summary>{data.not_scored.length} not scored</summary>
           <ul>{data.not_scored.map((item) => <li key={item.vehicle_id}>Vehicle #{item.vehicle_id}: {item.error}</li>)}</ul>
         </details>
       )}

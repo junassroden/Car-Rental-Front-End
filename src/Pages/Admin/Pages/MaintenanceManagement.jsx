@@ -408,7 +408,7 @@ function PageSkeleton() {
 }
 
 export default function MaintenanceManagement({ navigate }) {
-  const [data, setData] = useState({ vehicles: [], records: [], serviceItems: [] })
+  const [data, setData] = useState({ vehicles: [], records: [], serviceItems: [], serviceItemsAvailable: true })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [attempt, setAttempt] = useState(0)
@@ -427,7 +427,12 @@ export default function MaintenanceManagement({ navigate }) {
     getMaintenanceRecords()
       .then((result) => {
         if (!active) return
-        setData({ vehicles: result.vehicles || [], records: result.records || [], serviceItems: Object.entries(result.service_items || {}) })
+        setData({
+          vehicles: result.vehicles || [],
+          records: result.records || [],
+          serviceItems: Object.entries(result.service_items || {}),
+          serviceItemsAvailable: result.service_items_available !== false,
+        })
         setError('')
       })
       .catch((requestError) => {
@@ -439,7 +444,7 @@ export default function MaintenanceManagement({ navigate }) {
     return () => { active = false }
   }, [attempt])
 
-  const { vehicles, records, serviceItems } = data
+  const { vehicles, records, serviceItems, serviceItemsAvailable } = data
   const rows = useMemo(() => vehicles.map((vehicle) => ({ vehicle, health: serviceHealth(vehicle, today) })), [today, vehicles])
   const counts = useMemo(() => rows.reduce((totals, row) => ({ ...totals, [row.health.key]: totals[row.health.key] + 1 }), { overdue: 0, soon: 0, good: 0, none: 0 }), [rows])
   const visibleRows = healthFilter ? rows.filter((row) => row.health.key === healthFilter) : rows
@@ -493,9 +498,7 @@ export default function MaintenanceManagement({ navigate }) {
     <div className="admin-content mm">
       <header className="mm-header">
         <div>
-          <span className="mm-eyebrow">Fleet upkeep</span>
           <h1>Maintenance records</h1>
-          <p>See which cars need service, log the work done, and keep mileage up to date.</p>
         </div>
         <div className="mm-header-actions">
           <button type="button" className="mm-btn mm-btn-outline" onClick={() => navigate('/admin/maintenance/predictions')}>View predictions</button>
@@ -535,6 +538,7 @@ export default function MaintenanceManagement({ navigate }) {
           </dl>
 
           {error && <p className="mm-banner mm-banner-bad" role="alert">{error}</p>}
+          {!serviceItemsAvailable && <p className="mm-banner mm-banner-bad" role="status">Service-item tracking is unavailable in this database. Maintenance history can still be viewed and recorded, but service-item tracking needs a database upgrade.</p>}
           {notice && <p className="mm-banner mm-banner-good" role="status">{notice}</p>}
 
           <section className="mm-card mm-panel" aria-labelledby="mm-vehicles-title">

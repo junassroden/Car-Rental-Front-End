@@ -440,7 +440,7 @@ export default function InspectionStage({ rig, vehicle, components, selectedKey,
         )}
       </div>
 
-      <p className="pm-stage-note">Coded schematic, not a 3D scan of this vehicle. Internal parts are representative.</p>
+      <p className="pm-stage-note">Schematic, not a scan</p>
 
       <div className="pm-legend" aria-label="Hotspot colours">
         {legend.map(({ tone, label }) => (

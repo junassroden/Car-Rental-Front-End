@@ -287,7 +287,6 @@ export default function FleetOperations({ navigate }) {
         <div>
           <span className="fo-eyebrow">Daily handovers</span>
           <h1>Fleet operations</h1>
-          <p>Hand over and take back vehicles, and see who has each car.</p>
         </div>
         <div className="fo-header-actions">
           <button type="button" className="fo-btn fo-btn-outline" onClick={() => navigate('/admin/maintenance/records')}>Maintenance records</button>

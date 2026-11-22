@@ -867,3 +867,14 @@ html:has(.rv-dialog[open]) {
 .rv-result-facts dd { margin: 2px 0 0; font-size: 15px; font-weight: 500; color: var(--rv-ink); overflow-wrap: anywhere; }
 .rv-result .rv-actions { margin-top: 16px; }
 .rv-ref { font-family: var(--font-mono); font-size: 13px; overflow-wrap: anywhere; }
+
+#root .rv-state-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  color: var(--g-500);
+  background: var(--g-50);
+}

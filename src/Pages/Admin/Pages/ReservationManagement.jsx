@@ -8,8 +8,8 @@ function money(value) {
 }
 
 // Reservations are confirmed by a verified payment; a paid special-duration request then waits here for approval.
-const STATUS_LABELS = { pending: 'Pending payment', awaiting_approval: 'Awaiting approval', confirmed: 'Confirmed', cancelled: 'Cancelled', rejected: 'Rejected', completed: 'Completed', expired: 'Expired (not paid in time)' }
-const PAYMENT_LABELS = { paid: 'Paid', pending: 'Pending', failed: 'Failed', unpaid: 'Not paid', not_required: 'Not required' }
+const STATUS_LABELS = { pending: 'Unpaid', awaiting_approval: 'Approval', confirmed: 'Confirmed', cancelled: 'Cancelled', rejected: 'Rejected', completed: 'Completed', expired: 'Expired' }
+const PAYMENT_LABELS = { paid: 'Paid', pending: 'Pending', failed: 'Failed', unpaid: 'Unpaid', not_required: 'Free' }
 const ACTIVE_STATUSES = ['pending', 'awaiting_approval', 'confirmed']
 const HISTORY_STATUSES = ['completed', 'cancelled', 'rejected', 'expired']
 
@@ -36,17 +36,17 @@ const needsRefund = (reservation) => reservation.payment_status === 'paid' && ['
 function timing(reservation, today) {
   if (reservation.status !== 'confirmed') return null
   if (reservation.checked_out_at) {
-    if (reservation.end_date < today) return { tone: 'red', label: `Return overdue · ${daysBetween(reservation.end_date, today)}d` }
-    if (reservation.end_date === today) return { tone: 'amber', label: 'Due back today' }
-    return { tone: 'teal', label: `In use · back ${shortDate(reservation.end_date)}` }
+    if (reservation.end_date < today) return { tone: 'red', label: `Overdue ${daysBetween(reservation.end_date, today)}d` }
+    if (reservation.end_date === today) return { tone: 'amber', label: 'Due today' }
+    return { tone: 'teal', label: `Back ${shortDate(reservation.end_date)}` }
   }
   if (reservation.start_date === today) return { tone: 'green', label: 'Pickup today' }
   if (reservation.start_date > today) {
     const days = daysBetween(today, reservation.start_date)
-    return { tone: 'blue', label: days === 1 ? 'Starts tomorrow' : `Starts in ${days} days` }
+    return { tone: 'blue', label: days === 1 ? 'Tomorrow' : `In ${days}d` }
   }
-  if (reservation.end_date > today) return { tone: 'green', label: 'Ready for check-out' }
-  return { tone: 'grey', label: 'Pickup date passed' }
+  if (reservation.end_date > today) return { tone: 'green', label: 'Ready' }
+  return { tone: 'grey', label: 'Missed' }
 }
 
 function Icon({ name, size = 18 }) {
@@ -62,20 +62,29 @@ function Icon({ name, size = 18 }) {
     calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
     arrow: <path d="M5 12h14m-6-6 6 6-6 6" />,
     return: <><path d="M9 14 4 9l5-5" /><path d="M4 9h11a5 5 0 0 1 0 10h-3" /></>,
+    statReady: <><circle cx="7.5" cy="16" r="4.5" /><circle cx="7.5" cy="16" r="1.2" /><path d="M10.8 12.7 20 3.5M16.5 7l2.5 2.5M14 9.5l2 2" /></>,
+    statOut: <><path d="M3 16.5v-3.4c0-.5.3-.9.8-1l2.9-.9 2.1-3.1c.3-.4.8-.7 1.3-.7h5c.5 0 1 .2 1.3.6l2.6 3.2 1.3.3c.4.1.7.5.7 1v4" /><circle cx="7.5" cy="16.5" r="1.9" /><circle cx="16.5" cy="16.5" r="1.9" /><path d="M9.4 16.5h5.2M8.5 11.2h10" /></>,
+    statOverdue: <><path d="M20.6 13.5A9 9 0 1 1 12 3a9 9 0 0 1 7.4 3.9" /><path d="M12 7.5V12l3 2" /><path d="M20 9.5v4M20 17h.01" /></>,
+    statReview: <><path d="M6.5 3h11M6.5 21h11" /><path d="M7.5 3v2.6a4 4 0 0 0 1.7 3.3L12 11l2.8-2.1a4 4 0 0 0 1.7-3.3V3M7.5 21v-2.6a4 4 0 0 1 1.7-3.3L12 13l2.8 2.1a4 4 0 0 1 1.7 3.3V21" /></>,
+    statDone: <><circle cx="12" cy="12" r="9" /><path d="m8 12.3 2.7 2.7L16.2 9.5" /></>,
+    statCancelled: <><circle cx="12" cy="12" r="9" /><path d="m9 9 6 6M15 9l-6 6" /></>,
+    statRejected: <><circle cx="12" cy="12" r="9" /><path d="m5.7 5.7 12.6 12.6" /></>,
+    mail: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
   }
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{shapes[name]}</svg>
 }
 
-function Stat({ icon, tone = '', label, value, note, onClick, active }) {
+/** One segment of the summary strip. Clickable segments filter the list. */
+function Stat({ icon, tone = 'grey', label, value, note, onClick, active }) {
   const content = <>
-    <span className={`rsv-stat-icon ${tone}`}><Icon name={icon} size={19} /></span>
     <span className="rsv-stat-label">{label}</span>
     <strong>{value}</strong>
-    <small>{note}</small>
+    {note && <small>{note}</small>}
+    <span className={`rsv-stat-icon tone-${tone}`} aria-hidden="true"><Icon name={icon} size={20} /></span>
   </>
   return onClick
-    ? <button type="button" className={`rsv-stat is-action${active ? ' is-active' : ''}`} onClick={onClick}>{content}</button>
-    : <article className="rsv-stat">{content}</article>
+    ? <button type="button" className={`rsv-stat is-action${active ? ' is-active' : ''}`} aria-pressed={active} onClick={onClick}>{content}</button>
+    : <div className="rsv-stat">{content}</div>
 }
 
 export default function ReservationManagement({ historyView = false, setToast }) {
@@ -205,25 +214,31 @@ export default function ReservationManagement({ historyView = false, setToast })
   ))
   const toggle = (value) => setStatusFilter(activeFilter === value ? 'all' : value)
 
+  const quickLabels = { pickup: 'Ready', out: 'Out', overdue: 'Overdue', refund: 'Refunds', attention: 'To review' }
+  const dash = (value) => (loading ? '—' : value)
+
   return (
     <div className="admin-content rsv-page">
       <header className="rsv-header">
-        <span className="rsv-eyebrow">{historyView ? 'RECORDS' : 'BOOKING OPERATIONS'}</span>
         <h1>{historyView ? 'Reservation History' : 'Reservations'}</h1>
-        <p>{historyView ? 'Completed and cancelled reservations, with their payment details.' : 'Standard rentals confirm after verified payment. Special rental periods need administrator approval after payment.'}</p>
+        <label className="rsv-search">
+          <Icon name="search" size={16} />
+          <span className="rsv-sr">Search reservations</span>
+          <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search" />
+        </label>
       </header>
 
       <section className="rsv-stats" aria-label="Reservation summary">
         {historyView ? <>
-          <Stat icon="check" label="Completed" value={loading ? '—' : stats.counts.completed} note={`${money(stats.completedValue)} in completed rentals`} />
-          <Stat icon="x" tone="is-grey" label="Cancelled" value={loading ? '—' : stats.counts.cancelled} note="Kept for the record" />
-          <Stat icon="alert" tone="is-red" label="Rejected" value={loading ? '—' : stats.counts.rejected} note="Not approved" />
-          <Stat icon="refund" tone="is-red" label="Refunds needed" value={loading ? '—' : stats.refunds} note={stats.refunds ? `${money(stats.refundAmount)} paid, then cancelled` : 'All clear'} onClick={stats.refunds ? () => toggle('refund') : undefined} active={activeFilter === 'refund'} />
+          <Stat tone="green" icon="statDone" label="Completed" value={dash(stats.counts.completed)} note={stats.completedValue ? money(stats.completedValue) : null} />
+          <Stat tone="grey" icon="statCancelled" label="Cancelled" value={dash(stats.counts.cancelled)} />
+          <Stat tone="red" icon="statRejected" label="Rejected" value={dash(stats.counts.rejected)} />
+          <Stat tone="red" icon="refund" label="Refunds" value={dash(stats.refunds)} note={stats.refunds ? money(stats.refundAmount) : null} onClick={stats.refunds ? () => toggle('refund') : undefined} active={activeFilter === 'refund'} />
         </> : <>
-          <Stat icon="key" tone="is-green" label="Ready for check-out" value={loading ? '—' : stats.pickupsToday} note={stats.pickupsToday ? 'Paid and within the rental dates' : 'No handovers waiting'} onClick={stats.pickupsToday ? () => toggle('pickup') : undefined} active={activeFilter === 'pickup'} />
-          <Stat icon="car" tone="is-teal" label="Vehicles out" value={loading ? '—' : stats.out} note={stats.dueToday ? `${stats.dueToday} due back today` : 'Currently with customers'} onClick={stats.out ? () => toggle('out') : undefined} active={activeFilter === 'out'} />
-          <Stat icon="alert" tone="is-red" label="Overdue returns" value={loading ? '—' : stats.overdue} note={stats.overdue ? 'Past their return date' : 'Nothing overdue'} onClick={stats.overdue ? () => toggle('overdue') : undefined} active={activeFilter === 'overdue'} />
-          <Stat icon="clock" tone="is-amber" label="Needs attention" value={loading ? '—' : stats.counts.pending + stats.awaitingApproval} note={`${stats.counts.pending || 0} awaiting payment · ${stats.awaitingApproval} awaiting approval`} onClick={stats.counts.pending + stats.awaitingApproval ? () => toggle('attention') : undefined} active={activeFilter === 'attention'} />
+          <Stat tone="green" icon="statReady" label="Ready" value={dash(stats.pickupsToday)} onClick={stats.pickupsToday ? () => toggle('pickup') : undefined} active={activeFilter === 'pickup'} />
+          <Stat tone="teal" icon="statOut" label="Out" value={dash(stats.out)} note={stats.dueToday ? `${stats.dueToday} due today` : null} onClick={stats.out ? () => toggle('out') : undefined} active={activeFilter === 'out'} />
+          <Stat tone="red" icon="statOverdue" label="Overdue" value={dash(stats.overdue)} onClick={stats.overdue ? () => toggle('overdue') : undefined} active={activeFilter === 'overdue'} />
+          <Stat tone="amber" icon="statReview" label="To review" value={dash(stats.counts.pending + stats.awaitingApproval)} onClick={stats.counts.pending + stats.awaitingApproval ? () => toggle('attention') : undefined} active={activeFilter === 'attention'} />
         </>}
       </section>
 
@@ -235,28 +250,23 @@ export default function ReservationManagement({ historyView = false, setToast })
                 {status === 'all' ? 'All' : STATUS_LABELS[status]}<span>{stats.counts[status] ?? 0}</span>
               </button>
             ))}
-            {!['all', ...viewStatuses].includes(activeFilter) && (
-              <button type="button" role="tab" aria-selected="true" className="active is-quick" onClick={() => setStatusFilter('all')}>
-                {{ pickup: 'Ready for check-out', out: 'Vehicles out', overdue: 'Overdue returns', refund: 'Refunds needed', attention: 'Needs attention' }[activeFilter]}<Icon name="x" size={13} />
-              </button>
-            )}
           </div>
-          <label className="rsv-search">
-            <Icon name="search" size={17} />
-            <span className="rsv-sr">Search reservations</span>
-            <input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Customer, vehicle or reference" />
-          </label>
+          {!['all', ...viewStatuses].includes(activeFilter) && (
+            <button type="button" className="rsv-chip" onClick={() => setStatusFilter('all')}>
+              {quickLabels[activeFilter]}<Icon name="x" size={12} />
+            </button>
+          )}
         </div>
 
         {error && <div className="global-error" role="alert">{error}</div>}
         {loading ? (
-          <div className="rsv-loading" aria-busy="true" aria-label="Loading reservations">{[0, 1, 2].map((key) => <span key={key} />)}</div>
+          <div className="rsv-loading" aria-busy="true" aria-label="Loading reservations">{[0, 1, 2, 3].map((key) => <span key={key} />)}</div>
         ) : visibleReservations.length ? (
           <>
             <div className="rsv-table-wrap">
               <table className="rsv-table">
-                <thead><tr><th>Reservation</th><th>Customer</th><th>Vehicle</th><th>Trip</th><th className="is-num">Total</th><th>Payment</th><th>Status</th>{!historyView && <th>Actions</th>}</tr></thead>
-                <tbody>{visibleReservations.map((reservation) => {
+                <thead><tr><th>Customer</th><th>Vehicle</th><th>Trip</th><th className="is-num">Total</th><th>Status</th>{!historyView && <th className="is-end"><span className="rsv-sr">Actions</span></th>}</tr></thead>
+                <tbody>{visibleReservations.map((reservation, index) => {
                   const when = historyView ? null : timing(reservation, today)
                   const name = reservation.full_name || reservation.username || 'Customer'
                   const refund = needsRefund(reservation)
@@ -272,76 +282,81 @@ export default function ReservationManagement({ historyView = false, setToast })
                     && reservation.payment_status === 'paid'
                     && !reservation.agreement_email_sent_at
                   return (
-                    <tr key={reservation.id} className={`${when?.tone === 'red' || refund ? 'is-alert' : ''}`}>
-                      <td>
-                        <b className="rsv-id">#{reservation.id}</b>
-                        {Number(reservation.special_duration_request) === 1 && <span className="rsv-tag tone-violet">Special duration</span>}
-                      </td>
+                    <tr key={reservation.id} className={when?.tone === 'red' || refund ? 'is-alert' : ''} style={{ '--i': Math.min(index, 12) }}>
                       <td>
                         <div className="rsv-customer">
                           <span className="rsv-avatar" aria-hidden="true">{name.slice(0, 1).toUpperCase()}</span>
-                          <div><b>{name}</b><small>{reservation.email}</small></div>
+                          <div>
+                            <b title={reservation.email || undefined}>{name}</b>
+                            <small>
+                              #{reservation.id}
+                              {Number(reservation.special_duration_request) === 1 && <span className="rsv-tag tone-violet">Special</span>}
+                            </small>
+                          </div>
                         </div>
                       </td>
                       <td>
                         <b>{reservation.make} {reservation.model}</b>
                         <div className="rsv-vehicle-meta">
-                          {reservation.variant_color && <small>{reservation.variant_color}</small>}
                           {reservation.plate_number && <small className="rsv-plate">{reservation.plate_number}</small>}
+                          {reservation.variant_color && <small>{reservation.variant_color}</small>}
                         </div>
                       </td>
                       <td>
-                        <b className="rsv-trip">{shortDate(reservation.start_date)} <Icon name="arrow" size={13} /> {shortDate(reservation.end_date, true)}</b>
-                        <small>{reservation.rental_days} day{Number(reservation.rental_days) === 1 ? '' : 's'}</small>
-                        {when && <span className={`rsv-tag tone-${when.tone}`}>{when.label}</span>}
+                        <b className="rsv-trip">{shortDate(reservation.start_date)} <Icon name="arrow" size={12} /> {shortDate(reservation.end_date)}</b>
+                        <small className="rsv-trip-meta">
+                          {reservation.rental_days}d
+                          {when && <span className={`rsv-tag tone-${when.tone}`}>{when.label}</span>}
+                        </small>
                       </td>
-                      <td className="is-num"><b className="rsv-amount">{money(reservation.total_amount)}</b></td>
-                      <td>
-                        <span className={`rsv-pay is-${reservation.payment_status}`}><i />{PAYMENT_LABELS[reservation.payment_status] || reservation.payment_status}</span>
-                        {reservation.payment_reference && <small className="rsv-ref" title={reservation.payment_reference}>{reservation.payment_reference}</small>}
-                        {refund && <small className="rsv-refund"><Icon name="refund" size={13} /> Refund needed</small>}
-                        {reservation.payment_review_reason && <small className="rsv-refund">Needs review: {reservation.payment_review_reason}</small>}
+                      <td className="is-num">
+                        <b className="rsv-amount">{money(reservation.total_amount)}</b>
+                        <small className={`rsv-pay is-${reservation.payment_status}`} title={reservation.payment_reference || undefined}>
+                          <i />{PAYMENT_LABELS[reservation.payment_status] || reservation.payment_status}
+                        </small>
+                        {refund && <small className="rsv-refund">Refund</small>}
+                        {reservation.payment_review_reason && <small className="rsv-refund" title={reservation.payment_review_reason}>Review</small>}
                       </td>
                       <td>
-                        <span className={`status-pill status-${reservation.status}`}><i />{STATUS_LABELS[reservation.status] || reservation.status}</span>
-                        {reservation.checked_out_at && reservation.status === 'confirmed' && <span className="rsv-tag tone-teal">Vehicle out</span>}
+                        <span className={`rsv-status is-${reservation.status}`}>{STATUS_LABELS[reservation.status] || reservation.status}</span>
+                        {reservation.checked_out_at && reservation.status === 'confirmed' && <span className="rsv-status is-out">Out</span>}
                       </td>
                       {!historyView && (
-                        <td>
+                        <td className="is-end">
+                          {/* Two fixed slots so every row's buttons line up: next step, then a secondary action. */}
                           <div className="rsv-actions">
-                            {awaitingApproval && (
-                              <>
+                            <span className="rsv-slot is-main">
+                              {awaitingApproval ? (
                                 <button type="button" className="rsv-btn is-primary" disabled={busy} onClick={() => updateStatus(reservation.id, 'confirmed')}>
-                                  {busy ? 'Saving…' : 'Approve'}
+                                  <Icon name="check" size={14} />{busy ? '…' : 'Approve'}
                                 </button>
-                                <button type="button" className="rsv-btn is-danger" disabled={busy} onClick={() => updateStatus(reservation.id, 'rejected')}>
-                                  {busy ? 'Saving…' : 'Reject'}
+                              ) : canCheckout ? (
+                                <button type="button" className="rsv-btn is-primary" disabled={busy} onClick={() => updateUse(reservation.id, 'checkout')}>
+                                  <Icon name="key" size={14} />{busy ? '…' : 'Check out'}
                                 </button>
-                              </>
-                            )}
-                            {canResendAgreement && (
-                              <button type="button" className="rsv-btn" disabled={busy} onClick={() => resendAgreement(reservation.id)}>
-                                {busy ? 'Sending…' : 'Send agreement email'}
-                              </button>
-                            )}
-                            {canCheckout && (
-                              <button type="button" className="rsv-btn is-primary" disabled={busy} onClick={() => updateUse(reservation.id, 'checkout')}>
-                                <Icon name="key" size={15} />{busy ? 'Saving…' : 'Check out vehicle'}
-                              </button>
-                            )}
-                            {canReturn && (
-                              <button type="button" className="rsv-btn is-primary" disabled={busy} onClick={() => updateUse(reservation.id, 'return')}>
-                                <Icon name="return" size={15} />{busy ? 'Saving…' : 'Mark returned'}
-                              </button>
-                            )}
-                            {canCancel && (
-                              <button type="button" className="rsv-btn is-danger" disabled={busy} onClick={() => updateStatus(reservation.id, 'cancelled')}>
-                                {busy ? 'Saving…' : 'Cancel'}
-                              </button>
-                            )}
-                            {!awaitingApproval && !canResendAgreement && !canCheckout && !canReturn && !canCancel && (
-                              <span className="rsv-no-action">{waitingForPickup ? `Check-out opens ${shortDate(reservation.start_date)}` : 'No action needed'}</span>
-                            )}
+                              ) : canReturn ? (
+                                <button type="button" className="rsv-btn is-primary is-return" disabled={busy} onClick={() => updateUse(reservation.id, 'return')}>
+                                  <Icon name="return" size={14} />{busy ? '…' : 'Return'}
+                                </button>
+                              ) : (
+                                <span className="rsv-no-action">{waitingForPickup ? <><Icon name="clock" size={13} />{shortDate(reservation.start_date)}</> : '—'}</span>
+                              )}
+                            </span>
+                            <span className="rsv-slot is-side">
+                              {awaitingApproval ? (
+                                <button type="button" className="rsv-btn is-icon is-danger" disabled={busy} title="Reject" aria-label="Reject" onClick={() => updateStatus(reservation.id, 'rejected')}>
+                                  <Icon name="x" size={14} />
+                                </button>
+                              ) : canResendAgreement ? (
+                                <button type="button" className="rsv-btn is-icon" disabled={busy} title="Send agreement email" aria-label="Send agreement email" onClick={() => resendAgreement(reservation.id)}>
+                                  <Icon name="mail" size={15} />
+                                </button>
+                              ) : canCancel ? (
+                                <button type="button" className="rsv-btn is-icon is-danger" disabled={busy} title="Cancel reservation" aria-label="Cancel reservation" onClick={() => updateStatus(reservation.id, 'cancelled')}>
+                                  <Icon name="x" size={14} />
+                                </button>
+                              ) : null}
+                            </span>
                           </div>
                         </td>
                       )}
@@ -350,16 +365,12 @@ export default function ReservationManagement({ historyView = false, setToast })
                 })}</tbody>
               </table>
             </div>
-            <footer className="rsv-foot">
-              <span>Showing <b>{visibleReservations.length}</b> of {inView.length} reservation{inView.length === 1 ? '' : 's'}</span>
-              {!historyView && <span>Pickup and return dates are compared with today, {shortDate(today, true)}.</span>}
-            </footer>
+            <footer className="rsv-foot"><b>{visibleReservations.length}</b> of {inView.length}</footer>
           </>
         ) : !error && (
           <div className="rsv-empty" role="status">
-            <span className="rsv-stat-icon is-green"><Icon name="calendar" size={22} /></span>
-            <h3>{inView.length ? 'No reservations match these filters' : 'No reservations found'}</h3>
-            <p>{inView.length ? 'Change the status or search to see more.' : historyView ? 'Completed and cancelled reservations will appear here.' : 'New customer reservations will appear here.'}</p>
+            <span className="rsv-empty-icon"><Icon name="calendar" size={20} /></span>
+            <h3>{inView.length ? 'No matches' : 'No reservations'}</h3>
             {inView.length > 0 && <button type="button" onClick={() => { setStatusFilter('all'); setSearch('') }}>Clear filters</button>}
           </div>
         )}

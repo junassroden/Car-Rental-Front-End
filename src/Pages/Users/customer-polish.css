@@ -1,0 +1,539 @@
+/*
+ * Shared polish for the customer area (everything inside .customer-frame).
+ * Loaded after App.css, so it settles the conflicting overrides there and keeps
+ * the customer pages consistent with each other: one header style, one empty
+ * state, one focus ring, one press effect.
+ */
+
+.customer-frame {
+  --cx-ink: #202a28;
+  --cx-muted: #68716c;
+  --cx-line: #e7e6df;
+  --cx-forest: #263f39;
+  --cx-green: #35564a;
+  --cx-bronze: #8d6a53;
+  --cx-mist: #eef0ea;
+  --cx-ring: 0 0 0 3px rgb(53 86 74 / 22%);
+}
+
+/* ---------- Top bar ---------- */
+
+
+.customer-frame .topbar .admin-breadcrumb strong {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+/* ---------- Sidebar ---------- */
+
+.customer-frame .customer-nav-section h2 {
+  text-transform: uppercase;
+}
+
+.customer-frame .customer-nav-link {
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.customer-frame .customer-nav-link:active {
+  transform: scale(.98);
+}
+
+/* ---------- Page headers: one style for every page ---------- */
+
+.customer-frame :is(.vl-eyebrow, .vr-eyebrow, .pf-eyebrow, .pay-eyebrow, .rv-eyebrow) {
+  display: inline-block;
+  color: var(--cx-bronze);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) h1 {
+  margin: 6px 0 8px;
+  text-wrap: balance;
+}
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) p {
+  max-width: 62ch;
+  margin-top: 0;
+  text-wrap: pretty;
+}
+
+.customer-frame .public-page.pay-page {
+  padding-top: 32px;
+}
+
+/* ---------- Interaction: focus and press feedback ---------- */
+
+.customer-frame :is(button, a, input, select, textarea, summary):focus-visible {
+  outline: none;
+  box-shadow: var(--cx-ring);
+}
+
+.customer-frame :is(
+  .vd-reserve,
+  .dash-hero-action,
+  .dash-row-pay,
+  .rv-btn,
+  .pay-empty-action,
+  .button
+):not(:disabled):active {
+  transform: translateY(1px) scale(.985);
+}
+
+.customer-frame :is(.dash-row-pay, .rv-btn, .pay-empty-action, .button) {
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.customer-frame .dash-row-pay:hover {
+  border-color: var(--cx-green);
+  color: #fff;
+  background: var(--cx-green);
+}
+
+/* Numbers line up in tables, totals and stats. */
+.customer-frame :is(.dash-stat b, .dash-ticket-route b, .pay-stat, .vd-price-amount b, .rv-list, .dash-row small) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Dashboard ---------- */
+
+.customer-frame .dash-row {
+  transition: background-color .2s ease;
+}
+
+.customer-frame .dash-row:hover {
+  background: #fbfaf6;
+}
+
+/* ---------- Empty states ---------- */
+
+.customer-frame .rv-state-icon {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 14px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--cx-green);
+  background: var(--cx-mist);
+}
+
+.customer-frame .rv-state {
+  border-style: dashed;
+}
+
+/* The generic empty state (e.g. "Select a vehicle first") still carried the old blue palette. */
+.customer-frame .public-page > .empty-state {
+  min-height: 280px;
+  margin-top: 32px;
+  border: 1px dashed #d9d9cf;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.customer-frame .public-page > .empty-state h3 {
+  margin: 0 0 6px;
+  color: var(--cx-ink);
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.customer-frame .public-page > .empty-state p {
+  max-width: 44ch;
+  margin: 0 0 18px;
+  color: var(--cx-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.customer-frame .public-page > .empty-state .button-primary {
+  border-color: var(--cx-forest);
+  background: var(--cx-forest);
+  box-shadow: none;
+}
+
+/* ---------- Vehicle details: features and terms ---------- */
+
+.customer-frame .vd-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.customer-frame .vd-features li {
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #3d4843;
+  background: var(--cx-mist);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.customer-frame .vd-terms {
+  margin: -6px 0 0;
+  color: var(--cx-muted);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+/* ---------- Phones and small tablets ---------- */
+
+@media (max-width: 900px) {
+  /* Separate the page name from the logo instead of letting them run together. */
+  .customer-frame .topbar .admin-breadcrumb {
+    padding-left: 14px;
+    border-left: 1px solid var(--cx-line);
+  }
+
+  .customer-frame .topbar .admin-breadcrumb strong {
+    font-size: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-frame * {
+    transition-duration: .01ms !important;
+  }
+}
+
+/* =====================================================================
+ * Redesign layer: light floating sidebar, open top bar, richer dashboard
+ * and vehicle cards. Same green/cream palette as the rest of the app.
+ * ===================================================================== */
+
+/* ---------- Light floating sidebar ---------- */
+
+.customer-frame,
+.customer-frame > .app-main,
+.customer-frame > .app-main > main {
+  background: #f4f3ee;
+}
+
+.customer-frame .customer-sidebar {
+  padding: 12px 0 12px 12px;
+  color: var(--cx-ink);
+  background: #f4f3ee;
+  scrollbar-color: rgb(53 86 74 / 22%) transparent;
+}
+
+.customer-frame .customer-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 22px 14px 14px;
+  border: 1px solid var(--cx-line);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgb(36 58 52 / 6%);
+}
+
+.customer-frame .customer-sidebar .logo {
+  margin: 0 8px 30px;
+  color: var(--cx-ink);
+}
+
+.customer-frame .customer-sidebar .logo > span:last-child > span {
+  color: var(--cx-bronze);
+}
+
+.customer-frame .customer-sidebar .logo-symbol {
+  color: #f7f6f1;
+  background: var(--cx-forest);
+}
+
+.customer-frame .customer-nav-section h2 {
+  margin: 0 12px 8px;
+  color: #9aa29c;
+  font-size: 10px;
+  letter-spacing: .12em;
+}
+
+.customer-frame .customer-nav-link {
+  min-height: 44px;
+  gap: 12px;
+  padding: 0 12px;
+  border-radius: 12px;
+  color: #4a5550;
+  font-size: 13.5px;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.customer-frame .customer-nav-link svg {
+  color: #8a948e;
+}
+
+.customer-frame .customer-nav-link:hover {
+  color: var(--cx-ink);
+  background: #f4f3ee;
+}
+
+.customer-frame .customer-nav-link.selected {
+  color: #fff;
+  background: var(--cx-forest);
+  box-shadow: 0 6px 16px rgb(38 63 57 / 22%);
+}
+
+.customer-frame .customer-nav-link.selected svg {
+  color: #e4c3a6;
+}
+
+.customer-frame .customer-sidebar-profile {
+  margin-top: auto;
+  padding: 12px;
+  border: 0;
+  border-radius: 14px;
+  background: #f4f3ee;
+}
+
+.customer-frame .customer-sidebar-profile .avatar {
+  border-radius: 10px;
+  color: #fff;
+  background: var(--cx-green);
+}
+
+.customer-frame .customer-sidebar-profile b {
+  color: var(--cx-ink);
+  font-size: 13px;
+}
+
+.customer-frame .customer-sidebar-profile small {
+  color: var(--cx-muted);
+  font-size: 11.5px;
+}
+
+.customer-frame .customer-sidebar-profile > button {
+  border-radius: 9px;
+  color: var(--cx-muted);
+  background: #fff;
+}
+
+.customer-frame .customer-sidebar-profile > button:hover {
+  color: #a43d32;
+  background: #fff;
+}
+
+/* ---------- Open top bar ---------- */
+
+.customer-frame .topbar {
+  border-bottom: 0;
+  background: #f4f3ee;
+  box-shadow: none;
+}
+
+.customer-frame .topbar .admin-breadcrumb strong {
+  color: var(--cx-ink);
+  font-size: 20px;
+  letter-spacing: -.02em;
+}
+
+/* ---------- Dashboard ---------- */
+
+.customer-frame .dash-hero {
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgb(29 44 40 / 18%);
+}
+
+.customer-frame .dash-ticket {
+  border-radius: 16px;
+  background: rgb(255 255 255 / 7%);
+  backdrop-filter: blur(6px);
+}
+
+.customer-frame .dash-ticket-vehicle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.customer-frame .dash-ticket-photo {
+  display: grid;
+  width: 128px;
+  height: 72px;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 12px;
+  color: rgb(255 255 255 / 55%);
+  background: #f4f3ee;
+}
+
+.customer-frame .dash-ticket-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.customer-frame .dash-ticket-photo svg {
+  width: 84%;
+  color: #b9bfb8;
+}
+
+.customer-frame .dash-stats {
+  gap: 14px;
+  overflow: visible;
+  border: 0;
+  background: none;
+}
+
+.customer-frame .dash-stat {
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--cx-line);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.customer-frame .dash-stat + .dash-stat,
+.customer-frame .dash-stat:first-child {
+  border: 1px solid var(--cx-line);
+}
+
+.customer-frame .dash-stat-icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--cx-green);
+  background: var(--cx-mist);
+}
+
+.customer-frame .dash-stat.is-attention {
+  border-color: #ecd9b4;
+  background: #fffaf0;
+}
+
+.customer-frame .dash-stat.is-attention .dash-stat-icon {
+  color: #9a6b13;
+  background: #f7ecd4;
+}
+
+.customer-frame .dash-panel {
+  border-radius: 18px;
+}
+
+.customer-frame .dash-row {
+  gap: 14px;
+}
+
+.customer-frame .dash-row-thumb {
+  display: grid;
+  width: 64px;
+  height: 44px;
+  flex: none;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f4f3ee;
+}
+
+.customer-frame .dash-row-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.customer-frame .dash-row-thumb svg {
+  width: 80%;
+  color: #b9bfb8;
+}
+
+/* ---------- Vehicle cards ---------- */
+
+.customer-frame .vl-card {
+  border-radius: 18px;
+}
+
+.customer-frame .vl-photo {
+  width: calc(100% - 16px);
+  margin: 8px 8px 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f4f3ee, #ebeae3);
+}
+
+.customer-frame .vl-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--cx-forest);
+  background: rgb(255 255 255 / 88%);
+  backdrop-filter: blur(6px);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.customer-frame .vl-card-body {
+  padding: 16px 18px 18px;
+}
+
+.customer-frame .vl-reserve {
+  border-radius: 999px;
+}
+
+/* ---------- Shared surfaces ---------- */
+
+.customer-frame :is(.vl-controls, .vr-form, .pf-card, .pf-section, .pay-stat, .pay-panel, .rv-card, .rv-state, .rsv-card, .vd-info, .vd-gallery-main) {
+  border-radius: 18px;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 900px) {
+  .customer-frame .customer-sidebar {
+    padding: 10px;
+    background: #f4f3ee;
+  }
+
+  .customer-frame .topbar .admin-breadcrumb strong {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .customer-frame .dash-stats {
+    gap: 8px;
+  }
+
+  .customer-frame .dash-stat {
+    padding: 12px;
+  }
+
+  .customer-frame .dash-stat-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  .customer-frame .dash-ticket-photo {
+    width: 96px;
+    height: 56px;
+  }
+}
+
+/* The stat label rule (".dash-stat > span") would otherwise stretch the icon. */
+.customer-frame .dash-stat > .dash-stat-icon {
+  min-width: 0;
+  flex: none;
+}
+
+/* Pages sit directly on the canvas; no lighter band under the top bar. */
+.customer-frame .app-main > main > .public-page {
+  background: transparent;
+}
+
+@media (max-width: 480px) {
+  /* Room for the name and status; the thumbnail is the first thing to go. */
+  .customer-frame .dash-row-thumb {
+    display: none;
+  }
+}

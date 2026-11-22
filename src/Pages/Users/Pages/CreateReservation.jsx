@@ -3,6 +3,7 @@ import { api, imageUrl } from '../../../Services/API/api.js'
 import { createPaymentCheckout, createReservation, previewReservationAgreement } from '../../../Services/API/reservationAPI.js'
 import { AgreementDialog, PaymentDialog } from '../Components/ReservationDialogs.jsx'
 import './CreateReservation.css'
+import { carPhoto } from '../Components/carPhoto.js'
 
 const DAY_MS = 86400000
 const STANDARD_MAX_DAYS = 7
@@ -541,7 +542,7 @@ export default function CreateReservation({ navigate, carId, setToast }) {
             <div className="rsv-vehicle">
               <div className="rsv-photo">
                 {vehicleImage && !photoFailed
-                  ? <img src={vehicleImage} alt={`${selectedVariant ? `${selectedVariant.color} ` : ''}${car.make} ${car.model}`} onError={() => setPhotoFailed(true)} />
+                  ? <img {...carPhoto(vehicleImage)} alt={`${selectedVariant ? `${selectedVariant.color} ` : ''}${car.make} ${car.model}`} onError={() => setPhotoFailed(true)} />
                   : <CarIcon />}
               </div>
               <div className="rsv-vehicle-name">

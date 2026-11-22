@@ -84,6 +84,31 @@ const VEHICLE_ASSETS = [
   },
 ]
 
+// Toyota Vios (3rd generation, Philippine market): 4,425 L x 1,730 W x 1,475 H mm,
+// 2,550 mm wheelbase, 185/60 R15 tyres, 133 mm ground clearance. A compact four-door sedan
+// with a short boot and a fast rear window.
+const VIOS_SPEC = {
+  length: 4.425, width: 1.73, wheelRadius: 0.3, tireWidth: 0.185, clearance: 0.133,
+  frontAxle: 1.3, rearAxle: -1.25, engine: [1.5, 0.54], engineSize: [0.55, 0.4, 0.6],
+  profile: [[2.21, 0.33], [2.25, 0.53], [2.14, 0.68], [1.0, 0.9], [0.18, 1.43], [-0.6, 1.475], [-1.58, 1.06], [-2.12, 1.0], [-2.25, 0.76], [-2.21, 0.35]],
+  windows: [[0.9, 0.98], [0.2, 1.38], [-0.57, 1.42], [-1.4, 1.06]],
+  windshield: [[1.0, 0.9], [0.18, 1.43]],
+  rearWindow: [[-0.6, 1.475], [-1.58, 1.06]],
+  lamps: { front: 0.64, rear: 0.8 },
+}
+
+/**
+ * Known models drawn with the coded shell, matched on make and model. These win over the
+ * body type on the vehicle record, so a car filed under the wrong type still gets its real shape.
+ */
+const VEHICLE_SHAPES = [
+  {
+    matches: (vehicle) => /toyota/i.test(vehicle?.make || '') && /vios/i.test(vehicle?.model || ''),
+    type: 'sedan',
+    spec: VIOS_SPEC,
+  },
+]
+
 export const MOTORCYCLE_SPEC = {
   length: 2.15, wheelRadius: 0.31, tireWidth: 0.12, frontAxle: 0.72, rearAxle: -0.7,
 }
@@ -168,6 +193,8 @@ export function rigFor(bodyType, vehicle) {
   if (bodyType === 'motorcycle') return motorcycleRig()
   const known = VEHICLE_ASSETS.find((entry) => entry.matches(vehicle))
   if (known) return carRig('suv', known.spec, known.asset)
+  const shape = VEHICLE_SHAPES.find((entry) => entry.matches(vehicle))
+  if (shape) return carRig(shape.type, shape.spec)
   return CAR_SPECS[bodyType] ? carRig(bodyType) : null
 }
 

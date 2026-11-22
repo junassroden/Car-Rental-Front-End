@@ -4,7 +4,7 @@ import { Chip } from './AssessmentOverview.jsx'
 import { formatDate, formatKm } from './status.js'
 
 const MODEL_STATUS = {
-  evaluated_pending: { label: 'Passed, awaiting review', tone: 'pending' },
+  evaluated_pending: { label: 'Needs review', tone: 'pending' },
   evaluated_accepted: { label: 'Accepted', tone: 'good' },
   evaluated_rejected: { label: 'Rejected', tone: 'failed' },
   superseded: { label: 'Superseded', tone: 'na' },
@@ -42,59 +42,58 @@ function Evaluation({ entry, active, onAccept, onRevoke, busy }) {
       <div className="am-result-body">
         <dl className="am-status-grid">
           <div><dt>Trained</dt><dd>{formatDate(entry.trained_at)}</dd></div>
-          <div><dt>Algorithm</dt><dd>{report.algorithm?.replaceAll('_', ' ') || 'None fitted'}</dd></div>
-          <div><dt>Dataset</dt><dd>{report.dataset.rows} records, {report.dataset.vehicles} vehicles</dd></div>
+          <div title={report.methodology}><dt>Algorithm</dt><dd>{report.algorithm?.replaceAll('_', ' ') || 'None'}</dd></div>
+          <div><dt>Data</dt><dd>{report.dataset.rows} rows · {report.dataset.vehicles} vehicles</dd></div>
           <div><dt>Faults / healthy</dt><dd>{report.dataset.faults} / {report.dataset.healthy}</dd></div>
-          {report.periods.training && <div><dt>Training period</dt><dd>{formatDate(report.periods.training[0])} to {formatDate(report.periods.training[1])}</dd></div>}
-          {report.periods.test && <div><dt>Test period</dt><dd>{formatDate(report.periods.test[0])} to {formatDate(report.periods.test[1])}</dd></div>}
+          {report.periods.training && <div><dt>Trained on</dt><dd>{formatDate(report.periods.training[0])} – {formatDate(report.periods.training[1])}</dd></div>}
+          {report.periods.test && <div><dt>Tested on</dt><dd>{formatDate(report.periods.test[0])} – {formatDate(report.periods.test[1])}</dd></div>}
         </dl>
-        <p className="am-note">{report.methodology}</p>
 
         {metrics && (
           <>
-            <h4>Test results ({metrics.records} later records, not used for training)</h4>
+            <h4>Test results <small>{metrics.records} records</small></h4>
             <dl className="am-status-grid">
               <div><dt>Recall</dt><dd>{metrics.recall}</dd></div>
-              <div><dt>Recall, 95% lower bound</dt><dd>{metrics.recall_lower_bound}</dd></div>
+              <div><dt>Recall (low)</dt><dd>{metrics.recall_lower_bound}</dd></div>
               <div><dt>Precision</dt><dd>{metrics.precision}</dd></div>
-              <div><dt>F1-score</dt><dd>{metrics.f1}</dd></div>
+              <div><dt>F1</dt><dd>{metrics.f1}</dd></div>
               <div><dt>Accuracy</dt><dd>{metrics.accuracy}</dd></div>
             </dl>
             <table className="am-table am-matrix" aria-label="Confusion matrix">
-              <thead><tr><th /><th>Model: no fault</th><th>Model: fault</th></tr></thead>
+              <thead><tr><th /><th>Predicted OK</th><th>Predicted fault</th></tr></thead>
               <tbody>
-                <tr><th>Actually healthy</th><td>{matrix.true_negative}</td><td>{matrix.false_positive} false alarms</td></tr>
-                <tr><th>Actual fault</th><td className={matrix.false_negative ? 'am-missed' : ''}>{matrix.false_negative} missed faults</td><td>{matrix.true_positive}</td></tr>
+                <tr><th>Healthy</th><td>{matrix.true_negative}</td><td>{matrix.false_positive} <small>false alarms</small></td></tr>
+                <tr><th>Fault</th><td className={matrix.false_negative ? 'am-missed' : ''}>{matrix.false_negative} <small>missed</small></td><td>{matrix.true_positive}</td></tr>
               </tbody>
             </table>
             {matrix.false_negative > 0 && (
-              <p className="am-flag-critical">{matrix.false_negative} verified {matrix.false_negative === 1 ? 'fault' : 'faults'} would not have been flagged{report.safety_critical ? ' in a safety-critical category' : ''}.</p>
+              <p className="am-flag-critical">{matrix.false_negative} {matrix.false_negative === 1 ? 'fault' : 'faults'} missed{report.safety_critical ? ' (safety-critical)' : ''}</p>
             )}
             {report.unseen_vehicle_metrics
-              ? <p className="am-note">On {report.unseen_vehicle_metrics.records} records from vehicles not seen in training: recall {report.unseen_vehicle_metrics.recall}, precision {report.unseen_vehicle_metrics.precision}.</p>
-              : <p className="am-note">The test period had no vehicles unseen in training, so performance on new vehicles is unknown.</p>}
+              ? <p className="am-note">New vehicles: recall {report.unseen_vehicle_metrics.recall} · precision {report.unseen_vehicle_metrics.precision}</p>
+              : <p className="am-note">No new vehicles in the test set.</p>}
           </>
         )}
 
         {report.acceptance_criteria.length > 0 && (
           <>
-            <h4>Acceptance criteria</h4>
+            <h4>Criteria</h4>
             <table className="am-table">
-              <thead><tr><th>Criterion</th><th>Required</th><th>Actual</th><th>Result</th></tr></thead>
+              <thead><tr><th>Check</th><th>Need</th><th>Got</th><th /></tr></thead>
               <tbody>
                 {report.acceptance_criteria.map((item) => (
-                  <tr key={item.name}><td>{item.name}</td><td>{item.required}</td><td>{item.actual ?? 'n/a'}</td><td><Chip tone={item.passed ? 'good' : 'failed'}>{item.passed ? 'Passed' : 'Failed'}</Chip></td></tr>
+                  <tr key={item.name}><td>{item.name}</td><td>{item.required}</td><td>{item.actual ?? 'n/a'}</td><td><Chip tone={item.passed ? 'good' : 'failed'}>{item.passed ? 'Pass' : 'Fail'}</Chip></td></tr>
                 ))}
               </tbody>
             </table>
           </>
         )}
         <ul className="am-reasons">{report.decision_reasons.map((reason) => <li key={reason}>{reason}</li>)}</ul>
-        {entry.revoked_reason && <p className="am-note">Withdrawn: {entry.revoked_reason}</p>}
+        {entry.revoked_reason && <p className="am-note" title={entry.revoked_reason}>Withdrawn</p>}
 
         <div className="am-outcome-actions">
-          {entry.status === 'evaluated_pending' && <button type="button" className="is-primary" disabled={busy} onClick={() => onAccept(entry)}>Accept this model</button>}
-          {active && <button type="button" disabled={busy} onClick={() => onRevoke(entry)}>Withdraw this model</button>}
+          {entry.status === 'evaluated_pending' && <button type="button" className="is-primary" disabled={busy} onClick={() => onAccept(entry)}>Accept</button>}
+          {active && <button type="button" disabled={busy} onClick={() => onRevoke(entry)}>Withdraw</button>}
         </div>
       </div>
     </details>
@@ -104,11 +103,11 @@ function Evaluation({ entry, active, onAccept, onRevoke, busy }) {
 function DatasetReview({ dataset }) {
   return (
     <div className="am-dataset">
-      <h4>Eligible records ({dataset.rows.length})</h4>
-      {dataset.rows.length === 0 ? <p className="am-note">No records qualify yet.</p> : (
+      <h4>Dataset <small>{dataset.rows.length}</small></h4>
+      {dataset.rows.length === 0 ? <p className="am-note">No records yet.</p> : (
         <div className="am-table-wrap">
           <table className="am-table">
-            <thead><tr><th>Vehicle</th><th>Assessed</th><th>Odometer</th><th>Rating</th><th>Verified result</th><th>Outcome date</th><th>Outcome mileage</th></tr></thead>
+            <thead><tr><th>Vehicle</th><th>Assessed</th><th>Odometer</th><th>Rating</th><th>Result</th><th>Outcome</th><th>Mileage</th></tr></thead>
             <tbody>
               {dataset.rows.slice(0, 100).map((row) => (
                 <tr key={row.outcome_id}>
@@ -118,12 +117,12 @@ function DatasetReview({ dataset }) {
                   <td>{row.rating}</td>
                   <td>{row.label === 'fault' ? 'Fault' : 'Healthy'}</td>
                   <td>{formatDate(row.outcome_date)}</td>
-                  <td>{row.outcome_mileage_km === null ? <em>Not recorded</em> : formatKm(row.outcome_mileage_km)}</td>
+                  <td>{row.outcome_mileage_km === null ? '—' : formatKm(row.outcome_mileage_km)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {dataset.rows.length > 100 && <p className="am-note">Showing the first 100 of {dataset.rows.length}.</p>}
+          {dataset.rows.length > 100 && <p className="am-note">First 100 of {dataset.rows.length}</p>}
         </div>
       )}
     </div>
@@ -203,7 +202,7 @@ export default function ModelTrainingPanel() {
   }
 
   if (!data) {
-    return error ? <p className="am-error" role="alert">{error}</p> : <p className="am-note" role="status">Loading model training…</p>
+    return error ? <p className="am-error" role="alert">{error}</p> : <p className="am-note" role="status">Loading…</p>
   }
 
   const { totals, categories } = data.sufficiency
@@ -214,60 +213,57 @@ export default function ModelTrainingPanel() {
 
   return (
     <>
-      <section className="am-section" aria-label="Data sufficiency">
+      <section className="am-section mm-section" aria-label="Training data">
         <div className="am-section-head">
-          <h2>Data sufficiency</h2>
-          <Chip tone={qualified ? 'good' : 'insufficient'}>{qualified} of {categories.length} categories qualify</Chip>
+          <h2>Training data</h2>
+          <Chip tone={qualified ? 'good' : 'insufficient'}>{qualified}/{categories.length} ready</Chip>
         </div>
-        <dl className="am-tally am-tally-inline">
-          <div><dt>Verified outcomes</dt><dd>{totals.verified_outcomes}</dd></div>
-          <div><dt>Eligible for training</dt><dd>{totals.eligible}</dd></div>
-          <div><dt>Contributing vehicles</dt><dd>{totals.vehicles}</dd></div>
-          <div><dt>Confirmed faults</dt><dd>{totals.faults}</dd></div>
-          <div><dt>Healthy outcomes</dt><dd>{totals.healthy}</dd></div>
+        <dl className="mm-stats">
+          <div><dt>Verified</dt><dd>{totals.verified_outcomes}</dd></div>
+          <div><dt>Eligible</dt><dd>{totals.eligible}</dd></div>
+          <div><dt>Vehicles</dt><dd>{totals.vehicles}</dd></div>
+          <div><dt>Faults</dt><dd>{totals.faults}</dd></div>
+          <div><dt>Healthy</dt><dd>{totals.healthy}</dd></div>
         </dl>
-        <p className="am-note">
-          Each category needs {policy.min_outcomes_per_category} eligible outcomes from at least {policy.min_vehicles} vehicles, with no vehicle above {Math.round(policy.max_vehicle_share * 100)}%,
-          and at least {policy.min_failures} faults and {policy.min_healthy} healthy results. Only verified outcomes within {policy.horizon_days} days of an assessment count. Demo vehicles do not count.
-        </p>
-        <div className="am-table-wrap">
-          <table className="am-table">
-            <thead><tr><th>Category</th><th>Eligible</th><th>Still needed</th><th>Vehicles</th><th>Faults</th><th>Healthy</th><th>Status</th></tr></thead>
-            <tbody>
-              {categories.map((category) => (
-                <tr key={category.key}>
-                  <td>{category.name}</td>
-                  <td>{category.eligible} / {category.minimum}</td>
-                  <td>{category.remaining}</td>
-                  <td>{category.vehicles}</td>
-                  <td>{category.faults}</td>
-                  <td>{category.healthy}</td>
-                  <td>
-                    <Chip tone={category.status === 'sufficient' ? 'good' : 'insufficient'}>{category.status === 'sufficient' ? 'Sufficient' : 'Insufficient Data'}</Chip>
-                    {category.blockers.map((blocker) => <small key={blocker}>{blocker}</small>)}
-                    {Object.entries(category.excluded_by_reason).map(([reason, count]) => <small key={reason}>Excluded: {EXCLUSIONS[reason] || reason} ({count})</small>)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ul className="mm-progress">
+          {categories.map((category) => {
+            const ready = category.status === 'sufficient'
+            const why = [
+              ...category.blockers,
+              ...Object.entries(category.excluded_by_reason).map(([reason, count]) => `Excluded: ${EXCLUSIONS[reason] || reason} (${count})`),
+            ].join('\n')
+            return (
+              <li key={category.key} className={ready ? 'is-ready' : ''} title={why || undefined}>
+                <span className="mm-progress-name">{category.name}</span>
+                <span className="mm-bar" aria-hidden="true"><i style={{ width: `${Math.min(100, (category.eligible / Math.max(category.minimum, 1)) * 100)}%` }} /></span>
+                <span className="mm-progress-count">{category.eligible}/{category.minimum}</span>
+                <span className="mm-progress-meta">{category.vehicles} veh · {category.faults} F · {category.healthy} H</span>
+                <Chip tone={ready ? 'good' : 'insufficient'}>{ready ? 'Ready' : `${category.remaining} more`}</Chip>
+              </li>
+            )
+          })}
+        </ul>
+        <details className="mm-rules">
+          <summary>Rules</summary>
+          <ul>
+            <li>{policy.min_outcomes_per_category} eligible outcomes per category</li>
+            <li>{policy.min_vehicles}+ vehicles, none above {Math.round(policy.max_vehicle_share * 100)}%</li>
+            <li>{policy.min_failures}+ faults and {policy.min_healthy}+ healthy</li>
+            <li>Verified, within {policy.horizon_days} days, no demo vehicles</li>
+          </ul>
+        </details>
       </section>
 
-      <section className="am-section" aria-label="Model training and registry">
-        <div className="am-section-head"><h2>Model training and registry</h2></div>
-        {!data.service.reachable && <p className="am-banner">The AI service could not be reached, so model status is unknown and no training can run.</p>}
+      <section className="am-section mm-section" aria-label="Models">
+        <div className="am-section-head"><h2>Models</h2></div>
+        {!data.service.reachable && <p className="am-banner">AI service offline.</p>}
         {error && <p className="am-error" role="alert">{error}</p>}
         {demoModels.length > 0 && (
           <div className="am-banner" role="note">
-            <p>
-              <strong>{demoModels.length} demonstration {demoModels.length === 1 ? 'model is' : 'models are'} serving predictions.</strong>{' '}
-              They were trained on simulated SAMPLE- vehicles, not real fleet outcomes. Withdraw them before using predictions for real maintenance decisions.
-            </p>
-            <button type="button" disabled={busy || !data.service.reachable} onClick={() => revokeDemoModels(demoModels)}>Withdraw demo models</button>
+            <p><strong>{demoModels.length} demo {demoModels.length === 1 ? 'model' : 'models'} live</strong> · simulated data, not for real decisions</p>
+            <button type="button" disabled={busy || !data.service.reachable} onClick={() => revokeDemoModels(demoModels)}>Withdraw demos</button>
           </div>
         )}
-        <p className="am-note">Condition-based screening always runs. A machine learning prediction appears only for a category with an accepted model, and each category unlocks on its own.</p>
         <div className="am-models">
           {categories.map((category) => {
             const model = models[category.key]
@@ -277,20 +273,19 @@ export default function ModelTrainingPanel() {
             return (
               <article key={category.key} className="am-model-row">
                 <header>
-                  <strong>{category.name}{category.safety_critical && <small> Safety-critical</small>}</strong>
-                  <Chip tone={model?.available ? 'good' : 'not-assessed'}>{model?.available ? 'ML prediction enabled' : 'Prediction unavailable'}</Chip>
-                  {model?.available && model.demonstration && <Chip tone="unknown">Demo model, simulated data</Chip>}
+                  <strong>{category.name}{category.safety_critical && <small className="mm-safety">Safety</small>}</strong>
+                  <Chip tone={model?.available ? 'good' : 'not-assessed'}>{model?.available ? 'Live' : 'Off'}</Chip>
+                  {model?.available && model.demonstration && <Chip tone="unknown">Demo</Chip>}
                   <span className="am-model-actions">
-                    <button type="button" onClick={() => (open ? setDataset({ key: null, value: null }) : review(category.key))}>{open ? 'Hide dataset' : 'Review dataset'}</button>
-                    <button type="button" className={ready ? 'is-primary' : ''} disabled={!ready || busy || !data.service.reachable} title={ready ? '' : 'This category does not have enough eligible data.'} onClick={() => train(category.key)}>
-                      {training === category.key ? 'Training…' : 'Start training'}
+                    <button type="button" onClick={() => (open ? setDataset({ key: null, value: null }) : review(category.key))}>{open ? 'Hide data' : 'Data'}</button>
+                    <button type="button" className={ready ? 'is-primary' : ''} disabled={!ready || busy || !data.service.reachable} title={ready ? '' : 'Not enough data'} onClick={() => train(category.key)}>
+                      {training === category.key ? 'Training…' : 'Train'}
                     </button>
                   </span>
                 </header>
-                {training === category.key && <p className="am-note" role="status">Training and evaluating {category.name}. This page updates when it finishes.</p>}
+                {training === category.key && <p className="am-note" role="status">Training…</p>}
                 {model && !model.available && versions.length > 0 && <p className="am-note">{model.reason}</p>}
-                {model?.available && model.demonstration && <p className="am-note" role="note">{model.notice} Withdraw it before relying on predictions for real vehicles.</p>}
-                {open && dataset.value && <DatasetReview dataset={dataset.value} />}
+                                {open && dataset.value && <DatasetReview dataset={dataset.value} />}
                 {versions.map((entry) => (
                   <Evaluation key={entry.model_version} entry={entry} active={model.active_version === entry.model_version} busy={busy} onAccept={(item) => accept(category, item)} onRevoke={(item) => revoke(category, item)} />
                 ))}
@@ -300,7 +295,7 @@ export default function ModelTrainingPanel() {
         </div>
         {data.runs.length > 0 && (
           <details className="am-runs">
-            <summary>Training history ({data.runs.length})</summary>
+            <summary>History <small>{data.runs.length}</small></summary>
             <table className="am-table">
               <thead><tr><th>Started</th><th>Category</th><th>Run</th><th>Records</th><th>Vehicles</th><th>Evaluation</th></tr></thead>
               <tbody>

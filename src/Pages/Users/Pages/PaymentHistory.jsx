@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getReservations } from '../../../Services/API/reservationAPI.js'
-import { imageUrl } from '../../../Services/API/api.js'
 import CarSilhouette from '../Components/CarSilhouette.jsx'
 import './PaymentHistory.css'
+import { carPhoto } from '../Components/carPhoto.js'
+import { reservationPhotos, useReservationCars } from '../Components/reservationPhotos.js'
 
 // The server returns only the signed-in customer's reservations, so only their payments appear here.
 const PAYMENT_LABELS = { paid: 'Paid', pending: 'Pending verification', failed: 'Failed' }
@@ -95,16 +96,16 @@ function CopyReference({ value }) {
   )
 }
 
-function PaymentCard({ item }) {
+function PaymentCard({ item, photos }) {
   const status = item.payment_status
-  const photo = item.primary_image ? imageUrl(item.primary_image) : ''
-  const [photoFailed, setPhotoFailed] = useState(false)
+  const [failed, setFailed] = useState(0)
+  const photo = photos[failed]
   const days = Number(item.rental_days) || null
   return (
     <article className={`pay-card pay-card--${status}`}>
       <div className="pay-card-vehicle">
         <div className="pay-thumb" aria-hidden="true">
-          {photo && !photoFailed ? <img src={photo} alt="" loading="lazy" onError={() => setPhotoFailed(true)} /> : <CarSilhouette category={item.category} />}
+          {photo ? <img key={photo} {...carPhoto(photo)} alt="" loading="lazy" onError={() => setFailed((count) => count + 1)} /> : <CarSilhouette category={item.category} />}
         </div>
         <div>
           <span className="pay-card-kicker">Reservation #{item.id}</span>
@@ -198,12 +199,13 @@ export default function PaymentHistory({ navigate }) {
   }, [payments])
 
   const visible = filter === 'all' ? payments : payments.filter((item) => item.payment_status === filter)
+  const cars = useReservationCars(visible)
 
   return (
-    <div className="public-page pay-page">
+    <div className="public-page content-width pay-page">
       <header className="pay-header">
         <div>
-          <span className="pay-eyebrow">YOUR ACCOUNT</span>
+          <span className="pay-eyebrow">Your account</span>
           <h1>Payment history</h1>
           <p>Payments are verified by the provider. Standard reservations confirm automatically; special rental periods need administrator approval.</p>
         </div>
@@ -258,7 +260,13 @@ export default function PaymentHistory({ navigate }) {
           </div>
         ) : visible.length ? (
           <div className="pay-list">
-            {visible.map((item) => <PaymentCard key={item.payment_id} item={item} />)}
+            {visible.map((item) => (
+              <PaymentCard
+                key={`${item.payment_id}-${cars[item.car_id] ? 'full' : 'basic'}`}
+                item={item}
+                photos={reservationPhotos(item, cars[item.car_id])}
+              />
+            ))}
           </div>
         ) : !error && (
           <div className="pay-empty" role="status">

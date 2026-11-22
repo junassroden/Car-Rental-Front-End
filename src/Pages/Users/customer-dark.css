@@ -1,0 +1,481 @@
+/*
+ * Dark mode for the customer area. Active when UserLayout sets
+ * data-theme="dark" on .customer-frame (toggle in the top bar).
+ * Loaded last so it settles every light surface from the page styles.
+ *
+ * Car photo boxes stay light on purpose: the product shots have white
+ * backdrops, so they read as plates on the dark page.
+ */
+
+.customer-frame[data-theme='dark'] {
+  color-scheme: dark;
+
+  --dk-canvas: #101614;
+  --dk-surface: #171f1d;
+  --dk-raised: #1e2825;
+  --dk-hover: #243029;
+  --dk-line: #2a3531;
+  --dk-field-line: #34413c;
+  --dk-ink: #ebe9e2;
+  --dk-muted: #a3ada7;
+  --dk-faint: #7f8a84;
+  --dk-green: #4f8a73;
+  --dk-green-hover: #5d9a82;
+  --dk-clay: #e4c3a6;
+  --dk-plate: #eeede7;
+
+  /* Shared customer tokens */
+  --cx-ink: var(--dk-ink);
+  --cx-muted: var(--dk-muted);
+  --cx-line: var(--dk-line);
+  --cx-mist: var(--dk-raised);
+  --cx-forest: var(--dk-green);
+  --cx-green: var(--dk-green);
+  --cx-bronze: var(--dk-clay);
+  --cx-ring: 0 0 0 3px rgb(93 154 130 / 40%);
+
+  color: var(--dk-ink);
+  background: var(--dk-canvas);
+}
+
+/* Each page styles itself through its own variables; point them all at the dark palette. */
+.customer-frame[data-theme='dark'] :is(.dash, .vl, .vr, .pf, .pay-page, .rv, .rsv, .vd, .rv-dialog) {
+  --dash-ink: var(--dk-ink);
+  --dash-muted: var(--dk-muted);
+  --dash-faint: var(--dk-faint);
+  --dash-line: var(--dk-line);
+  --dash-cream: #f3efe6;
+  --vl-ink: var(--dk-ink);
+  --vl-muted: var(--dk-muted);
+  --vl-line: var(--dk-line);
+  --vl-field-line: var(--dk-field-line);
+  --vl-canvas: var(--dk-raised);
+  --vl-forest: var(--dk-green);
+  --vl-forest-dark: var(--dk-green-hover);
+  --vl-shadow: 0 18px 40px rgb(0 0 0 / 35%);
+  --vr-ink: var(--dk-ink);
+  --vr-muted: var(--dk-muted);
+  --vr-line: var(--dk-line);
+  --vr-field-line: var(--dk-field-line);
+  --vr-canvas: var(--dk-raised);
+  --vr-forest: var(--dk-green);
+  --vr-forest-dark: var(--dk-green-hover);
+  --vr-green: var(--dk-green);
+  --pf-ink: var(--dk-ink);
+  --pf-muted: var(--dk-muted);
+  --pf-line: var(--dk-line);
+  --pf-field-line: var(--dk-field-line);
+  --pf-canvas: var(--dk-raised);
+  --pf-forest: var(--dk-green);
+  --pf-forest-dark: var(--dk-green-hover);
+  --pf-green: var(--dk-green);
+  --pay-ink: var(--dk-ink);
+  --pay-muted: var(--dk-muted);
+  --pay-faint: var(--dk-faint);
+  --pay-line: var(--dk-line);
+  --pay-forest: var(--dk-green);
+  --pay-bronze: var(--dk-clay);
+  --rv-ink: var(--dk-ink);
+  --rv-muted: var(--dk-muted);
+  --rv-line: var(--dk-line);
+  --rv-field-line: var(--dk-field-line);
+  --rv-canvas: var(--dk-raised);
+  --rv-forest: var(--dk-green);
+  --rv-forest-dark: var(--dk-green-hover);
+  --rsv-ink: var(--dk-ink);
+  --rsv-muted: var(--dk-muted);
+  --rsv-line: var(--dk-line);
+  --rsv-tint: var(--dk-raised);
+  --rsv-forest: var(--dk-green);
+  --rsv-green: var(--dk-green);
+  --vd-ink: var(--dk-ink);
+  --vd-muted: var(--dk-muted);
+  --vd-line: var(--dk-line);
+  --vd-canvas: var(--dk-raised);
+  --vd-forest: var(--dk-green);
+  --vd-green: var(--dk-green);
+}
+
+/* ---------- Canvas, top bar, sidebar ---------- */
+
+.customer-frame[data-theme='dark'],
+.customer-frame[data-theme='dark'] > .app-main,
+.customer-frame[data-theme='dark'] > .app-main > main,
+.customer-frame[data-theme='dark'] .topbar,
+.customer-frame[data-theme='dark'] .customer-sidebar {
+  color: var(--dk-ink);
+  background: var(--dk-canvas);
+}
+
+.customer-frame[data-theme='dark'] .topbar .admin-breadcrumb strong,
+.customer-frame[data-theme='dark'] .topbar .logo,
+.customer-frame[data-theme='dark'] .customer-sidebar .logo {
+  color: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] .topbar .admin-breadcrumb {
+  border-color: var(--dk-line);
+}
+
+.customer-frame[data-theme='dark'] .menu-toggle {
+  border-color: var(--dk-line);
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] .menu-toggle span {
+  background: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] .customer-sidebar-content {
+  border-color: var(--dk-line);
+  background: var(--dk-surface);
+  box-shadow: none;
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-link {
+  color: #c4ccc7;
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-link svg {
+  color: var(--dk-faint);
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-link:hover {
+  color: var(--dk-ink);
+  background: var(--dk-hover);
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-link.selected {
+  color: #fff;
+  background: var(--dk-green);
+  box-shadow: 0 6px 16px rgb(0 0 0 / 30%);
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-link.selected svg {
+  color: #f6e3d1;
+}
+
+.customer-frame[data-theme='dark'] .customer-nav-section h2 {
+  color: var(--dk-faint);
+}
+
+.customer-frame[data-theme='dark'] .customer-sidebar-profile {
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] .customer-sidebar-profile b {
+  color: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] .customer-sidebar-profile > button {
+  color: var(--dk-muted);
+  background: var(--dk-surface);
+}
+
+/* ---------- Theme toggle (both themes) ---------- */
+
+.customer-frame .theme-toggle {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid var(--cx-line);
+  border-radius: 12px;
+  color: var(--cx-ink);
+  background: #fff;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease, transform .15s ease;
+}
+
+.customer-frame .theme-toggle:hover {
+  background: #f4f3ee;
+}
+
+.customer-frame .theme-toggle:active {
+  transform: scale(.94);
+}
+
+.customer-frame[data-theme='dark'] .theme-toggle {
+  color: var(--dk-clay);
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] .theme-toggle:hover {
+  background: var(--dk-hover);
+}
+
+/* ---------- Surfaces: cards, panels, dialogs ---------- */
+
+.customer-frame[data-theme='dark'] :is(
+  .dash-panel,
+  .dash-quick-item,
+  .vl-filters,
+  .vl-card,
+  .vl-state,
+  .vr-card,
+  .pf-card,
+  .pay-stat:not(.pay-stat--feature),
+  .pay-panel,
+  .rv-card,
+  .rv-state,
+  .rv-dialog,
+  .rv-doc,
+  .rv-result,
+  .rsv-panel,
+  .rsv-calendar,
+  .vd-info,
+  .public-page > .empty-state
+) {
+  border-color: var(--dk-line);
+  color: var(--dk-ink);
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] :is(.dash-finder, .dash-location, .pay-tabs, .rv-agreement-actions, .rv-agreement-scroll, .rv-doc-plain, .vd-price, .rsv-summary .rsv-lines) {
+  border-color: var(--dk-line);
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] :is(.dash-panel > header, .dash-row, .vl-card .vl-actions, .rsv-panel *, .pay-panel *) {
+  border-color: var(--dk-line);
+}
+
+.customer-frame[data-theme='dark'] .dash-row:hover,
+.customer-frame[data-theme='dark'] .pay-card:hover {
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] :is(.dash-panel, .vl-card, .vr-card, .pf-card, .pay-panel, .rv-card, .rsv-panel, .vd-info) :is(h1, h2, h3, b, strong, dd, label, legend) {
+  color: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] :is(p, small, dt, .vl-card-heading p, .vl-specs, .vl-results-bar, .vl-sort span, .dash-row small) {
+  color: var(--dk-muted);
+}
+
+/* ---------- Form controls ---------- */
+
+.customer-frame[data-theme='dark'] :is(
+  input:not([type='checkbox'], [type='radio'], [type='range']),
+  select,
+  textarea,
+  .vl-input,
+  .vl-field > select,
+  .vl-sort select,
+  .vr-money,
+  .rsv-date-trigger,
+  .pf-field input,
+  .rv-field input,
+  .vr-field > input,
+  .vr-field > select
+) {
+  border-color: var(--dk-field-line);
+  color: var(--dk-ink);
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] .vl-input input {
+  background: transparent;
+}
+
+.customer-frame[data-theme='dark'] :is(input, textarea)::placeholder {
+  color: var(--dk-faint);
+}
+
+.customer-frame[data-theme='dark'] :is(input, select, textarea):disabled {
+  color: var(--dk-faint);
+  background: var(--dk-surface);
+}
+
+/* ---------- Buttons, chips, tabs ---------- */
+
+.customer-frame[data-theme='dark'] :is(.vl-chips button, .vr-purpose label, .pf-btn-outline, .vr-btn-outline, .rv-btn-outline, .dash-row-pay, .vd-color, .vd-color-step button, .rsv-length, .rsv-calendar-header button, .vd-view-toggle, .pay-ref) {
+  border-color: var(--dk-field-line);
+  color: var(--dk-ink);
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] :is(.vl-chips button, .vr-purpose label, .vd-color, .vd-color-step button, .rsv-length):hover {
+  border-color: #46544e;
+  background: var(--dk-hover);
+}
+
+.customer-frame[data-theme='dark'] :is(.vl-chips button.selected, .vd-view-toggle button[aria-pressed='true'], .pay-tabs button.active) {
+  border-color: var(--dk-green);
+  color: #fff;
+  background: var(--dk-green);
+}
+
+.customer-frame[data-theme='dark'] .vd-view-toggle button:not([aria-pressed='true']) {
+  color: var(--dk-muted);
+}
+
+.customer-frame[data-theme='dark'] .vd-view-toggle button:not([aria-pressed='true']):hover {
+  color: var(--dk-ink);
+  background: var(--dk-hover);
+}
+
+.customer-frame[data-theme='dark'] .pay-tabs button:not(.active) {
+  color: var(--dk-muted);
+}
+
+.customer-frame[data-theme='dark'] :is(.vl-details, .dash-link, .vl-clear, .rsv-back, .vd-back, .dash-finder .dash-link) {
+  color: #cfe2d8;
+}
+
+.customer-frame[data-theme='dark'] .dash-row-pay:hover {
+  color: #fff;
+  background: var(--dk-green);
+}
+
+/* ---------- Dashboard ---------- */
+
+.customer-frame[data-theme='dark'] .dash-hero {
+  box-shadow: 0 18px 40px rgb(0 0 0 / 40%);
+}
+
+.customer-frame[data-theme='dark'] .dash-ticket:not(.dash-ticket-empty) {
+  background: #f4f3ee;
+}
+
+.customer-frame[data-theme='dark'] .dash-ticket:not(.dash-ticket-empty) :is(h2, .dash-ticket-route b) {
+  color: #202a28;
+}
+
+.customer-frame[data-theme='dark'] .dash-ticket:not(.dash-ticket-empty) :is(small, footer, footer span) {
+  color: #68716c;
+}
+
+.customer-frame[data-theme='dark'] .dash-quick-icon {
+  color: #f6e3d1;
+  background: var(--dk-green);
+}
+
+.customer-frame[data-theme='dark'] .dash-quick-item:hover {
+  border-color: #3a4842;
+  box-shadow: 0 14px 30px rgb(0 0 0 / 35%);
+}
+
+.customer-frame[data-theme='dark'] .tilt3d::after {
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgb(255 255 255 / 10%), transparent 46%);
+}
+
+/* ---------- Car photo plates ---------- */
+
+.customer-frame[data-theme='dark'] :is(.vl-photo, .vd-main-photo:not(.vd-stage3d), .vd-thumb, .rsv-photo, .rv-photo, .pay-thumb, .vr-photo, .dash-row-thumb, .dash-ticket-photo, .vd-color-media) {
+  background: var(--dk-plate);
+}
+
+.customer-frame[data-theme='dark'] :is(.rsv-photo, .pay-thumb, .dash-row-thumb, .vd-thumb) {
+  box-shadow: none;
+}
+
+.customer-frame[data-theme='dark'] .vl-badge {
+  color: #202a28;
+}
+
+/* The 3D view keeps its light studio so the car's paint reads true. */
+.customer-frame[data-theme='dark'] .vd-stage3d {
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 80%, #2d3a35 0%, transparent 70%),
+    linear-gradient(180deg, #1a2320 0%, #202b27 62%, #18201d 100%);
+}
+
+.customer-frame[data-theme='dark'] .vd-stage3d::before {
+  border-color: rgb(228 195 166 / 18%);
+}
+
+.customer-frame[data-theme='dark'] :is(.showroom3d-hint, .vd-stage3d-note) {
+  color: var(--dk-muted);
+}
+
+.customer-frame[data-theme='dark'] .showroom3d-hint {
+  background: rgb(0 0 0 / 35%);
+}
+
+/* ---------- Skeletons and empty states ---------- */
+
+.customer-frame[data-theme='dark'] :is(.vl-shimmer, .rv-shimmer, .dash-skeleton:not(.dash-skeleton-dark)) {
+  background: linear-gradient(90deg, #1e2825 25%, #26322e 50%, #1e2825 75%);
+  background-size: 200% 100%;
+}
+
+.customer-frame[data-theme='dark'] :is(.rv-state-icon, .pay-empty-icon, .vl-state-icon) {
+  color: #cfe2d8;
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] .pay-empty {
+  border-color: var(--dk-field-line);
+}
+
+/* ---------- Chat widget ---------- */
+
+.customer-frame[data-theme='dark'] .dr-chat-window {
+  border-color: var(--dk-line);
+  color: var(--dk-ink);
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] :is(.dr-chat-messages, .dr-chat-form) {
+  border-color: var(--dk-line);
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] .dr-chat-row:not(.dr-chat-row-user) .dr-chat-bubble {
+  color: var(--dk-ink);
+  background: var(--dk-raised);
+}
+
+/* ---------- Smooth switch ---------- */
+
+.customer-frame :is(.customer-sidebar-content, .topbar, .dash-panel, .vl-card, .rv-card, .pay-panel, .pf-card, .rsv-panel, .vd-info) {
+  transition-property: background-color, border-color, color, box-shadow, transform;
+}
+
+/* ---------- Remaining light spots ---------- */
+
+/* Page titles and the cream hero button keep their own readable colours. */
+.customer-frame[data-theme='dark'] :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) h1 {
+  color: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] .dash-hero-action {
+  color: #202a28;
+  background: #f3efe6;
+}
+
+.customer-frame[data-theme='dark'] .vd-features li {
+  color: #d8ddd9;
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] .rsv-next,
+.customer-frame[data-theme='dark'] .pay-note {
+  border-color: var(--dk-line);
+  color: var(--dk-muted);
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] :is(.rsv-next h3, .pay-note b, .pay-note strong, .pay-note h3) {
+  color: var(--dk-ink);
+}
+
+.customer-frame[data-theme='dark'] .pay-note-icon {
+  color: #cfe2d8;
+  background: var(--dk-surface);
+}
+
+.customer-frame[data-theme='dark'] .rsv-submit:disabled {
+  color: var(--dk-faint);
+  background: var(--dk-raised);
+}
+
+.customer-frame[data-theme='dark'] :is(.dash-location-kicker, .dash-ticket-empty p) {
+  color: var(--dk-muted);
+}
+
+/* White photo backdrops melt into the plate instead of showing as a white box. */
+.customer-frame[data-theme='dark'] :is(.vl-photo, .vd-main-photo:not(.vd-stage3d), .vd-thumb, .rsv-photo, .rv-photo, .pay-thumb, .vr-photo, .dash-row-thumb, .dash-ticket-photo, .vd-color-media) img {
+  mix-blend-mode: multiply;
+}

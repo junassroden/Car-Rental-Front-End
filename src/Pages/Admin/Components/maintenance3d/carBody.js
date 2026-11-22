@@ -41,7 +41,9 @@ export function carSurface(spec) {
   const tipIndex = smooth.findIndex(([x]) => x === frontX)
   const tailIndex = smooth.findIndex(([x]) => x === rearX)
 
-  const topAt = (x) => heightAt(smooth, x) ?? belt
+  // Clamped to the profile's length: a slice a rounding error past the nose or tail would
+  // otherwise miss the outline, fall back to the belt line and stand up as a flat wall.
+  const topAt = (x) => heightAt(smooth, clamp(x, rearX, frontX)) ?? belt
 
   const halfWidth = (x) => {
     let factor = 1 - 0.025 * (x / Math.max(frontX, -rearX)) ** 2
@@ -168,7 +170,8 @@ export function bodyGeometry(surface) {
   const positions = []
   let perRing = 0
   for (let index = 0; index <= steps; index += 1) {
-    const x = rearX + (frontX - rearX) * (0.5 - 0.5 * Math.cos(Math.PI * (index / steps)))
+    // End slices sit exactly on the tips; cosine spacing alone can land a hair outside them.
+    const x = index === 0 ? rearX : index === steps ? frontX : rearX + (frontX - rearX) * (0.5 - 0.5 * Math.cos(Math.PI * (index / steps)))
     const half = section(x)
     const width = halfWidth(x)
     const ring = [...half.map(([u, y]) => [-u, y]), ...half.slice(0, -1).reverse()]

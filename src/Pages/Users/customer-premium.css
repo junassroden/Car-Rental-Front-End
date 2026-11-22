@@ -1,0 +1,451 @@
+/*
+ * Premium layer for the customer area: serif display headings, a textured
+ * dashboard hero with a boarding-pass style next-trip card, quick actions
+ * and a gentle entrance. Loaded after customer-polish.css.
+ */
+
+.customer-frame {
+  --cx-display: 'Instrument Serif', 'Times New Roman', serif;
+}
+
+/* ---------- Display type ---------- */
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) h1,
+.customer-frame .vd-info h1,
+.customer-frame .dash-hero-copy h1 {
+  font-family: var(--cx-display);
+  font-weight: 400;
+  letter-spacing: -.015em;
+  line-height: 1;
+}
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) h1 {
+  font-size: clamp(2.6rem, 4.6vw, 3.6rem);
+}
+
+.customer-frame .vd-info h1 {
+  font-size: clamp(2.2rem, 3.4vw, 2.8rem);
+}
+
+.customer-frame .dash-hero-copy h1 {
+  margin: 14px 0;
+  font-size: clamp(2.8rem, 6cqw, 4.2rem);
+}
+
+.customer-frame .dash-hero-copy h1 em {
+  font-style: italic;
+}
+
+/* ---------- Hero ---------- */
+
+.customer-frame .dash-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 40px;
+  background:
+    radial-gradient(ellipse 60% 80% at 92% 0%, rgb(228 195 166 / 18%), transparent 60%),
+    radial-gradient(ellipse 50% 70% at 0% 100%, rgb(120 150 125 / 22%), transparent 60%),
+    linear-gradient(125deg, #284239, #1a2925 70%);
+}
+
+/* Film grain, so the green reads as a surface rather than a flat fill. */
+.customer-frame .dash-hero::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: .22;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  content: '';
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+/* A faint dashed road curve behind the copy. */
+.customer-frame .dash-hero::after {
+  position: absolute;
+  right: -10%;
+  bottom: -60%;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  border: 1px dashed rgb(228 195 166 / 22%);
+  border-radius: 50%;
+  content: '';
+  pointer-events: none;
+}
+
+.customer-frame .dash-hero-action {
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 18%);
+}
+
+/* ---------- Next trip: boarding pass ---------- */
+
+.customer-frame .dash-ticket {
+  position: relative;
+  gap: 12px;
+  padding: 14px 14px 18px;
+  border: 0;
+  border-radius: 18px;
+  color: var(--cx-ink);
+  background: #fbfaf6;
+  box-shadow: 0 24px 50px rgb(0 0 0 / 28%);
+  backdrop-filter: none;
+}
+
+.customer-frame .dash-ticket.dash-ticket-empty {
+  padding: 20px 22px;
+  color: #fff;
+  border: 1px dashed rgb(255 255 255 / 28%);
+  background: rgb(255 255 255 / 5%);
+  box-shadow: none;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) > header {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  left: 24px;
+  z-index: 1;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-label {
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--cx-forest);
+  background: rgb(255 255 255 / 92%);
+  font-weight: 600;
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 8;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #efeee8, #e4e3dc);
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo svg {
+  width: 62%;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) h2 {
+  margin: 4px 8px 0;
+  color: var(--cx-ink);
+  font-family: var(--cx-display);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route {
+  position: relative;
+  margin: 0 8px;
+  padding-top: 14px;
+  border-top: 1px dashed #d9d8cf;
+}
+
+/* Ticket notches on the perforation line. */
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::before,
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::after {
+  position: absolute;
+  top: -11px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #213530;
+  content: '';
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::before {
+  left: -32px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::after {
+  right: -32px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route small {
+  color: var(--cx-muted);
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route b {
+  color: var(--cx-ink);
+  font-size: 16px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route i {
+  border-color: #cfcec4;
+  background: #cfcec4;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) footer {
+  margin: 0 8px;
+  padding-top: 0;
+  border: 0;
+  color: var(--cx-muted);
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) footer button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--cx-forest);
+}
+
+/* ---------- Quick actions ---------- */
+
+.customer-frame .dash-quick {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.customer-frame .dash-quick-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--cx-line);
+  border-radius: 16px;
+  color: var(--cx-ink);
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .2s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+.customer-frame .dash-quick-item:hover {
+  border-color: #d3d4c9;
+  box-shadow: 0 14px 30px rgb(36 58 52 / 9%);
+  transform: translateY(-2px);
+}
+
+.customer-frame .dash-quick-item:active {
+  transform: translateY(0) scale(.99);
+}
+
+.customer-frame .dash-quick-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  place-items: center;
+  border-radius: 12px;
+  color: #e4c3a6;
+  background: var(--cx-forest);
+}
+
+.customer-frame .dash-quick-text {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 2px;
+}
+
+.customer-frame .dash-quick-text b {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.customer-frame .dash-quick-text small {
+  overflow: hidden;
+  color: var(--cx-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.customer-frame .dash-quick-item > svg {
+  color: #a4aba5;
+}
+
+.customer-frame .dash-quick-item:hover > svg {
+  color: var(--cx-forest);
+  transform: translateX(3px);
+}
+
+/* ---------- Entrance ---------- */
+
+@keyframes cx-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .customer-frame .app-main > main > .public-page > * {
+    animation: cx-rise .6s cubic-bezier(.2, .7, .2, 1) both;
+  }
+
+  .customer-frame .app-main > main > .public-page > :nth-child(2) { animation-delay: .06s; }
+  .customer-frame .app-main > main > .public-page > :nth-child(3) { animation-delay: .12s; }
+  .customer-frame .app-main > main > .public-page > :nth-child(4) { animation-delay: .18s; }
+  .customer-frame .app-main > main > .public-page > :nth-child(n + 5) { animation-delay: .24s; }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 1180px) {
+  .customer-frame .dash-quick {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .customer-frame .dash-hero {
+    padding: 26px 20px 20px;
+  }
+
+  .customer-frame .dash-quick {
+    gap: 8px;
+  }
+
+  .customer-frame .dash-quick-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .customer-frame .dash-quick-item > svg,
+  .customer-frame .dash-quick-text small {
+    display: none;
+  }
+
+  .customer-frame .dash-quick-icon {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* ---------- Stats inside the hero ---------- */
+
+.customer-frame .dash-hero .dash-stats {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 8px 0 26px;
+}
+
+.customer-frame .dash-hero .dash-stat,
+.customer-frame .dash-hero .dash-stat:first-child,
+.customer-frame .dash-hero .dash-stat + .dash-stat {
+  min-height: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.customer-frame .dash-hero .dash-stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #e4c3a6;
+  background: rgb(255 255 255 / 9%);
+}
+
+.customer-frame .dash-hero .dash-stat b,
+.customer-frame .dash-hero .dash-stat b.is-zero {
+  color: #fff;
+  font-family: var(--cx-display);
+  font-size: 34px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.customer-frame .dash-hero .dash-stat b.is-zero {
+  color: rgb(255 255 255 / 55%);
+}
+
+.customer-frame .dash-hero .dash-stat > span:not(.dash-skeleton, .dash-stat-icon) {
+  color: rgb(255 255 255 / 72%);
+  font-size: 12.5px;
+}
+
+.customer-frame .dash-hero .dash-stat.is-attention {
+  border-color: rgb(228 195 166 / 45%);
+  background: rgb(228 195 166 / 12%);
+}
+
+.customer-frame .dash-hero .dash-stat.is-attention .dash-stat-icon {
+  color: #1d2c28;
+  background: #e4c3a6;
+}
+
+.customer-frame .dash-hero .dash-stat.is-attention b {
+  color: #e4c3a6;
+}
+
+/* ---------- Ticket photo: show the whole car ---------- */
+
+.customer-frame .dash-ticket .dash-ticket-photo {
+  aspect-ratio: 16 / 9;
+  background: #fff;
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo img {
+  object-fit: contain;
+  padding: 34px 10px 4px;
+}
+
+/* No lighter band above the dashboard. */
+.customer-frame .customer-dashboard-page {
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .customer-frame .dash-hero .dash-stats {
+    gap: 6px;
+  }
+
+  .customer-frame .dash-hero .dash-stat {
+    padding: 10px;
+  }
+
+  .customer-frame .dash-hero .dash-stat b {
+    font-size: 28px;
+  }
+}
+
+/* Percent heights do not resolve inside the auto-height box, so pin the photo. */
+.customer-frame .dash-ticket .dash-ticket-photo {
+  position: relative;
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo img {
+  position: absolute;
+  inset: 0;
+}
+
+/* Thin serif digits read poorly at this size; keep stats in the sans. */
+.customer-frame .dash-hero .dash-stat b,
+.customer-frame .dash-hero .dash-stat b.is-zero {
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -.03em;
+}
+
+/* The next-trip ticket no longer has a photo: its header sits in the flow again. */
+.customer-frame .dash-ticket:not(.dash-ticket-empty) > header {
+  position: static;
+  margin: 6px 8px 0;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) {
+  justify-content: center;
+  padding: 18px 14px 20px;
+}
+
+.customer-frame .dash-hero > .dash-ticket {
+  align-self: center;
+}

@@ -1,0 +1,272 @@
+/*
+ * 3D layer for the customer area: the turning car in the dashboard ticket
+ * and the cursor-following tilt on cards. Loaded last.
+ */
+
+/* ---------- 3D showroom (vehicle details "3D view") ---------- */
+
+.customer-frame .showroom3d {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: pan-y;
+  animation: cx-fade-in .9s ease both;
+}
+
+.customer-frame .showroom3d:active {
+  cursor: grabbing;
+}
+
+.customer-frame .showroom3d canvas {
+  display: block;
+}
+
+.customer-frame .showroom3d-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  padding: 3px 9px;
+  border-radius: 999px;
+  color: var(--cx-muted);
+  background: rgb(255 255 255 / 75%);
+  font-size: 11px;
+  font-weight: 500;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+.customer-frame .showroom3d:hover .showroom3d-hint {
+  opacity: 0;
+}
+
+@keyframes cx-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Cursor-following 3D tilt ---------- */
+
+.customer-frame .tilt3d {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+  transform-style: preserve-3d;
+  transition: transform .45s cubic-bezier(.2, .7, .2, 1), box-shadow .3s ease, border-color .3s ease;
+  will-change: transform;
+}
+
+.customer-frame .tilt3d.is-tilting {
+  transition: transform .08s linear, box-shadow .3s ease, border-color .3s ease;
+}
+
+.customer-frame .tilt3d:hover,
+.customer-frame .vl-card.tilt3d:not(.vl-skeleton):hover {
+  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translateY(-4px);
+  box-shadow: 0 22px 44px rgb(36 58 52 / 14%);
+}
+
+/* Soft highlight that follows the cursor. */
+.customer-frame .tilt3d::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%), rgb(255 255 255 / 38%), transparent 46%);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+.customer-frame .tilt3d.is-tilting::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .customer-frame .tilt3d,
+  .customer-frame .tilt3d:hover {
+    transform: none;
+  }
+
+  .customer-frame .tilt3d::after {
+    display: none;
+  }
+}
+
+/* ---------- Shared 3D stage look ---------- */
+
+.customer-frame .vd-stage3d {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 80%, #ffffff 0%, rgb(255 255 255 / 0%) 70%),
+    linear-gradient(180deg, #eceae2 0%, #f7f6f1 62%, #e9e7df 100%);
+}
+
+.customer-frame .vd-stage3d::before {
+  position: absolute;
+  bottom: 9%;
+  left: 50%;
+  width: 76%;
+  height: 20%;
+  border: 1px solid rgb(38 63 57 / 12%);
+  border-radius: 50%;
+  content: '';
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* ---------- Vehicle details: Photos / 3D toggle ---------- */
+
+.customer-frame .vd-view-toggle {
+  display: inline-flex;
+  justify-self: start;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--cx-line);
+  border-radius: 999px;
+  background: #fff;
+}
+
+.customer-frame .vd-view-toggle button {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--cx-muted);
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.customer-frame .vd-view-toggle button[aria-pressed='true'] {
+  color: #fff;
+  background: var(--cx-forest);
+}
+
+.customer-frame .vd-view-toggle button:not([aria-pressed='true']):hover {
+  color: var(--cx-ink);
+  background: #f4f3ee;
+}
+
+.customer-frame .vd-stage3d {
+  border-radius: 18px;
+}
+
+.customer-frame .vd-stage3d-loading {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  color: var(--cx-muted);
+  font-size: 13px;
+}
+
+.customer-frame .vd-stage3d .showroom3d-hint {
+  bottom: 40px;
+}
+
+.customer-frame .vd-stage3d-note {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  color: var(--cx-muted);
+  font-size: 11.5px;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ---------- Vehicle photos: always fitted ----------
+ * Every car photo shows whole inside its box: never stretched, never cropped,
+ * never larger than the box. Empty space around it is plain white, which
+ * matches the white-background product shots.
+ */
+
+.customer-frame :is(
+  .vl-photo > img,
+  .vd-main-photo > img,
+  .vd-thumb img,
+  .vd-color-media img,
+  .rsv-photo img,
+  .rv-photo > img,
+  .pay-thumb img,
+  .vr-photo > img,
+  .dash-row-thumb img,
+  .dash-ticket-photo img
+) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  box-sizing: border-box;
+  padding: 6%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.customer-frame :is(.vd-thumb img, .vd-color-media img, .rsv-photo img, .pay-thumb img, .dash-row-thumb img) {
+  padding: 4%;
+}
+
+.customer-frame :is(
+  .vl-photo,
+  .vd-main-photo:not(.vd-stage3d),
+  .vd-thumb,
+  .rsv-photo,
+  .rv-photo,
+  .pay-thumb,
+  .vr-photo,
+  .dash-row-thumb
+) {
+  background: #fff;
+}
+
+/* No zoom on hover: the photo stays exactly the size of its box. */
+.customer-frame :is(.vl-card, .vr-card, .rv-card):hover :is(.vl-photo, .vr-photo, .rv-photo) > img {
+  transform: none;
+}
+
+/* Thumbnails and small boxes get a hairline so the white box still reads as a frame. */
+.customer-frame :is(.rsv-photo, .pay-thumb, .dash-row-thumb, .vd-thumb) {
+  box-shadow: inset 0 0 0 1px var(--cx-line);
+}
+
+/* Larger boxes need less breathing room; photos with their own backdrop get soft corners. */
+.customer-frame :is(.vl-photo > img, .vr-photo > img, .rv-photo > img, .vd-main-photo > img) {
+  padding: 2%;
+  border-radius: 14px;
+}
+
+/* Photos on a coloured or photographic backdrop fill the box (set by carPhoto.js),
+   so no grey slab sits inside the white frame. Aspect ratio is always kept. */
+.customer-frame :is(
+  .vl-photo > img,
+  .vd-main-photo > img,
+  .vd-thumb img,
+  .vd-color-media img,
+  .rsv-photo img,
+  .rv-photo > img,
+  .pay-thumb img,
+  .vr-photo > img,
+  .dash-row-thumb img,
+  .dash-ticket-photo img
+)[data-backdrop='solid'] {
+  padding: 0;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+/* Photos on white: trimmed by ImageKit, so a small even margin is enough. */
+.customer-frame :is(.vl-photo > img, .vr-photo > img, .rv-photo > img, .vd-main-photo > img)[data-backdrop='light'] {
+  padding: 4% 5%;
+}
+
+/* The "Photo coming soon" placeholder sits behind the photo; show it only when
+   there is no photo, so it never shows through as a watermark. */
+.customer-frame :is(.vl-photo, .vr-photo):has(> img:not([hidden])) :is(.vl-photo-empty, .vr-photo-empty) {
+  display: none;
+}

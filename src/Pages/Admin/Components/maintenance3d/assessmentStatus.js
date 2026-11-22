@@ -60,8 +60,8 @@ export const USAGE = {
 export const ANSWERS = { yes: 'Yes', no: 'No', unknown: 'Unknown', not_applicable: 'N/A' }
 
 export const DECISIONS = { completed: 'Completed', deferred: 'Deferred', rejected: 'Rejected' }
-export const CONFIRMATIONS = { not_checked: 'Not checked', confirmed: 'Confirmed by a mechanic', not_confirmed: 'Not confirmed by a mechanic' }
-export const RESULTS = { pending: 'No result yet', confirmed_failure: 'Followed by a confirmed failure', successful_repair: 'Followed by a successful repair', no_fault_found: 'No fault found' }
+export const CONFIRMATIONS = { not_checked: 'Not checked', confirmed: 'Confirmed', not_confirmed: 'Not confirmed' }
+export const RESULTS = { pending: 'Pending', confirmed_failure: 'Failed', successful_repair: 'Repaired', no_fault_found: 'No fault' }
 export const VERIFICATION = { unverified: 'Unverified', verified: 'Verified', rejected: 'Rejected' }
 
 export const CHANGE = {
@@ -79,10 +79,10 @@ export function stageTone(screeningStatus) {
 }
 
 export const STAGE_LEGEND = [
-  { tone: 'good', label: 'No concerns recorded' },
-  { tone: 'attention', label: 'Needs attention or maintenance' },
-  { tone: 'critical', label: 'Critical finding' },
-  { tone: 'unknown', label: 'Not assessed or no data' },
+  { tone: 'good', label: 'OK' },
+  { tone: 'attention', label: 'Attention' },
+  { tone: 'critical', label: 'Critical' },
+  { tone: 'unknown', label: 'No data' },
 ]
 
 export function newUuid() {
@@ -128,10 +128,10 @@ export function assessmentStatus(reassessmentStatus, hasDraft) {
 
 // Each label restates the backend's worst screening severity. Nothing here is a score.
 const CONDITIONS = {
-  critical: { label: 'Critical Condition', tone: 'critical', priority: 'Immediate: keep out of rental until cleared' },
-  attention: { label: 'Maintenance Recommended', tone: 'poor', priority: 'High: schedule repair' },
-  monitor: { label: 'Needs Attention', tone: 'fair', priority: 'Moderate: monitor at next reassessment' },
-  no_concerns_recorded: { label: 'Good Condition', tone: 'good', priority: 'Routine: no action recorded' },
+  critical: { label: 'Critical Condition', tone: 'critical', priority: 'Urgent' },
+  attention: { label: 'Maintenance Recommended', tone: 'poor', priority: 'High' },
+  monitor: { label: 'Needs Attention', tone: 'fair', priority: 'Moderate' },
+  no_concerns_recorded: { label: 'Good Condition', tone: 'good', priority: 'Routine' },
   limited: { label: 'Limited Information', tone: 'insufficient', priority: 'Not determined' },
 }
 
@@ -146,21 +146,21 @@ export function overallCondition(assessment, categories) {
   const flagged = statuses.filter((status) => ['critical', 'attention', 'monitor'].includes(status)).length
   const overall = assessment.overall_screening
   if (CONDITIONS[overall] && overall !== 'no_concerns_recorded') {
-    const extra = unevaluated ? ` ${unevaluated} could not be evaluated from what was recorded.` : ''
-    return { ...CONDITIONS[overall], summary: `Screening flagged ${flagged} of ${categories.length} categories.${extra}` }
+    const extra = unevaluated ? ` ${unevaluated} unchecked.` : ''
+    return { ...CONDITIONS[overall], summary: `${flagged} of ${categories.length} flagged.${extra}` }
   }
   if (overall === 'no_concerns_recorded' && unevaluated === 0) {
     // Questions are optional, so a clean screening can rest on very few answers.
     const limited = categories.filter((category) => ['partial', 'insufficient'].includes(assessment.components[category.key]?.data_sufficiency)).length
     if (limited) {
       return {
-        label: 'No Concerns Recorded', tone: 'good', priority: 'Routine: complete the missing checks at the next reassessment',
-        summary: `No screening rule fired, but ${limited} of ${categories.length} categories had fewer than half of their questions answered, so this is not a confirmed good condition.`,
+        label: 'No Concerns Recorded', tone: 'good', priority: 'Routine',
+        summary: `Nothing flagged. ${limited} of ${categories.length} had few answers.`,
       }
     }
-    return { ...CONDITIONS.no_concerns_recorded, summary: 'No screening rule fired in any evaluated category. This reflects what was recorded and is not a mechanical certification.' }
+    return { ...CONDITIONS.no_concerns_recorded, summary: 'Nothing flagged.' }
   }
-  return { ...CONDITIONS.limited, summary: `${unevaluated} of ${categories.length} categories could not be evaluated from what was recorded, so no overall condition is assigned.` }
+  return { ...CONDITIONS.limited, summary: `${unevaluated} of ${categories.length} unchecked.` }
 }
 
 /* Survey examples. These are placeholder hints only: they are never pre-filled or submitted. */

@@ -142,7 +142,6 @@ export default function PaymentManagement() {
       <header className="pmt-header">
         <span className="pmt-eyebrow">FINANCE</span>
         <h1>Payment History</h1>
-        <p>Payments are verified by the payment provider, and paid reservations are confirmed automatically. This page is for monitoring.</p>
       </header>
 
       <section className="pmt-stats" aria-label="Payment summary">

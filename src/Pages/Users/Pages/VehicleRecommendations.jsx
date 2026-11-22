@@ -3,6 +3,7 @@ import { api, imageUrl } from '../../../Services/API/api.js'
 import CarSilhouette from '../Components/CarSilhouette.jsx'
 import { FuelIcon, GearboxIcon, SeatsIcon } from '../Components/VehicleSpecIcons.jsx'
 import './VehicleRecommendations.css'
+import { carPhoto as fittedPhoto } from '../Components/carPhoto.js'
 
 const DAY_MS = 86400000
 // The API's largest page.
@@ -143,7 +144,7 @@ function CarPhoto({ car, name, onClick }) {
         <CarSilhouette category={car.category} />
         <small>Photo coming soon</small>
       </span>
-      {photo && <img src={photo} alt="" loading="lazy" onError={(event) => { event.currentTarget.hidden = true }} />}
+      {photo && <img {...fittedPhoto(photo)} alt="" loading="lazy" onError={(event) => { event.currentTarget.hidden = true }} />}
     </button>
   )
 }

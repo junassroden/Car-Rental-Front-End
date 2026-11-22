@@ -1,0 +1,414 @@
+/*
+ * Sign-in form refinement. Every selector is scoped to `.login-form.signin-form`, which only the
+ * sign-in page uses, so sign-up and account recovery (which share `.login-form`) are untouched and
+ * these rules win over the App.css login rules regardless of stylesheet order.
+ */
+
+.login-form.signin-form {
+  --si-ink: #1d2a26;
+  --si-muted: #6b7570;
+  --si-sage: #35564a;
+  --si-sage-deep: #243a34;
+  --si-sand: #c9a582;
+  --si-hairline: rgb(36 58 52 / 9%);
+  --si-field: #f5f4ef;
+  --si-ease: cubic-bezier(.32, .72, 0, 1);
+
+  width: min(440px, calc(100% - 40px));
+  gap: 22px;
+  padding: 64px 0;
+}
+
+/* ── Card: outer tray + inner plate (concentric radii) ── */
+
+.login-form.signin-form .signin-shell {
+  padding: 0;
+  border-radius: 24px;
+  background: none;
+  box-shadow: none;
+}
+
+.login-form.signin-form .signin-core {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 36px 0 28px;
+  border: 0;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+}
+
+/* Plain white behind the sign-in form, so the card blends into the page with no edge. */
+.login-page:has(> .signin-form) {
+  background: #fff;
+}
+
+.login-form.signin-form .error-message,
+.login-form.signin-form .auth-success {
+  border: 0;
+  border-radius: 14px;
+}
+
+/* ── Heading ── */
+
+.login-form.signin-form .signin-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.login-form.signin-form .signin-eyebrow {
+  padding: 5px 11px;
+  border-radius: 999px;
+  color: var(--si-sage);
+  background: rgb(53 86 74 / 7%);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.login-form.signin-form .signin-head h2 {
+  margin: 4px 0 0;
+  color: var(--si-ink);
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -.05em;
+  line-height: 1.05;
+}
+
+.login-form.signin-form .signin-head p {
+  margin: 0;
+  color: var(--si-muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+/* ── Fields: icon + input + optional action, on a soft fill with no border ── */
+
+.login-form.signin-form .form-field {
+  gap: 9px;
+  font-size: 12.5px;
+}
+
+.login-form.signin-form .form-field > span {
+  color: #3f4a46;
+  font-weight: 500;
+  letter-spacing: .01em;
+}
+
+.login-form.signin-form .signin-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 6px 0 16px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--si-field);
+  transition: background-color .45s var(--si-ease), box-shadow .45s var(--si-ease);
+}
+
+.login-form.signin-form .signin-input-icon {
+  flex: none;
+  color: #a0a7a2;
+  transition: color .45s var(--si-ease);
+}
+
+.login-form.signin-form .signin-input input {
+  min-width: 0;
+  min-height: 52px;
+  flex: 1;
+  margin: 0;
+  padding: 0 10px 0 0;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--si-ink);
+  font-size: 15px;
+  letter-spacing: .005em;
+}
+
+.login-form.signin-form .signin-input input:focus,
+.login-form.signin-form .signin-input input:focus-visible {
+  outline: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.login-form.signin-form .signin-input input::placeholder {
+  color: #aab0ac;
+}
+
+/* Keep browser autofill from painting a yellow/blue box over the field. */
+.login-form.signin-form .signin-input input:-webkit-autofill {
+  -webkit-text-fill-color: var(--si-ink);
+  transition: background-color 600000s 0s;
+}
+
+.login-form.signin-form .signin-input:hover {
+  background: #f0efe9;
+}
+
+/* No outline on focus; a soft glow keeps the active field visible for keyboard users. */
+.login-form.signin-form .signin-input:focus-within {
+  background: #fff;
+  box-shadow: 0 0 0 4px rgb(53 86 74 / 12%), 0 10px 24px -14px rgb(36 58 52 / 30%);
+}
+
+.login-form.signin-form .signin-input:focus-within .signin-input-icon {
+  color: var(--si-sage);
+}
+
+.login-form.signin-form .signin-input.is-invalid {
+  background: #fcf2ef;
+}
+
+.login-form.signin-form .signin-input.is-invalid .signin-input-icon {
+  color: #b5533f;
+}
+
+.login-form.signin-form .signin-input.is-invalid:focus-within {
+  background: #fff;
+  box-shadow: 0 0 0 4px rgb(181 83 63 / 12%);
+}
+
+/* Show/hide password */
+.login-form.signin-form .signin-eye {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  color: #8a928d;
+  background: transparent;
+  transition: color .4s var(--si-ease), background-color .4s var(--si-ease), transform .4s var(--si-ease);
+}
+
+.login-form.signin-form .signin-eye:hover {
+  color: var(--si-sage);
+  background: rgb(53 86 74 / 8%);
+}
+
+.login-form.signin-form .signin-eye:active {
+  transform: scale(.92);
+}
+
+.login-form.signin-form .signin-eye[aria-pressed='true'] {
+  color: var(--si-sage);
+}
+
+/* ── Google ── */
+
+.login-form.signin-form .signin-google {
+  margin-top: 4px;
+}
+
+.login-form.signin-form .google-auth-button {
+  min-height: 46px;
+  overflow: visible;
+}
+
+.login-form.signin-form .google-auth-help {
+  padding: 12px 16px;
+  border-radius: 14px;
+  color: var(--si-muted);
+  background: var(--si-field);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* ── Divider ── */
+
+.login-form.signin-form .auth-divider {
+  gap: 14px;
+  color: #9aa29d;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.login-form.signin-form .auth-divider::before,
+.login-form.signin-form .auth-divider::after {
+  background: linear-gradient(90deg, transparent, rgb(36 58 52 / 14%));
+}
+
+.login-form.signin-form .auth-divider::after {
+  background: linear-gradient(90deg, rgb(36 58 52 / 14%), transparent);
+}
+
+/* ── Sign in: pill with nested trailing icon ── */
+
+.login-form.signin-form .login-submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  margin: 0;
+  padding: 0 7px 0 26px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--si-sage-deep);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 14px 30px -14px rgb(36 58 52 / 55%);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .005em;
+  transition: transform .5s var(--si-ease), background-color .5s var(--si-ease), box-shadow .5s var(--si-ease);
+}
+
+.login-form.signin-form .login-submit {
+  padding: 0 26px;
+}
+
+.login-form.signin-form .login-submit > span:first-child {
+  flex: 1;
+  text-align: center;
+}
+
+.login-form.signin-form .signin-submit-icon {
+  display: inline-flex;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 12%);
+  transition: transform .5s var(--si-ease), background-color .5s var(--si-ease);
+}
+
+.login-form.signin-form .login-submit:hover:not(:disabled) {
+  background: #1d302b;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 18px 36px -14px rgb(36 58 52 / 60%);
+}
+
+.login-form.signin-form .login-submit:hover:not(:disabled) .signin-submit-icon {
+  background: rgb(255 255 255 / 18%);
+  transform: translateX(3px) scale(1.05);
+}
+
+.login-form.signin-form .login-submit:active:not(:disabled) {
+  transform: scale(.98);
+}
+
+.login-form.signin-form .login-submit:disabled {
+  padding: 0 26px;
+  opacity: .78;
+}
+
+/* ── Forgot password ── */
+
+.login-form.signin-form .signin-forgot {
+  align-self: center;
+  margin-top: -2px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 999px;
+  color: var(--si-muted);
+  background: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color .4s var(--si-ease), background-color .4s var(--si-ease);
+}
+
+.login-form.signin-form .signin-forgot:hover {
+  color: var(--si-sage);
+  background: rgb(53 86 74 / 6%);
+}
+
+/* ── Footer ── */
+
+.login-form.signin-form > .auth-switch {
+  margin: 0;
+  color: var(--si-muted);
+  font-size: 13.5px;
+  text-align: center;
+}
+
+.login-form.signin-form > .auth-switch button {
+  color: var(--si-sage);
+  font-weight: 600;
+}
+
+.login-form.signin-form .login-safe {
+  gap: 7px;
+  color: #8a928d;
+  font-size: 11.5px;
+}
+
+.login-form.signin-form .login-safe svg {
+  color: var(--si-sand);
+}
+
+/* ── Entry choreography ── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .login-form.signin-form .signin-shell,
+  .login-form.signin-form > .auth-switch,
+  .login-form.signin-form > .login-safe {
+    animation: signin-rise .9s var(--si-ease) both;
+  }
+
+  .login-form.signin-form .signin-core > * {
+    animation: signin-rise .9s var(--si-ease) both;
+  }
+
+  .login-form.signin-form .signin-core > :nth-child(1) { animation-delay: .08s; }
+  .login-form.signin-form .signin-core > :nth-child(2) { animation-delay: .14s; }
+  .login-form.signin-form .signin-core > :nth-child(3) { animation-delay: .2s; }
+  .login-form.signin-form .signin-core > :nth-child(4) { animation-delay: .26s; }
+  .login-form.signin-form .signin-core > :nth-child(5) { animation-delay: .32s; }
+  .login-form.signin-form .signin-core > :nth-child(6) { animation-delay: .38s; }
+  .login-form.signin-form .signin-core > :nth-child(7) { animation-delay: .44s; }
+  .login-form.signin-form .signin-core > :nth-child(n + 8) { animation-delay: .5s; }
+  .login-form.signin-form > .auth-switch { animation-delay: .5s; }
+  .login-form.signin-form > .login-safe { animation-delay: .56s; }
+}
+
+@keyframes signin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Small screens ── */
+
+@media (max-width: 700px) {
+  .login-form.signin-form {
+    width: min(480px, calc(100% - 32px));
+    padding: 32px 0 48px;
+  }
+
+  .login-form.signin-form .signin-core {
+    padding: 28px 0 22px;
+  }
+
+  .login-form.signin-form .signin-head h2 {
+    font-size: 30px;
+  }
+}

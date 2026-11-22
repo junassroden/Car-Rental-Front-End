@@ -70,15 +70,15 @@ function attentionItems(reservations, today) {
       key: 'late-returns',
       level: 'critical',
       count: confirmed.filter((item) => item.checked_out_at && !item.returned_at && dateOnly(item.end_date) < today).length,
-      label: (n) => `${plural(n, 'vehicle')} past the return date`,
-      action: 'Record return',
+      label: (n) => `${plural(n, 'late return')}`,
+      action: 'Return',
       href: '/admin/reservations?status=confirmed',
     },
     {
       key: 'missed-pickups',
       level: 'critical',
       count: missedPickups.length,
-      label: (n) => `${plural(n, 'pickup')} past the date, not checked out`,
+      label: (n) => `${plural(n, 'missed pickup')}`,
       action: 'Review',
       href: '/admin/reservations?status=confirmed',
     },
@@ -86,7 +86,7 @@ function attentionItems(reservations, today) {
       key: 'special-approval',
       level: 'warning',
       count: reservations.filter((item) => reservationStatus(item) === 'awaiting_approval').length,
-      label: (n) => `${plural(n, 'paid special rental')} awaiting approval`,
+      label: (n) => `${plural(n, 'approval')} pending`,
       action: 'Review',
       href: '/admin/reservations?status=awaiting_approval',
     },
@@ -100,7 +100,7 @@ function attentionItems(reservations, today) {
         && dateOnly(item.start_date) >= today
         && dateOnly(item.start_date) <= addDays(today, UNPAID_WARNING_DAYS)
       )).length,
-      label: (n) => `${plural(n, 'reservation')} awaiting payment, pickup within ${UNPAID_WARNING_DAYS} days`,
+      label: (n) => `${plural(n, 'payment')} due soon`,
       action: 'View',
       href: '/admin/reservations?status=pending',
     },
@@ -108,7 +108,7 @@ function attentionItems(reservations, today) {
       key: 'unpaid-soon',
       level: 'warning',
       count: paymentsDue.length,
-      label: (n) => `${plural(n, 'confirmed rental')} unpaid, pickup within ${UNPAID_WARNING_DAYS} days`,
+      label: (n) => `${plural(n, 'unpaid rental')}, pickup soon`,
       action: 'Review',
       href: '/admin/reservations?status=confirmed',
     },
@@ -123,7 +123,7 @@ function reassessmentItems(vehicles) {
       key: 'reassessment-overdue',
       level: 'warning',
       count: count('overdue'),
-      label: (n) => `${plural(n, 'vehicle')} overdue for the monthly reassessment`,
+      label: (n) => `${plural(n, 'reassessment')} overdue`,
       action: 'Assess',
       href: '/admin/maintenance/predictions',
     },
@@ -131,7 +131,7 @@ function reassessmentItems(vehicles) {
       key: 'reassessment-due-soon',
       level: 'info',
       count: count('due_soon'),
-      label: (n) => `${plural(n, 'vehicle')} due for reassessment within 7 days`,
+      label: (n) => `${plural(n, 'reassessment')} due this week`,
       action: 'Plan',
       href: '/admin/maintenance/predictions',
     },
@@ -293,39 +293,39 @@ export default function AdminDashboard({ navigate }) {
       <header className="ad-header">
         <div>
           <span className="ad-eyebrow">{formatDay(today, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
-          <h1>Fleet dashboard</h1>
+          <h1>Dashboard</h1>
         </div>
-        <button type="button" className="ad-btn ad-btn-primary" onClick={() => navigate('/admin/vehicles')}>Manage vehicles</button>
+        <button type="button" className="ad-btn ad-btn-primary" onClick={() => navigate('/admin/vehicles')}>Vehicles</button>
       </header>
 
       {loading ? <DashboardSkeleton /> : error ? (
         <div className="ad-card ad-state" role="alert">
-          <h2>We couldn't load the dashboard</h2>
+          <h2>Couldn't load</h2>
           <p>{error}</p>
-          <button type="button" className="ad-btn ad-btn-primary" onClick={retry}>Try again</button>
+          <button type="button" className="ad-btn ad-btn-primary" onClick={retry}>Retry</button>
         </div>
       ) : (
         <>
           <dl className="ad-tiles">
             <div className="ad-card ad-tile">
-              <dt>Available now</dt>
+              <dt>Available</dt>
               <dd className="ad-value">{fleet.available} <small>of {fleet.total}</small></dd>
               <dd className="ad-detail">{fleetBreakdown}</dd>
             </div>
             <div className="ad-card ad-tile">
-              <dt>On the road</dt>
+              <dt>Out</dt>
               <dd className="ad-value">{onTheRoad}</dd>
-              <dd className="ad-detail">Checked out, not yet returned</dd>
+              <dd className="ad-detail">On the road</dd>
             </div>
             <div className="ad-card ad-tile">
-              <dt>Open bookings</dt>
+              <dt>Open</dt>
               <dd className="ad-value">{pendingCount + awaitingApprovalCount + confirmedCount}</dd>
-              <dd className="ad-detail">{pendingCount} payment · {awaitingApprovalCount} approval · {confirmedCount} confirmed</dd>
+              <dd className="ad-detail">{confirmedCount} confirmed</dd>
             </div>
             <div className="ad-card ad-tile">
-              <dt>Booking value</dt>
+              <dt>Value</dt>
               <dd className="ad-value">{money(bookingValue)}</dd>
-              <dd className="ad-detail">{money(paidValue)} paid so far</dd>
+              <dd className="ad-detail">{money(paidValue)} paid</dd>
             </div>
           </dl>
 
@@ -333,17 +333,14 @@ export default function AdminDashboard({ navigate }) {
 
           <div className="ad-panels">
             <section className="ad-card ad-panel" aria-labelledby="ad-attention-title">
-              <h2 id="ad-attention-title">Needs attention</h2>
+              <h2 id="ad-attention-title">To do</h2>
               {attention.length ? (
                 <ul className="ad-attention">
                   {attention.map((entry) => (
                     <li key={entry.key}>
                       <button type="button" className={`ad-alert ad-alert-${entry.level}`} onClick={() => navigate(entry.href)}>
                         <span className="ad-alert-icon">{entry.level === 'critical' ? <AlertIcon /> : <ClockIcon />}</span>
-                        <span className="ad-alert-text">
-                          {entry.label(entry.count)}
-                          <small>{entry.level === 'critical' ? 'Urgent' : entry.level === 'info' ? 'Coming up' : 'To do'}</small>
-                        </span>
+                        <span className="ad-alert-text">{entry.label(entry.count)}</span>
                         <span className="ad-alert-action">{entry.action}</span>
                       </button>
                     </li>
@@ -352,18 +349,15 @@ export default function AdminDashboard({ navigate }) {
               ) : (
                 <div className="ad-clear">
                   <span><CheckIcon /></span>
-                  <p>Nothing needs attention right now.</p>
+                  <p>All clear</p>
                 </div>
               )}
             </section>
 
             <section className="ad-card ad-panel" aria-labelledby="ad-schedule-title">
               <div className="ad-panel-head">
-                <div>
-                  <h2 id="ad-schedule-title">Pickups and returns</h2>
-                  <p>Next {SCHEDULE_DAYS} days</p>
-                </div>
-                <button type="button" className="ad-btn ad-btn-outline" onClick={() => navigate('/admin/reservations')}>All reservations</button>
+                <h2 id="ad-schedule-title">Schedule <small>{SCHEDULE_DAYS} days</small></h2>
+                <button type="button" className="ad-btn ad-btn-outline" onClick={() => navigate('/admin/reservations')}>View all</button>
               </div>
               {visibleEvents.length ? (
                 <>
@@ -384,9 +378,9 @@ export default function AdminDashboard({ navigate }) {
                       </ul>
                     </div>
                   ))}
-                  {events.length > SCHEDULE_LIMIT && <p className="ad-more">{plural(events.length - SCHEDULE_LIMIT, 'more event')} in the next {SCHEDULE_DAYS} days</p>}
+                  {events.length > SCHEDULE_LIMIT && <p className="ad-more">+{events.length - SCHEDULE_LIMIT} more</p>}
                 </>
-              ) : <p className="ad-empty">No pickups or returns in the next {SCHEDULE_DAYS} days.</p>}
+              ) : <p className="ad-empty">Nothing scheduled.</p>}
             </section>
           </div>
         </>

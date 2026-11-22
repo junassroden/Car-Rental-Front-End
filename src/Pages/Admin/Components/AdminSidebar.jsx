@@ -2,7 +2,14 @@ export default function AdminSidebar({ title = 'Admin workspace', subtitle = 'Fl
   return (
     <aside className="admin-sidebar">
       <div className="logo" aria-label="DriveRent admin home">
-        <span className="logo-symbol">D</span>
+        <span className="logo-symbol" aria-hidden="true">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m5 11 1.6-4.5A2.2 2.2 0 0 1 8.7 5h6.6a2.2 2.2 0 0 1 2.1 1.5L19 11" />
+            <path d="M3 11h18v7H3zM6 18v2m12-2v2" />
+            <circle cx="7" cy="15" r="1" />
+            <circle cx="17" cy="15" r="1" />
+          </svg>
+        </span>
         <span>Drive<span>Rent</span></span>
       </div>
       <p className="sidebar-caption">Workspace</p>

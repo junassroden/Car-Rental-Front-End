@@ -1,0 +1,218 @@
+/*
+ * Compact spacing for the customer area. Loaded last, so it tightens the
+ * paddings and gaps set by the page styles and the polish/premium layers.
+ */
+
+/* ---------- Top bar ---------- */
+
+.customer-frame .topbar {
+  flex-basis: 52px;
+  height: 52px;
+}
+
+/* ---------- Sidebar ---------- */
+
+.customer-frame .customer-sidebar {
+  padding: 8px 0 8px 8px;
+}
+
+.customer-frame .customer-sidebar-content {
+  padding: 16px 10px 10px;
+  border-radius: 16px;
+}
+
+.customer-frame .customer-sidebar .logo {
+  margin-bottom: 18px;
+}
+
+.customer-frame .customer-sidebar-nav {
+  gap: 14px;
+}
+
+.customer-frame .customer-nav-section {
+  gap: 2px;
+}
+
+.customer-frame .customer-nav-section h2 {
+  margin-bottom: 4px;
+}
+
+.customer-frame .customer-nav-link {
+  min-height: 38px;
+  border-radius: 10px;
+}
+
+.customer-frame .customer-sidebar-profile {
+  padding: 8px;
+}
+
+/* ---------- Page frame ---------- */
+
+.customer-frame .app-main > main > .public-page.public-page {
+  padding-top: 12px;
+  padding-bottom: 40px;
+}
+
+.customer-frame .customer-dashboard-page.dash {
+  gap: 12px;
+}
+
+/* ---------- Page headers ---------- */
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) {
+  margin-bottom: 16px;
+}
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) h1 {
+  margin: 2px 0 6px;
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
+}
+
+.customer-frame :is(.vl-header, .vr-header, .pf-header, .pay-header, .rv-header, .rsv-header) p {
+  margin-bottom: 0;
+}
+
+.customer-frame :is(.rsv-back, .vd-back) {
+  margin-bottom: 8px;
+}
+
+/* ---------- Dashboard ---------- */
+
+.customer-frame .dash-hero {
+  gap: 24px;
+  padding: 26px 28px;
+  border-radius: 18px;
+}
+
+.customer-frame .dash-hero-copy h1 {
+  margin: 8px 0 10px;
+  font-size: clamp(2.4rem, 5cqw, 3.4rem);
+}
+
+.customer-frame .dash-hero-copy p {
+  margin-bottom: 14px;
+}
+
+.customer-frame .dash-hero .dash-stats {
+  margin: 4px 0 18px;
+}
+
+.customer-frame .dash-hero .dash-stat,
+.customer-frame .dash-hero .dash-stat:first-child,
+.customer-frame .dash-hero .dash-stat + .dash-stat {
+  gap: 6px;
+  padding: 10px 12px;
+}
+
+.customer-frame .dash-hero .dash-stat-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.customer-frame .dash-hero .dash-stat b,
+.customer-frame .dash-hero .dash-stat b.is-zero {
+  font-size: 26px;
+}
+
+.customer-frame .dash-hero-action {
+  min-height: 42px;
+  margin-top: 0;
+}
+
+.customer-frame .dash-ticket {
+  gap: 8px;
+  padding: 10px 10px 14px;
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo {
+  aspect-ratio: 16 / 7;
+}
+
+.customer-frame .dash-ticket .dash-ticket-photo img {
+  padding: 30px 10px 2px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) h2 {
+  font-size: 26px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route {
+  padding-top: 10px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::before {
+  left: -28px;
+}
+
+.customer-frame .dash-ticket:not(.dash-ticket-empty) .dash-ticket-route::after {
+  right: -28px;
+}
+
+.customer-frame .dash-quick {
+  gap: 10px;
+}
+
+.customer-frame .dash-quick-item {
+  gap: 12px;
+  padding: 12px;
+  border-radius: 14px;
+}
+
+.customer-frame .dash-quick-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+}
+
+.customer-frame .dash-lower {
+  gap: 12px;
+  margin-top: 0;
+}
+
+.customer-frame .dash-panel > header {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.customer-frame .dash-row {
+  min-height: 58px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* ---------- Vehicle listing ---------- */
+
+.customer-frame .vl-controls {
+  margin-bottom: 14px;
+}
+
+.customer-frame .vl-grid {
+  gap: 14px;
+}
+
+.customer-frame .vl-card-body {
+  padding: 12px 14px 14px;
+}
+
+/* ---------- Phones ---------- */
+
+@media (max-width: 900px) {
+  .customer-frame .customer-sidebar {
+    padding: 8px;
+  }
+
+  .customer-frame .topbar {
+    flex-basis: 54px;
+    height: 54px;
+  }
+}
+
+@media (max-width: 640px) {
+  .customer-frame .dash-hero {
+    padding: 20px 16px 16px;
+  }
+
+  .customer-frame .dash-quick-item {
+    padding: 10px;
+  }
+}

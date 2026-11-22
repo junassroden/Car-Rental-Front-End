@@ -122,7 +122,7 @@ function BookingValueChart({ reservations, today }) {
       labels,
       datasets: [
         { label: 'Paid', data: weeks.map((week) => week.paid), backgroundColor: COLORS.paid },
-        { label: 'Not paid yet', data: weeks.map((week) => week.unpaid), backgroundColor: COLORS.unpaid },
+        { label: 'Unpaid', data: weeks.map((week) => week.unpaid), backgroundColor: COLORS.unpaid },
       ].map((dataset) => ({
         ...dataset,
         // A 2px surface-coloured edge separates stacked segments; rounded ends only on the outer edge.
@@ -170,22 +170,22 @@ function BookingValueChart({ reservations, today }) {
     <section className="ad-card ad-chart" aria-labelledby="ad-chart-value-title">
       <div className="ad-chart-head">
         <div>
-          <h2 id="ad-chart-value-title">Booking value by week</h2>
-          <p>Last {WEEKS} weeks, by the date each booking was made</p>
+          <h2 id="ad-chart-value-title">Revenue</h2>
+          <p>{WEEKS} weeks</p>
         </div>
         <div className="ad-chart-figure">
           <strong>{money(total)}</strong>
-          <small>{money(thisWeek.paid + thisWeek.unpaid)} this week</small>
+          <small>+{money(thisWeek.paid + thisWeek.unpaid)} this week</small>
         </div>
       </div>
-      <Legend items={[{ label: 'Paid', color: COLORS.paid }, { label: 'Not paid yet', color: COLORS.unpaid }]} />
+      <Legend items={[{ label: 'Paid', color: COLORS.paid }, { label: 'Unpaid', color: COLORS.unpaid }]} />
       <div className="ad-chart-canvas">
         <canvas ref={canvasRef} role="img" aria-label={`Stacked bar chart of booking value for the last ${WEEKS} weeks. Total ${money(total)}.`} />
       </div>
       <details className="ad-chart-table">
-        <summary>View as table</summary>
+        <summary>Table</summary>
         <table>
-          <thead><tr><th>Week of</th><th>Paid</th><th>Not paid yet</th><th>Bookings</th></tr></thead>
+          <thead><tr><th>Week of</th><th>Paid</th><th>Unpaid</th><th>Bookings</th></tr></thead>
           <tbody>{weeks.map((week) => <tr key={week.start}><td>{label(week.start, { month: 'short', day: 'numeric', year: 'numeric' })}</td><td>{money(week.paid)}</td><td>{money(week.unpaid)}</td><td>{week.count}</td></tr>)}</tbody>
         </table>
       </details>
@@ -246,20 +246,19 @@ function UtilisationChart({ reservations, today, fleetTotal }) {
     <section className="ad-card ad-chart" aria-labelledby="ad-chart-use-title">
       <div className="ad-chart-head">
         <div>
-          <h2 id="ad-chart-use-title">Vehicles booked per day</h2>
-          <p>Confirmed reservations, next {FORECAST_DAYS} days</p>
+          <h2 id="ad-chart-use-title">Booked per day</h2>
+          <p>Next {FORECAST_DAYS} days · avg {average.toFixed(1)}</p>
         </div>
         <div className="ad-chart-figure">
           <strong>{peak.count}<span> of {fleetTotal}</span></strong>
-          <small>{peak.count ? `Busiest: ${label(peak.day, { weekday: 'short', month: 'short', day: 'numeric' })}` : 'No bookings yet'}</small>
+          <small>{peak.count ? `Peak ${label(peak.day, { weekday: 'short', day: 'numeric' })}` : 'None yet'}</small>
         </div>
       </div>
-      <p className="ad-chart-note">Average {average.toFixed(1)} vehicles a day · {share(average)}% of the fleet</p>
       <div className="ad-chart-canvas">
         <canvas ref={canvasRef} role="img" aria-label={`Bar chart of vehicles booked for each of the next ${FORECAST_DAYS} days. Busiest day has ${peak.count} of ${fleetTotal} vehicles.`} />
       </div>
       <details className="ad-chart-table">
-        <summary>View as table</summary>
+        <summary>Table</summary>
         <table>
           <thead><tr><th>Day</th><th>Vehicles booked</th><th>Share of fleet</th></tr></thead>
           <tbody>{days.map((entry) => <tr key={entry.day}><td>{label(entry.day, { weekday: 'short', month: 'short', day: 'numeric' })}</td><td>{entry.count}</td><td>{share(entry.count)}%</td></tr>)}</tbody>

@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getReservations } from '../../../Services/API/reservationAPI.js'
-import { imageUrl } from '../../../Services/API/api.js'
+import { reservationPhotos, useReservationCars } from '../Components/reservationPhotos.js'
 import CarSilhouette from '../Components/CarSilhouette.jsx'
 import '../Components/ReservationDialogs.css'
+import { carPhoto } from '../Components/carPhoto.js'
 
 const VIEW_COPY = {
   active: {
-    eyebrow: 'YOUR RENTALS',
+    eyebrow: 'Your rentals',
     title: 'Active rentals',
     description: 'Confirmed rentals that are currently in progress.',
     emptyTitle: 'No active rentals',
     emptyMessage: 'When you pick up a confirmed vehicle, it will appear here.',
   },
   history: {
-    eyebrow: 'YOUR ACCOUNT',
+    eyebrow: 'Your account',
     title: 'Reservation history',
     description: 'Your completed and past reservations.',
     emptyTitle: 'No reservation history yet',
@@ -57,16 +58,16 @@ function money(value) {
   }).format(Number(value || 0))
 }
 
-function ReservationCard({ reservation }) {
-  const [photoFailed, setPhotoFailed] = useState(false)
-  const photo = imageUrl(reservation.primary_image)
+function ReservationCard({ reservation, photos }) {
+  const [failed, setFailed] = useState(0)
+  const photo = photos[failed]
   const payment = reservation.payment_status
 
   return (
     <article className="rv-card">
       <div className="rv-photo" aria-hidden="true">
-        {photo && !photoFailed
-          ? <img src={photo} alt="" loading="lazy" onError={() => setPhotoFailed(true)} />
+        {photo
+          ? <img key={photo} {...carPhoto(photo)} alt="" loading="lazy" onError={() => setFailed((count) => count + 1)} />
           : <span className="rv-photo-empty"><CarSilhouette category={reservation.category} /></span>}
       </div>
       <div className="rv-card-body">
@@ -134,6 +135,8 @@ export default function ReservationActivity({ navigate, view = 'active' }) {
     ))
   }, [reservations, view])
 
+  const cars = useReservationCars(visible)
+
   function retry() {
     setError('')
     setLoading(true)
@@ -168,11 +171,22 @@ export default function ReservationActivity({ navigate, view = 'active' }) {
       ) : visible.length > 0 ? (
         <div className="rv-list">
           {visible.map((reservation) => (
-            <ReservationCard key={reservation.id} reservation={reservation} />
+            <ReservationCard
+              key={`${reservation.id}-${cars[reservation.car_id] ? 'full' : 'basic'}`}
+              reservation={reservation}
+              photos={reservationPhotos(reservation, cars[reservation.car_id])}
+            />
           ))}
         </div>
       ) : (
         <div className="rv-state" role="status">
+          <span className="rv-state-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+              {error
+                ? <><circle cx="12" cy="12" r="9" /><path d="M12 7.5v5.5m0 3.2v.1" /></>
+                : <><rect x="3.5" y="5" width="17" height="15" rx="2" /><path d="M3.5 10h17M8 3v4m8-4v4" /></>}
+            </svg>
+          </span>
           <h2>{error ? 'Unable to load reservations' : copy.emptyTitle}</h2>
           <p>{error ? 'Check your connection and try again.' : copy.emptyMessage}</p>
           {error
